@@ -3,8 +3,8 @@ version: '3'
 services:
   gateway:
     build:
-      context: ./api/
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./build/package/docker/gatewayDockerfile
     ports:
       - 8080:8080
     tty:
@@ -13,10 +13,20 @@ services:
       - user
   user:
     build:
-      context: ./api/
-      dockerfile: user/Dockerfile
+      context: ./
+      dockerfile: ./build/package/docker/user/Dockerfile
     ports:
       - 50051:50051
+    tty:
+      true
+    depends_on: 
+      - user_db
+  auth:
+    build:
+      context: ./
+      dockerfile: ./build/package/docker/auth/Dockerfile
+    ports:
+      - 50052:50052
     tty:
       true
     depends_on: 
