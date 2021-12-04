@@ -21,13 +21,37 @@ type server struct {
 	pb.UnimplementedUserServer
 }
 
+func (s *server) ListUsers(rect *pb.ListUsersRequest, stream pb.User_ListUsersServer) error {
+	log.Println("ListUsers running")
+	var users []db.User
+	result := db.DB.Find(&users)
+	log.Println("got all users")
+	log.Println(result.Error)
+	if result.Error != nil {
+		log.Fatalf("failed to list users: %v", result.Error)
+		return result.Error
+	}
+	for _, user := range users {
+		if err := stream.Send(&pb.ListUsersReply{
+			Uuid:       user.UUID.String(),
+			Email:      user.EMAIL,
+			Permission: user.PERMISSION,
+			Password:   user.PASSWORD,
+		}); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.CreateUserReply, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(in.GetPassword()), bcrypt.MinCost)
 	if err != nil {
 		panic(err)
 	}
 
-	user := db.User{UUID: uuid.NewV4(), EMAIL: string(in.GetEmail()), PASSWORD: string(hash), PERMISSION: "normal"}
+	user := db.User{UUID: uuid.NewV4(), EMAIL: string(in.GetEmail()), PERMISSION: "normal", PASSWORD: string(hash)}
+	log.Println(user)
 	result := db.DB.Create(&user)
 	if result.Error != nil {
 		log.Printf("failed to create user: %v", result.Error)

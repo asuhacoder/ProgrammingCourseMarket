@@ -5,14 +5,26 @@ option go_package = "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/
 package user;
 
 service User {
-    rpc CreateUser (CreateUserRequest) returns (CreateUserReply) {}
+  rpc ListUsers (ListUsersRequest) returns (stream ListUsersReply) {}
+  rpc CreateUser (CreateUserRequest) returns (CreateUserReply) {}
+}
+
+message ListUsersRequest {
+  string token = 1;
+}
+
+message ListUsersReply {
+  string uuid = 1;
+  string email = 2;
+  string permission = 3;
+  string password = 4;
 }
 
 message CreateUserRequest {
-    string email = 1;
-    string password = 2;
-  }
+  string email = 1;
+  string password = 2;
+}
   
-  message CreateUserReply {
-    string token = 1;
-  }
+message CreateUserReply {
+  string token = 1;
+}

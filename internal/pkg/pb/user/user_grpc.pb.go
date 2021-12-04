@@ -18,6 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
+	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (User_ListUsersClient, error)
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserReply, error)
 }
 
@@ -27,6 +28,38 @@ type userClient struct {
 
 func NewUserClient(cc grpc.ClientConnInterface) UserClient {
 	return &userClient{cc}
+}
+
+func (c *userClient) ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (User_ListUsersClient, error) {
+	stream, err := c.cc.NewStream(ctx, &User_ServiceDesc.Streams[0], "/user.User/ListUsers", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &userListUsersClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type User_ListUsersClient interface {
+	Recv() (*ListUsersReply, error)
+	grpc.ClientStream
+}
+
+type userListUsersClient struct {
+	grpc.ClientStream
+}
+
+func (x *userListUsersClient) Recv() (*ListUsersReply, error) {
+	m := new(ListUsersReply)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *userClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserReply, error) {
@@ -42,6 +75,7 @@ func (c *userClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
 type UserServer interface {
+	ListUsers(*ListUsersRequest, User_ListUsersServer) error
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
 	mustEmbedUnimplementedUserServer()
 }
@@ -50,6 +84,9 @@ type UserServer interface {
 type UnimplementedUserServer struct {
 }
 
+func (UnimplementedUserServer) ListUsers(*ListUsersRequest, User_ListUsersServer) error {
+	return status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
+}
 func (UnimplementedUserServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
@@ -64,6 +101,27 @@ type UnsafeUserServer interface {
 
 func RegisterUserServer(s grpc.ServiceRegistrar, srv UserServer) {
 	s.RegisterService(&User_ServiceDesc, srv)
+}
+
+func _User_ListUsers_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ListUsersRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(UserServer).ListUsers(m, &userListUsersServer{stream})
+}
+
+type User_ListUsersServer interface {
+	Send(*ListUsersReply) error
+	grpc.ServerStream
+}
+
+type userListUsersServer struct {
+	grpc.ServerStream
+}
+
+func (x *userListUsersServer) Send(m *ListUsersReply) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 func _User_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -96,6 +154,12 @@ var User_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _User_CreateUser_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "ListUsers",
+			Handler:       _User_ListUsers_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "internal/pkg/pb/user/user.proto",
 }

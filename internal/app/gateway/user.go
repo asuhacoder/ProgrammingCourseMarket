@@ -2,6 +2,7 @@ package gateway
 
 import (
 	"context"
+	"io"
 	"log"
 	"time"
 
@@ -13,6 +14,45 @@ import (
 const (
 	userAddress = "user:50051"
 )
+
+func listUsers(c *gin.Context) {
+	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+	client := pbUser.NewUserClient(conn)
+
+	token := c.Query("token")
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	stream, err := client.ListUsers(ctx, &pbUser.ListUsersRequest{
+		Token: token,
+	})
+	var responces []gin.H
+	for {
+		r, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatalf("failed to get user stream: %v", nil)
+			c.AbortWithStatus(400)
+		} else {
+			user := gin.H{
+				"uuid":       r.GetUuid(),
+				"email":      r.GetEmail(),
+				"permission": r.GetPermission(),
+				"password":   r.GetPassword(),
+			}
+			responces = append(responces, user)
+		}
+	}
+	c.JSON(200, gin.H{
+		"users": responces,
+	})
+}
 
 func createUser(c *gin.Context) {
 	log.Println("createUser func started")
@@ -44,5 +84,6 @@ func createUser(c *gin.Context) {
 
 func userRouters(router *gin.RouterGroup) {
 	u := router.Group("/users")
+	u.GET("", listUsers)
 	u.POST("", createUser)
 }
