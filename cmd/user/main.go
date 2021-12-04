@@ -43,7 +43,7 @@ func createJWT(user db.User) (string, error) {
 	return ss, err
 }
 
-func (s *server) Signup(ctx context.Context, in *pb.SignupRequest) (*pb.SignupReply, error) {
+func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.CreateUserReply, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(in.GetPassword()), bcrypt.MinCost)
 	if err != nil {
 		panic(err)
@@ -60,7 +60,7 @@ func (s *server) Signup(ctx context.Context, in *pb.SignupRequest) (*pb.SignupRe
 		panic(err)
 	}
 
-	return &pb.SignupReply{Token: ss}, nil
+	return &pb.CreateUserReply{Token: ss}, nil
 }
 
 func main() {

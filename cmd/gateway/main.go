@@ -40,8 +40,8 @@ func login(c *gin.Context) {
 	}
 }
 
-func signup(c *gin.Context) {
-	log.Println("signup func started")
+func createUser(c *gin.Context) {
+	log.Println("createUser func started")
 	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
 	log.Println("connected grpc server")
 	if err != nil {
@@ -55,7 +55,7 @@ func signup(c *gin.Context) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	r, err := client.Signup(ctx, &pbUser.SignupRequest{
+	r, err := client.CreateUser(ctx, &pbUser.CreateUserRequest{
 		Email:    email,
 		Password: password,
 	})
@@ -70,8 +70,12 @@ func signup(c *gin.Context) {
 
 func userRouters(router *gin.RouterGroup) {
 	u := router.Group("/users")
-	u.POST("login", login)
-	u.POST("signup", signup)
+	u.POST("", createUser)
+}
+
+func authRouters(router *gin.RouterGroup) {
+	a := router.Group("/auth")
+	a.GET("", login)
 }
 
 func runServer() {
@@ -79,6 +83,7 @@ func runServer() {
 	api := r.Group("/api")
 	v1 := api.Group("/v1")
 	userRouters(v1)
+	authRouters(v1)
 	r.Run()
 }
 
