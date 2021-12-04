@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
 	ListUsers(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (User_ListUsersClient, error)
+	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error)
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserReply, error)
 }
 
@@ -62,6 +63,15 @@ func (x *userListUsersClient) Recv() (*ListUsersReply, error) {
 	return m, nil
 }
 
+func (c *userClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error) {
+	out := new(GetUserReply)
+	err := c.cc.Invoke(ctx, "/user.User/GetUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserReply, error) {
 	out := new(CreateUserReply)
 	err := c.cc.Invoke(ctx, "/user.User/CreateUser", in, out, opts...)
@@ -76,6 +86,7 @@ func (c *userClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts
 // for forward compatibility
 type UserServer interface {
 	ListUsers(*ListUsersRequest, User_ListUsersServer) error
+	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
 	mustEmbedUnimplementedUserServer()
 }
@@ -86,6 +97,9 @@ type UnimplementedUserServer struct {
 
 func (UnimplementedUserServer) ListUsers(*ListUsersRequest, User_ListUsersServer) error {
 	return status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
+}
+func (UnimplementedUserServer) GetUser(context.Context, *GetUserRequest) (*GetUserReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
 func (UnimplementedUserServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
@@ -124,6 +138,24 @@ func (x *userListUsersServer) Send(m *ListUsersReply) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _User_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).GetUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.User/GetUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).GetUser(ctx, req.(*GetUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _User_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateUserRequest)
 	if err := dec(in); err != nil {
@@ -149,6 +181,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "user.User",
 	HandlerType: (*UserServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetUser",
+			Handler:    _User_GetUser_Handler,
+		},
 		{
 			MethodName: "CreateUser",
 			Handler:    _User_CreateUser_Handler,

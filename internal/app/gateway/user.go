@@ -54,6 +54,36 @@ func listUsers(c *gin.Context) {
 	})
 }
 
+func getUser(c *gin.Context) {
+	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
+	log.Println("connected grpc server")
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+	client := pbUser.NewUserClient(conn)
+
+	uuid := c.Param("uuid")
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	r, err := client.GetUser(ctx, &pbUser.GetUserRequest{
+		Uuid: uuid,
+	})
+	log.Println("got data")
+	log.Println(err)
+	if err != nil {
+		c.AbortWithStatus(400)
+	} else {
+		c.JSON(200, gin.H{
+			"uuid":       r.GetUuid(),
+			"email":      r.GetEmail(),
+			"permission": r.GetPermission(),
+			"password":   r.GetPassword(),
+		})
+	}
+}
+
 func createUser(c *gin.Context) {
 	log.Println("createUser func started")
 	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
@@ -85,5 +115,6 @@ func createUser(c *gin.Context) {
 func userRouters(router *gin.RouterGroup) {
 	u := router.Group("/users")
 	u.GET("", listUsers)
+	u.GET(":uuid", getUser)
 	u.POST("", createUser)
 }

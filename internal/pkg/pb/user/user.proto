@@ -6,6 +6,7 @@ package user;
 
 service User {
   rpc ListUsers (ListUsersRequest) returns (stream ListUsersReply) {}
+  rpc GetUser (GetUserRequest) returns (GetUserReply) {}
   rpc CreateUser (CreateUserRequest) returns (CreateUserReply) {}
 }
 
@@ -14,6 +15,17 @@ message ListUsersRequest {
 }
 
 message ListUsersReply {
+  string uuid = 1;
+  string email = 2;
+  string permission = 3;
+  string password = 4;
+}
+
+message GetUserRequest {
+  string uuid = 1;
+}
+
+message GetUserReply {
   string uuid = 1;
   string email = 2;
   string permission = 3;

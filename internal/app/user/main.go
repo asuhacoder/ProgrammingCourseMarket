@@ -44,6 +44,22 @@ func (s *server) ListUsers(rect *pb.ListUsersRequest, stream pb.User_ListUsersSe
 	return nil
 }
 
+func (s *server) GetUser(ctx context.Context, in *pb.GetUserRequest) (*pb.GetUserReply, error) {
+	var user db.User
+	result := db.DB.Take(&user)
+	log.Println(user)
+	if result.Error != nil {
+		log.Printf("failed to get a user: %v", result.Error)
+		return &pb.GetUserReply{}, result.Error
+	}
+	return &pb.GetUserReply{
+		Uuid:       user.UUID.String(),
+		Email:      user.EMAIL,
+		Permission: user.PERMISSION,
+		Password:   user.PASSWORD,
+	}, nil
+}
+
 func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.CreateUserReply, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(in.GetPassword()), bcrypt.MinCost)
 	if err != nil {
