@@ -2,7 +2,7 @@ package jwt
 
 import (
 	db "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/db/user"
-	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 	uuid "github.com/satori/go.uuid"
 )
 
