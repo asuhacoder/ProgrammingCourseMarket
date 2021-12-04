@@ -82,6 +82,25 @@ func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.
 	return &pb.CreateUserReply{Token: ss}, nil
 }
 
+/*
+func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.UpdateUserReply, error) {
+	user := db.User{UUID: uuid.NewV4(), EMAIL: string(in.GetEmail()), PERMISSION: "normal", PASSWORD: string(hash)}
+	log.Println(user)
+	result := db.DB.Create(&user)
+	if result.Error != nil {
+		log.Printf("failed to update user: %v", result.Error)
+		return &pb.UpdateUserReply{Token: ""}, result.Error
+	}
+
+	ss, err := jwt.CreateJWT(user)
+	if err != nil {
+		panic(err)
+	}
+
+	return &pb.UpdateUserReply{Token: ss}, nil
+}
+*/
+
 func RunServer() {
 	log.Println("test")
 	db.Init()

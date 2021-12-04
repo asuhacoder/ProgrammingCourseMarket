@@ -8,6 +8,7 @@ service User {
   rpc ListUsers (ListUsersRequest) returns (stream ListUsersReply) {}
   rpc GetUser (GetUserRequest) returns (GetUserReply) {}
   rpc CreateUser (CreateUserRequest) returns (CreateUserReply) {}
+  rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply) {}
 }
 
 message ListUsersRequest {
@@ -38,5 +39,15 @@ message CreateUserRequest {
 }
   
 message CreateUserReply {
+  string token = 1;
+}
+
+message UpdateUserRequest {
+  string token = 1;
+  string newEmail = 2;
+  string newPassword = 3;
+}
+
+message UpdateUserReply {
   string token = 1;
 }
