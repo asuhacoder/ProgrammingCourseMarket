@@ -52,7 +52,7 @@ func (s *server) Signup(ctx context.Context, in *pb.SignupRequest) (*pb.SignupRe
 	user := db.User{UUID: uuid.NewV4(), EMAIL: string(in.GetEmail()), PASSWORD: string(hash), PERMISSION: "normal"}
 	result := db.DB.Create(&user)
 	if result.Error != nil {
-		panic(result.Error)
+		log.Fatalf("failed to create user: %v", result.Error)
 	}
 
 	ss, err := createJWT(user)
