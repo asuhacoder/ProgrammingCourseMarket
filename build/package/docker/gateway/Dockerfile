@@ -2,10 +2,7 @@ FROM golang:1.17.3-alpine AS builder
 
 WORKDIR /
 
-COPY ./go.mod ./cmd/gateway/
-COPY ./go.sum ./cmd/gateway/
-
-WORKDIR /cmd/gateway/
+COPY . .
 
 COPY ./cmd/gateway/ .
 

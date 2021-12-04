@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	port = ":50051"
+	port = ":50052"
 )
 
 type server struct {
@@ -73,6 +73,7 @@ func main() {
 	}
 	s := grpc.NewServer()
 	pb.RegisterAuthServer(s, &server{})
+	log.Println("auth grpc server running")
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

@@ -2,10 +2,7 @@ FROM golang:1.17.3-alpine AS builder
 
 WORKDIR /
 
-COPY ./go.mod ./cmd/user/
-COPY ./go.sum ./cmd/user/
-
-WORKDIR /cmd/user/
+COPY . .
 
 COPY ./cmd/user/ .
 
