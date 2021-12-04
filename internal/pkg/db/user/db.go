@@ -40,6 +40,6 @@ func autoMigration() {
 type User struct {
 	UUID       uuid.UUID `gorm:"primaryKey; unique; type:uuid;"`
 	EMAIL      string    `gorm:"unique"`
-	PERMISSION string    `gorm:"->"`
+	PERMISSION string
 	PASSWORD   string
 }
