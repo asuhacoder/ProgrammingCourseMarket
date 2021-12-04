@@ -6,8 +6,8 @@ import (
 	"net"
 
 	db "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/db/user"
+	jwt "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/jwt"
 	pb "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/user"
-	jwt "github.com/dgrijalva/jwt-go"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc"
@@ -19,28 +19,6 @@ const (
 
 type server struct {
 	pb.UnimplementedUserServer
-}
-
-type userClaims struct {
-	UUID       uuid.UUID
-	PERMISSION string
-	jwt.StandardClaims
-}
-
-func createJWT(user db.User) (string, error) {
-	mySingningKey := []byte("AllYourBase")
-
-	claims := userClaims{
-		user.UUID,
-		user.PERMISSION,
-		jwt.StandardClaims{
-			ExpiresAt: 15000,
-		},
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	ss, err := token.SignedString(mySingningKey)
-
-	return ss, err
 }
 
 func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.CreateUserReply, error) {
@@ -56,7 +34,7 @@ func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.
 		return &pb.CreateUserReply{Token: ""}, result.Error
 	}
 
-	ss, err := createJWT(user)
+	ss, err := jwt.CreateJWT(user)
 	if err != nil {
 		panic(err)
 	}

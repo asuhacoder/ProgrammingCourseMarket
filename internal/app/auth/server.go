@@ -6,9 +6,8 @@ import (
 	"net"
 
 	db "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/db/user"
+	"github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/jwt"
 	pb "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/auth"
-	jwt "github.com/dgrijalva/jwt-go"
-	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc"
 )
@@ -21,28 +20,6 @@ type server struct {
 	pb.UnimplementedAuthServer
 }
 
-type userClaims struct {
-	UUID       uuid.UUID
-	PERMISSION string
-	jwt.StandardClaims
-}
-
-func createJWT(user db.User) (string, error) {
-	mySingningKey := []byte("AllYourBase")
-
-	claims := userClaims{
-		user.UUID,
-		user.PERMISSION,
-		jwt.StandardClaims{
-			ExpiresAt: 15000,
-		},
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	ss, err := token.SignedString(mySingningKey)
-
-	return ss, err
-}
-
 func (s *server) Login(ctx context.Context, in *pb.LoginRequest) (*pb.LoginReply, error) {
 	var user db.User
 	result := db.DB.Where("email = ?", in.GetEmail()).First(&user)
@@ -52,10 +29,10 @@ func (s *server) Login(ctx context.Context, in *pb.LoginRequest) (*pb.LoginReply
 	}
 	err := bcrypt.CompareHashAndPassword([]byte(user.PASSWORD), []byte(in.GetPassword()))
 	if err != nil {
-		panic(err)
+		log.Printf("failed to login: %v", err)
 	}
 
-	ss, err := createJWT(user)
+	ss, err := jwt.CreateJWT(user)
 	if err != nil {
 		panic(err)
 	}
