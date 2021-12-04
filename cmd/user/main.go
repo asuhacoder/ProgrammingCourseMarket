@@ -74,6 +74,7 @@ func main() {
 	}
 	s := grpc.NewServer()
 	pb.RegisterUserServer(s, &server{})
+	log.Println("user grpc server running")
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
