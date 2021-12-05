@@ -46,7 +46,7 @@ func (s *server) ListUsers(rect *pb.ListUsersRequest, stream pb.User_ListUsersSe
 
 func (s *server) GetUser(ctx context.Context, in *pb.GetUserRequest) (*pb.GetUserReply, error) {
 	var user db.User
-	result := db.DB.Take(&user)
+	result := db.DB.First(&user, "UUID = ?", in.GetUuid())
 	log.Println(user)
 	if result.Error != nil {
 		log.Printf("failed to get a user: %v", result.Error)
@@ -82,15 +82,21 @@ func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.
 	return &pb.CreateUserReply{Token: ss}, nil
 }
 
-/*
 func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.UpdateUserReply, error) {
-	user := db.User{UUID: uuid.NewV4(), EMAIL: string(in.GetEmail()), PERMISSION: "normal", PASSWORD: string(hash)}
-	log.Println(user)
-	result := db.DB.Create(&user)
+	var user db.User
+	uuid, _, err := jwt.ParseJWT(in.GetToken())
+	result := db.DB.First(&user, "UUID = ?", uuid)
 	if result.Error != nil {
 		log.Printf("failed to update user: %v", result.Error)
 		return &pb.UpdateUserReply{Token: ""}, result.Error
 	}
+	hash, err := bcrypt.GenerateFromPassword([]byte(in.GetNewPassword()), bcrypt.MinCost)
+	if err != nil {
+		panic(err)
+	}
+	user.EMAIL = in.GetNewEmail()
+	user.PASSWORD = string(hash)
+	db.DB.Save(&user)
 
 	ss, err := jwt.CreateJWT(user)
 	if err != nil {
@@ -99,7 +105,6 @@ func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.
 
 	return &pb.UpdateUserReply{Token: ss}, nil
 }
-*/
 
 func RunServer() {
 	log.Println("test")
