@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 option go_package = "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/user";
 
 package user;
@@ -9,6 +11,7 @@ service User {
   rpc GetUser (GetUserRequest) returns (GetUserReply) {}
   rpc CreateUser (CreateUserRequest) returns (CreateUserReply) {}
   rpc UpdateUser (UpdateUserRequest) returns (UpdateUserReply) {}
+  rpc DeleteUser (DeleteUserRequest) returns (google.protobuf.Empty) {}
 }
 
 message ListUsersRequest {
@@ -30,7 +33,6 @@ message GetUserReply {
   string uuid = 1;
   string email = 2;
   string permission = 3;
-  string password = 4;
 }
 
 message CreateUserRequest {
@@ -40,14 +42,23 @@ message CreateUserRequest {
   
 message CreateUserReply {
   string token = 1;
+  string uuid = 2;
+  string email = 3;
+  string permission = 4;
 }
 
 message UpdateUserRequest {
   string token = 1;
   string newEmail = 2;
   string newPassword = 3;
+  string uuid = 4;
 }
 
 message UpdateUserReply {
   string token = 1;
+}
+
+message DeleteUserRequest {
+  string token = 1;
+  string uuid = 2;
 }

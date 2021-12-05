@@ -36,8 +36,12 @@ func (s *server) Login(ctx context.Context, in *pb.LoginRequest) (*pb.LoginReply
 	if err != nil {
 		panic(err)
 	}
-
-	return &pb.LoginReply{Token: ss}, nil
+	return &pb.LoginReply{
+		Token:      ss,
+		Uuid:       user.UUID.String(),
+		Email:      user.EMAIL,
+		Permission: user.PERMISSION,
+	}, nil
 }
 
 func RunServer() {

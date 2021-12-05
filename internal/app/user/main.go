@@ -2,12 +2,14 @@ package user
 
 import (
 	"context"
+	"errors"
 	"log"
 	"net"
 
 	db "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/db/user"
 	jwt "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/jwt"
 	pb "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/user"
+	"github.com/golang/protobuf/ptypes/empty"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc"
@@ -56,7 +58,6 @@ func (s *server) GetUser(ctx context.Context, in *pb.GetUserRequest) (*pb.GetUse
 		Uuid:       user.UUID.String(),
 		Email:      user.EMAIL,
 		Permission: user.PERMISSION,
-		Password:   user.PASSWORD,
 	}, nil
 }
 
@@ -79,12 +80,20 @@ func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.
 		panic(err)
 	}
 
-	return &pb.CreateUserReply{Token: ss}, nil
+	return &pb.CreateUserReply{
+		Token:      ss,
+		Uuid:       user.UUID.String(),
+		Email:      user.EMAIL,
+		Permission: user.PERMISSION,
+	}, nil
 }
 
 func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.UpdateUserReply, error) {
 	var user db.User
 	uuid, _, err := jwt.ParseJWT(in.GetToken())
+	if err != nil {
+		log.Println(err)
+	}
 	result := db.DB.First(&user, "UUID = ?", uuid)
 	if result.Error != nil {
 		log.Printf("failed to update user: %v", result.Error)
@@ -104,6 +113,30 @@ func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.
 	}
 
 	return &pb.UpdateUserReply{Token: ss}, nil
+}
+
+func (s *server) DeleteUser(ctx context.Context, in *pb.DeleteUserRequest) (*empty.Empty, error) {
+	var user db.User
+	uuid, _, err := jwt.ParseJWT(in.GetToken())
+	if uuid.String() != in.GetUuid() {
+		return new(empty.Empty), errors.New("invalid access")
+	}
+	if err != nil {
+		log.Println(err)
+		return new(empty.Empty), err
+	}
+	result := db.DB.First(&user, "UUID = ?", uuid)
+	if result.Error != nil {
+		log.Println(err)
+		return new(empty.Empty), result.Error
+	}
+	result = db.DB.Delete(&user, "UUID = ?", uuid)
+	log.Println(user, result.Error)
+	if result.Error != nil {
+		log.Printf("failed to delete a user: %v", result.Error)
+		return new(empty.Empty), result.Error
+	}
+	return new(empty.Empty), nil
 }
 
 func RunServer() {

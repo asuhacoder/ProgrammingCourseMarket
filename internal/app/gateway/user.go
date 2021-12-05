@@ -79,7 +79,6 @@ func getUser(c *gin.Context) {
 			"uuid":       r.GetUuid(),
 			"email":      r.GetEmail(),
 			"permission": r.GetPermission(),
-			"password":   r.GetPassword(),
 		})
 	}
 }
@@ -108,7 +107,12 @@ func createUser(c *gin.Context) {
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
-		c.JSON(200, r.GetToken())
+		c.JSON(200, gin.H{
+			"token":      r.GetToken(),
+			"uuid":       r.GetUuid(),
+			"email":      r.GetEmail(),
+			"permission": r.GetPermission(),
+		})
 	}
 }
 
@@ -125,6 +129,7 @@ func updateUser(c *gin.Context) {
 	token := c.Query(("token"))
 	newEmail := c.Query("email")
 	newPassword := c.Query("password")
+	uuid := c.Param("uuid")
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
@@ -132,6 +137,7 @@ func updateUser(c *gin.Context) {
 		Token:       token,
 		NewEmail:    newEmail,
 		NewPassword: newPassword,
+		Uuid:        uuid,
 	})
 	log.Println("got data")
 	log.Println(err)
@@ -142,10 +148,39 @@ func updateUser(c *gin.Context) {
 	}
 }
 
+func deleteUser(c *gin.Context) {
+	log.Println("deleteUser func started")
+	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
+	log.Println("connected grpc server")
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+	client := pbUser.NewUserClient(conn)
+
+	token := c.Query("token")
+	uuid := c.Param("uuid")
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	r, err := client.DeleteUser(ctx, &pbUser.DeleteUserRequest{
+		Token: token,
+		Uuid:  uuid,
+	})
+	log.Println("got data")
+	log.Println(err)
+	if err != nil {
+		c.AbortWithStatus(400)
+	} else {
+		c.JSON(200, r)
+	}
+}
+
 func userRouters(router *gin.RouterGroup) {
 	u := router.Group("/users")
 	u.GET("", listUsers)
 	u.GET(":uuid", getUser)
 	u.POST("", createUser)
 	u.PUT(":uuid", updateUser)
+	u.DELETE(":uuid", deleteUser)
 }
