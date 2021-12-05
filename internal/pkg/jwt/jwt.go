@@ -1,6 +1,9 @@
 package jwt
 
 import (
+	"log"
+	"time"
+
 	db "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/db/user"
 	"github.com/golang-jwt/jwt"
 	uuid "github.com/satori/go.uuid"
@@ -26,4 +29,35 @@ func CreateJWT(user db.User) (string, error) {
 	ss, err := token.SignedString(mySingningKey)
 
 	return ss, err
+}
+
+func at(t time.Time, f func()) {
+	jwt.TimeFunc = func() time.Time {
+		return t
+	}
+	f()
+	jwt.TimeFunc = time.Now
+}
+
+func ParseJWT(tokenString string) (uuid.UUID, string, error) {
+	log.Printf("token: %v", tokenString)
+	var uUID uuid.UUID
+	var permission string
+	mySingningKey := []byte("AllYourBase")
+	at(time.Unix(0, 0), func() {
+		token, err := jwt.ParseWithClaims(tokenString, &userClaims{}, func(token *jwt.Token) (interface{}, error) {
+			return mySingningKey, nil
+		})
+		log.Println(token)
+		if err != nil {
+			log.Printf("failed to parse jwt: %v", err)
+			return
+		} else {
+			if claims, ok := token.Claims.(*userClaims); ok && token.Valid {
+				uUID = claims.UUID
+				permission = claims.PERMISSION
+			}
+		}
+	})
+	return uUID, permission, nil
 }
