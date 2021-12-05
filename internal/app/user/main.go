@@ -57,7 +57,6 @@ func (s *server) GetUser(ctx context.Context, in *pb.GetUserRequest) (*pb.GetUse
 		Uuid:       user.UUID.String(),
 		Email:      user.EMAIL,
 		Permission: user.PERMISSION,
-		Password:   user.PASSWORD,
 	}, nil
 }
 
@@ -80,7 +79,12 @@ func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.
 		panic(err)
 	}
 
-	return &pb.CreateUserReply{Token: ss}, nil
+	return &pb.CreateUserReply{
+		Token:      ss,
+		Uuid:       user.UUID.String(),
+		Email:      user.EMAIL,
+		Permission: user.PERMISSION,
+	}, nil
 }
 
 func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.UpdateUserReply, error) {
@@ -115,6 +119,7 @@ func (s *server) DeleteUser(ctx context.Context, in *pb.DeleteUserRequest) (*emp
 	uuid, _, err := jwt.ParseJWT(in.GetToken())
 	if err != nil {
 		log.Println(err)
+		return new(empty.Empty), err
 	}
 	result := db.DB.Delete(&user, "UUID = ?", uuid)
 	log.Println(user)
