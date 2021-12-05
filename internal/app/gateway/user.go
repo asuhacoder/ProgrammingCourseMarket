@@ -129,6 +129,7 @@ func updateUser(c *gin.Context) {
 	token := c.Query(("token"))
 	newEmail := c.Query("email")
 	newPassword := c.Query("password")
+	uuid := c.Param("uuid")
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
@@ -136,6 +137,7 @@ func updateUser(c *gin.Context) {
 		Token:       token,
 		NewEmail:    newEmail,
 		NewPassword: newPassword,
+		Uuid:        uuid,
 	})
 	log.Println("got data")
 	log.Println(err)
@@ -156,12 +158,14 @@ func deleteUser(c *gin.Context) {
 	defer conn.Close()
 	client := pbUser.NewUserClient(conn)
 
-	token := c.Query(("token"))
+	token := c.Query("token")
+	uuid := c.Param("uuid")
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.DeleteUser(ctx, &pbUser.DeleteUserRequest{
 		Token: token,
+		Uuid:  uuid,
 	})
 	log.Println("got data")
 	log.Println(err)

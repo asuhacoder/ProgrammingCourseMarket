@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"errors"
 	"log"
 	"net"
 
@@ -117,12 +118,20 @@ func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.
 func (s *server) DeleteUser(ctx context.Context, in *pb.DeleteUserRequest) (*empty.Empty, error) {
 	var user db.User
 	uuid, _, err := jwt.ParseJWT(in.GetToken())
+	if uuid.String() != in.GetUuid() {
+		return new(empty.Empty), errors.New("invalid access")
+	}
 	if err != nil {
 		log.Println(err)
 		return new(empty.Empty), err
 	}
-	result := db.DB.Delete(&user, "UUID = ?", uuid)
-	log.Println(user)
+	result := db.DB.First(&user, "UUID = ?", uuid)
+	if result.Error != nil {
+		log.Println(err)
+		return new(empty.Empty), result.Error
+	}
+	result = db.DB.Delete(&user, "UUID = ?", uuid)
+	log.Println(user, result.Error)
 	if result.Error != nil {
 		log.Printf("failed to delete a user: %v", result.Error)
 		return new(empty.Empty), result.Error

@@ -15,4 +15,7 @@ message LoginRequest {
 
 message LoginReply {
   string token = 1;
+  string uuid = 2;
+  string email = 3;
+  string permission = 4;
 }

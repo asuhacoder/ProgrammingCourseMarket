@@ -51,6 +51,7 @@ message UpdateUserRequest {
   string token = 1;
   string newEmail = 2;
   string newPassword = 3;
+  string uuid = 4;
 }
 
 message UpdateUserReply {
@@ -59,4 +60,5 @@ message UpdateUserReply {
 
 message DeleteUserRequest {
   string token = 1;
+  string uuid = 2;
 }

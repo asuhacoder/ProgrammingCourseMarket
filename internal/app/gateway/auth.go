@@ -34,7 +34,12 @@ func login(c *gin.Context) {
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
-		c.JSON(200, r.GetToken())
+		c.JSON(200, gin.H{
+			"token":      r.GetToken(),
+			"uuid":       r.GetUuid(),
+			"email":      r.GetEmail(),
+			"permission": r.GetPermission(),
+		})
 	}
 }
 
