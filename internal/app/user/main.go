@@ -8,6 +8,7 @@ import (
 	db "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/db/user"
 	jwt "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/jwt"
 	pb "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/user"
+	"github.com/golang/protobuf/ptypes/empty"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc"
@@ -85,6 +86,9 @@ func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.
 func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.UpdateUserReply, error) {
 	var user db.User
 	uuid, _, err := jwt.ParseJWT(in.GetToken())
+	if err != nil {
+		log.Println(err)
+	}
 	result := db.DB.First(&user, "UUID = ?", uuid)
 	if result.Error != nil {
 		log.Printf("failed to update user: %v", result.Error)
@@ -104,6 +108,21 @@ func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.
 	}
 
 	return &pb.UpdateUserReply{Token: ss}, nil
+}
+
+func (s *server) DeleteUser(ctx context.Context, in *pb.DeleteUserRequest) (*empty.Empty, error) {
+	var user db.User
+	uuid, _, err := jwt.ParseJWT(in.GetToken())
+	if err != nil {
+		log.Println(err)
+	}
+	result := db.DB.Delete(&user, "UUID = ?", uuid)
+	log.Println(user)
+	if result.Error != nil {
+		log.Printf("failed to delete a user: %v", result.Error)
+		return new(empty.Empty), result.Error
+	}
+	return new(empty.Empty), nil
 }
 
 func RunServer() {

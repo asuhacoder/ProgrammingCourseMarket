@@ -142,10 +142,37 @@ func updateUser(c *gin.Context) {
 	}
 }
 
+func deleteUser(c *gin.Context) {
+	log.Println("deleteUser func started")
+	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
+	log.Println("connected grpc server")
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+	client := pbUser.NewUserClient(conn)
+
+	token := c.Query(("token"))
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	r, err := client.DeleteUser(ctx, &pbUser.DeleteUserRequest{
+		Token: token,
+	})
+	log.Println("got data")
+	log.Println(err)
+	if err != nil {
+		c.AbortWithStatus(400)
+	} else {
+		c.JSON(200, r)
+	}
+}
+
 func userRouters(router *gin.RouterGroup) {
 	u := router.Group("/users")
 	u.GET("", listUsers)
 	u.GET(":uuid", getUser)
 	u.POST("", createUser)
 	u.PUT(":uuid", updateUser)
+	u.DELETE(":uuid", deleteUser)
 }
