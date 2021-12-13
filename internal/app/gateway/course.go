@@ -42,7 +42,7 @@ func listCourses(c *gin.Context) {
 				"uuid":       r.GetUuid(),
 				"user_id":    r.GetUserId(),
 				"title":      r.GetTitle(),
-				"introduce":  r.GetIntroduce(),
+				"introduction":  r.GetIntroduction(),
 				"image":      r.GetImage(),
 				"price":      r.GetPrice(),
 				"published":  r.GetPublished(),
@@ -81,7 +81,7 @@ func getCourse(c *gin.Context) {
 			"uuid":       r.GetUuid(),
 			"user_id":    r.GetUserId(),
 			"title":      r.GetTitle(),
-			"introduce":  r.GetIntroduce(),
+			"introduction":  r.GetIntroduction(),
 			"image":      r.GetImage(),
 			"price":      r.GetPrice(),
 			"published":  r.GetPublished(),
@@ -102,7 +102,7 @@ func createCourse(c *gin.Context) {
 
 	token := c.Query("token")
 	title := c.Query("title")
-	introduce := c.Query("introduce")
+	introduction := c.Query("introduction")
 	image := c.Query("image")
 	price, err := strconv.ParseInt(c.Query("price"), 10, 64)
 	if err != nil {
@@ -118,7 +118,7 @@ func createCourse(c *gin.Context) {
 	r, err := client.CreateCourse(ctx, &pbCourse.CreateCourseRequest{
 		Token:     token,
 		Title:     title,
-		Introduce: introduce,
+		Introduction: introduction,
 		Image:     image,
 		Price:     price,
 		Published: published,
@@ -132,7 +132,7 @@ func createCourse(c *gin.Context) {
 			"uuid":       r.GetUuid(),
 			"user_id":    r.GetUserId(),
 			"title":      r.GetTitle(),
-			"introduce":  r.GetIntroduce(),
+			"introduction":  r.GetIntroduction(),
 			"image":      r.GetImage(),
 			"price":      r.GetPrice(),
 			"published":  r.GetPublished(),
@@ -154,7 +154,7 @@ func updateCourse(c *gin.Context) {
 	uuid := c.Param("uuid")
 	token := c.Query("token")
 	title := c.Query("title")
-	introduce := c.Query("introduce")
+	introduction := c.Query("introduction")
 	image := c.Query("image")
 	price, err := strconv.ParseInt(c.Query("price"), 10, 64)
 	if err != nil {
@@ -171,7 +171,7 @@ func updateCourse(c *gin.Context) {
 		Uuid:      uuid,
 		Token:     token,
 		Title:     title,
-		Introduce: introduce,
+		Introduction: introduction,
 		Image:     image,
 		Price:     price,
 		Published: published,
@@ -185,7 +185,7 @@ func updateCourse(c *gin.Context) {
 			"uuid":       r.GetUuid(),
 			"user_id":    r.GetUserId(),
 			"title":      r.GetTitle(),
-			"introduce":  r.GetIntroduce(),
+			"introduction":  r.GetIntroduction(),
 			"image":      r.GetImage(),
 			"price":      r.GetPrice(),
 			"published":  r.GetPublished(),

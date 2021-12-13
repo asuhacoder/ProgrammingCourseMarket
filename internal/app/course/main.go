@@ -38,7 +38,7 @@ func (s *server) ListCourses(_ *empty.Empty, stream pb.Course_ListCoursesServer)
 			Uuid:      course.UUID.String(),
 			UserId:    course.USER_ID.String(),
 			Title:     course.TITLE,
-			Introduce: course.INTRODUCE,
+			Introduction: course.INTRODUCE,
 			Image:     course.IMAGE,
 			Price:     int64(course.PRICE),
 			Published: course.PUBLISHED,
@@ -61,7 +61,7 @@ func (s *server) GetCourse(ctx context.Context, in *pb.GetCourseRequest) (*pb.Ge
 		Uuid:      course.UUID.String(),
 		UserId:    course.USER_ID.String(),
 		Title:     course.TITLE,
-		Introduce: course.INTRODUCE,
+		Introduction: course.INTRODUCE,
 		Image:     course.IMAGE,
 		Price:     int64(course.PRICE),
 		Published: course.PUBLISHED,
@@ -80,7 +80,7 @@ func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (
 		UUID:      uuid.Must(uuid.NewV4()),
 		USER_ID:   uUID,
 		TITLE:     in.GetTitle(),
-		INTRODUCE: in.GetIntroduce(),
+		INTRODUCE: in.GetIntroduction(),
 		IMAGE:     in.GetImage(),
 		PRICE:     int(in.GetPrice()),
 		PUBLISHED: in.GetPublished(),
@@ -97,7 +97,7 @@ func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (
 		Uuid:      course.UUID.String(),
 		UserId:    course.USER_ID.String(),
 		Title:     course.TITLE,
-		Introduce: course.INTRODUCE,
+		Introduction: course.INTRODUCE,
 		Image:     course.IMAGE,
 		Price:     int64(course.PRICE),
 		Published: course.PUBLISHED,
@@ -126,7 +126,7 @@ func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (
 		return &pb.UpdateCourseReply{}, err
 	}
 	course.TITLE = in.GetTitle()
-	course.INTRODUCE = in.GetIntroduce()
+	course.INTRODUCE = in.GetIntroduction()
 	course.IMAGE = in.GetImage()
 	course.PRICE = int(in.GetPrice())
 	course.PUBLISHED = in.GetPublished()
@@ -136,7 +136,7 @@ func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (
 		Uuid:      course.UUID.String(),
 		UserId:    course.USER_ID.String(),
 		Title:     course.TITLE,
-		Introduce: course.INTRODUCE,
+		Introduction: course.INTRODUCE,
 		Image:     course.IMAGE,
 		Price:     int64(course.PRICE),
 		Published: course.PUBLISHED,
