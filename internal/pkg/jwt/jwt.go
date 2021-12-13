@@ -5,8 +5,8 @@ import (
 	"time"
 
 	db "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/db/user"
+	uuid "github.com/gofrs/uuid"
 	"github.com/golang-jwt/jwt"
-	uuid "github.com/satori/go.uuid"
 )
 
 type userClaims struct {

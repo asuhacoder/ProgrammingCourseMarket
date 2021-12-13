@@ -1,7 +1,7 @@
 package user
 
 import (
-	uuid "github.com/satori/go.uuid"
+	uuid "github.com/gofrs/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
