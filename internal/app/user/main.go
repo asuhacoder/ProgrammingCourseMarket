@@ -9,8 +9,8 @@ import (
 	db "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/db/user"
 	jwt "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/jwt"
 	pb "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/user"
+	"github.com/gofrs/uuid"
 	"github.com/golang/protobuf/ptypes/empty"
-	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc"
 )
@@ -67,7 +67,12 @@ func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.
 		panic(err)
 	}
 
-	user := db.User{UUID: uuid.NewV4(), EMAIL: string(in.GetEmail()), PERMISSION: "normal", PASSWORD: string(hash)}
+	user := db.User{
+		UUID:       uuid.Must(uuid.NewV4()),
+		EMAIL:      string(in.GetEmail()),
+		PERMISSION: "normal",
+		PASSWORD:   string(hash),
+	}
 	log.Println(user)
 	result := db.DB.Create(&user)
 	if result.Error != nil {

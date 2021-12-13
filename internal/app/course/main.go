@@ -1,0 +1,187 @@
+package course
+
+import (
+	"context"
+	"errors"
+	"log"
+	"net"
+
+	db "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/db/course"
+	jwt "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/jwt"
+	pb "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/course"
+	"github.com/gofrs/uuid"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/empty"
+	"google.golang.org/grpc"
+)
+
+const (
+	port = ":50053"
+)
+
+type server struct {
+	pb.UnimplementedCourseServer
+}
+
+func (s *server) ListCourses(_ *empty.Empty, stream pb.Course_ListCoursesServer) error {
+	log.Println("ListCourses running")
+	var courses []db.Course
+	result := db.DB.Find(&courses)
+	log.Println("got all courses")
+	log.Println(result.Error)
+	if result.Error != nil {
+		log.Fatalf("failed to list courses: %v", result.Error)
+		return result.Error
+	}
+	for _, course := range courses {
+		if err := stream.Send(&pb.ListCoursesReply{
+			Uuid:      course.UUID.String(),
+			UserId:    course.USER_ID.String(),
+			Title:     course.TITLE,
+			Introduce: course.INTRODUCE,
+			Image:     course.IMAGE,
+			Price:     int64(course.PRICE),
+			Published: course.PUBLISHED,
+		}); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *server) GetCourse(ctx context.Context, in *pb.GetCourseRequest) (*pb.GetCourseReply, error) {
+	var course db.Course
+	result := db.DB.First(&course, "UUID = ?", in.GetUuid())
+	log.Println(course)
+	if result.Error != nil {
+		log.Printf("failed to get a course: %v", result.Error)
+		return &pb.GetCourseReply{}, result.Error
+	}
+	return &pb.GetCourseReply{
+		Uuid:      course.UUID.String(),
+		UserId:    course.USER_ID.String(),
+		Title:     course.TITLE,
+		Introduce: course.INTRODUCE,
+		Image:     course.IMAGE,
+		Price:     int64(course.PRICE),
+		Published: course.PUBLISHED,
+	}, nil
+}
+
+func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (*pb.CreateCourseReply, error) {
+	uUID, _, err := jwt.ParseJWT(in.GetToken())
+	if err != nil {
+		log.Println(err)
+		log.Printf("failed to create course: %v", err)
+		return &pb.CreateCourseReply{}, err
+	}
+
+	course := db.Course{
+		UUID:      uuid.Must(uuid.NewV4()),
+		USER_ID:   uUID,
+		TITLE:     in.GetTitle(),
+		INTRODUCE: in.GetIntroduce(),
+		IMAGE:     in.GetImage(),
+		PRICE:     int(in.GetPrice()),
+		PUBLISHED: in.GetPublished(),
+	}
+	log.Println(course)
+	result := db.DB.Create(&course)
+	if result.Error != nil {
+		log.Printf("failed to create course: %v", result.Error)
+		return &pb.CreateCourseReply{}, result.Error
+	}
+	CreatedAt, _ := ptypes.TimestampProto(course.CREATED_AT)
+
+	return &pb.CreateCourseReply{
+		Uuid:      course.UUID.String(),
+		UserId:    course.USER_ID.String(),
+		Title:     course.TITLE,
+		Introduce: course.INTRODUCE,
+		Image:     course.IMAGE,
+		Price:     int64(course.PRICE),
+		Published: course.PUBLISHED,
+		CreatedAt: CreatedAt,
+	}, nil
+}
+
+func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (*pb.UpdateCourseReply, error) {
+	var course db.Course
+	userUuid, _, err := jwt.ParseJWT(in.GetToken())
+	if err != nil {
+		log.Println(err)
+		log.Printf("failed to create course: %v", err)
+		return &pb.UpdateCourseReply{}, err
+	}
+
+	uUID, err := uuid.FromString(in.GetUuid())
+	result := db.DB.First(&course, "UUID = ?", uUID)
+	if result.Error != nil {
+		log.Printf("failed to update course: %v", result.Error)
+		return &pb.UpdateCourseReply{}, result.Error
+	}
+	if userUuid != course.USER_ID {
+		err := errors.New("invalid user id")
+		log.Printf("failed to update course: %v", err)
+		return &pb.UpdateCourseReply{}, err
+	}
+	course.TITLE = in.GetTitle()
+	course.INTRODUCE = in.GetIntroduce()
+	course.IMAGE = in.GetImage()
+	course.PRICE = int(in.GetPrice())
+	course.PUBLISHED = in.GetPublished()
+	db.DB.Save(&course)
+
+	return &pb.UpdateCourseReply{
+		Uuid:      course.UUID.String(),
+		UserId:    course.USER_ID.String(),
+		Title:     course.TITLE,
+		Introduce: course.INTRODUCE,
+		Image:     course.IMAGE,
+		Price:     int64(course.PRICE),
+		Published: course.PUBLISHED,
+	}, nil
+}
+
+func (s *server) DeleteCourse(ctx context.Context, in *pb.DeleteCourseRequest) (*empty.Empty, error) {
+	var course db.Course
+	userUuid, _, err := jwt.ParseJWT(in.GetToken())
+
+	if err != nil {
+		log.Println(err)
+		return new(empty.Empty), err
+	}
+	uUID, err := uuid.FromString(in.GetUuid())
+	result := db.DB.First(&course, "UUID = ?", uUID)
+	if result.Error != nil {
+		log.Println(err)
+		return new(empty.Empty), result.Error
+	}
+	if userUuid != course.USER_ID {
+		return new(empty.Empty), errors.New("invalid user id")
+	}
+	result = db.DB.Delete(&course, "UUID = ?", uUID)
+	log.Println(course, result.Error)
+	if result.Error != nil {
+		log.Printf("failed to delete a course: %v", result.Error)
+		return new(empty.Empty), result.Error
+	}
+	return new(empty.Empty), nil
+}
+
+func RunServer() {
+	log.Println("test")
+	db.Init()
+	defer db.Close()
+
+	lis, err := net.Listen("tcp", port)
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	s := grpc.NewServer()
+	pb.RegisterCourseServer(s, &server{})
+	log.Println("course grpc server running")
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
+}
