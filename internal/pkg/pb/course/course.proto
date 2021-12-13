@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/course";
+
+package course;
+
+service Course {
+  rpc ListCourses (google.protobuf.Empty) returns (stream ListCoursesReply) {}
+  rpc GetCourse (GetCourseRequest) returns (GetCourseReply) {}
+  rpc CreateCourse (CreateCourseRequest) returns (CreateCourseReply) {}
+  rpc UpdateCourse (UpdateCourseRequest) returns (UpdateCourseReply) {}
+  rpc DeleteCourse (DeleteCourseRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListCoursesReply {
+  string uuid = 1;
+  string user_id = 2;
+  string title = 3;
+  string introduce = 4;
+  string image = 5;
+  int64 price = 6;
+  bool published = 7;
+  google.protobuf.Timestamp created_at = 8;
+}
+
+message GetCourseRequest {
+  string uuid = 1;
+}
+
+message GetCourseReply {
+    string uuid = 1;
+    string user_id = 2;
+    string title = 3;
+    string introduce = 4;
+    string image = 5;
+    int64 price = 6;
+    bool published = 7;
+    google.protobuf.Timestamp created_at = 8;
+}
+
+message CreateCourseRequest {
+    string token = 1;
+    string title = 2;
+    string introduce = 3;
+    string image = 4;
+    int64 price = 5;
+    bool published = 6;
+}
+  
+message CreateCourseReply {
+    string uuid = 1;
+    string user_id = 2;
+    string title = 3;
+    string introduce = 4;
+    string image = 5;
+    int64 price = 6;
+    bool published = 7;
+    google.protobuf.Timestamp created_at = 8;
+}
+
+message UpdateCourseRequest {
+    string token = 1;
+    string uuid = 2;
+    string title = 3;
+    string introduce = 4;
+    string image = 5;
+    int64 price = 6;
+    bool published = 7;
+}
+
+message UpdateCourseReply {
+    string uuid = 1;
+    string user_id = 2;
+    string title = 3;
+    string introduce = 4;
+    string image = 5;
+    int64 price = 6;
+    bool published = 7;
+    google.protobuf.Timestamp created_at = 8;
+}
+
+message DeleteCourseRequest {
+  string token = 1;
+  string uuid = 2;
+}

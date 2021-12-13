@@ -9,6 +9,7 @@ func RunServer() {
 	api := r.Group("/api")
 	v1 := api.Group("/v1")
 	userRouters(v1)
-	AuthRouters(v1)
+	authRouters(v1)
+	courseRouters(v1)
 	r.Run()
 }

@@ -43,7 +43,7 @@ func login(c *gin.Context) {
 	}
 }
 
-func AuthRouters(router *gin.RouterGroup) {
+func authRouters(router *gin.RouterGroup) {
 	a := router.Group("/auth")
 	a.GET("", login)
 }

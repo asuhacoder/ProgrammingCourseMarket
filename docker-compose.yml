@@ -48,3 +48,32 @@ services:
       interval: 1s
       timeout: 5s
       retries: 5
+  course:
+    build:
+      context: ./
+      dockerfile: ./build/package/docker/course/Dockerfile
+    ports:
+      - 50053:50053
+    tty:
+      true
+    depends_on: 
+      course_db:
+        condition: service_healthy
+  course_db:
+    build: 
+      context: ./build/package/docker/course_db/
+      dockerfile: Dockerfile
+    container_name: "course_db"
+    command: postgres -c port=5433
+    environment: 
+      POSTGRES_USER: gorm
+      POSTGRES_PASSWORD: gorm
+      POSTGRES_DB: gorm
+      POSTGRES_HOST: course_db
+    ports:
+      - 5433:5433
+    healthcheck:
+      test: [CMD-SHELL, "exit", "0"]
+      interval: 1s
+      timeout: 5s
+      retries: 5

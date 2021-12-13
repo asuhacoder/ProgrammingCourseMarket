@@ -1,6 +1,8 @@
-package user
+package course
 
 import (
+	"time"
+
 	uuid "github.com/gofrs/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -15,7 +17,7 @@ var (
 // Init DB
 func Init() {
 	DB, err = gorm.Open(postgres.New(postgres.Config{
-		DSN: "host=user_db user=gorm password=gorm dbname=gorm port=5432 sslmode=disable TimeZone=Asia/Tokyo",
+		DSN: "host=course_db user=gorm password=gorm dbname=gorm port=5433 sslmode=disable TimeZone=Asia/Tokyo",
 	}), &gorm.Config{})
 	if err != nil {
 		panic(err)
@@ -33,13 +35,17 @@ func Close() {
 }
 
 func autoMigration() {
-	DB.AutoMigrate(&User{})
+	DB.AutoMigrate(&Course{})
 }
 
 // User Model
-type User struct {
+type Course struct {
 	UUID       uuid.UUID `gorm:"primaryKey; unique; type:uuid;"`
-	EMAIL      string    `gorm:"unique"`
-	PERMISSION string    `gorm:"not null"`
-	PASSWORD   string    `gorm:"not null"`
+	USER_ID    uuid.UUID `gorm:"not null"`
+	TITLE      string    `gorm:"not null"`
+	INTRODUCE  string    `gorm:"not null"`
+	IMAGE      string
+	PRICE      int       `gorm:"not null"`
+	PUBLISHED  bool      `gorm:"not null"`
+	CREATED_AT time.Time `gorm:"autoCreateTime"`
 }
