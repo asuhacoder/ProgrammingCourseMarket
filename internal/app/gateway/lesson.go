@@ -16,7 +16,7 @@ const (
 	lessonAddress = "lesson:50054"
 )
 
-type Request struct {
+type LessonRequest struct {
 	Token        string           `form:"token" json:"token"`
 	CourseID     string           `form:"course_id" json:"course_id"`
 	Title        string           `form:"title" json:"title"`
@@ -116,7 +116,7 @@ func createLesson(c *gin.Context) {
 	defer conn.Close()
 	client := pbLesson.NewLessonClient(conn)
 
-	var s Request
+	var s LessonRequest
 	err = c.ShouldBind(&s)
 	if err != nil {
 		log.Printf("failed to bind queries: %v", err)
@@ -172,7 +172,7 @@ func updateLesson(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	var s Request
+	var s LessonRequest
 	c.Bind(&s)
 	log.Printf("request: %v", s)
 
