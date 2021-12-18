@@ -4,7 +4,6 @@ import (
 	"context"
 	"io"
 	"log"
-	"reflect"
 	"time"
 
 	pbLesson "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/lesson"
@@ -125,9 +124,6 @@ func createLesson(c *gin.Context) {
 		log.Printf("failed to bind queries: %v", err)
 		c.AbortWithStatus(400)
 	}
-	log.Printf("request: %v", s)
-	log.Printf("s.TestCase: %v", s.TestCase)
-	log.Printf("s.TestCase's type: %v", reflect.TypeOf(s.TestCase[0]))
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
@@ -181,7 +177,6 @@ func updateLesson(c *gin.Context) {
 		log.Printf("failed to bind queries: %v", err)
 		c.AbortWithStatus(400)
 	}
-	log.Printf("request: %v", s)
 
 	r, err := client.UpdateLesson(ctx, &pbLesson.UpdateLessonRequest{
 		Token:        s.Token,
