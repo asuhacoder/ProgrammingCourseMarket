@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: cd web
+        run: cd web/
       - name: Install packages
         run: yarn install --frozen-lockfile
       - name: Prettier
@@ -21,3 +23,4 @@ jobs:
       - name: Lint
         run: yarn run lint
         working-directory: ./web
+
