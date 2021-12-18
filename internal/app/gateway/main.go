@@ -11,5 +11,6 @@ func RunServer() {
 	userRouters(v1)
 	authRouters(v1)
 	courseRouters(v1)
+	lessonRouters(v1)
 	r.Run()
 }
