@@ -37,7 +37,6 @@ func runCode(c *gin.Context) {
 		log.Printf("failed to bind queries: %v", err)
 		c.AbortWithStatus(400)
 	}
-	log.Printf("request: %v", s)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
