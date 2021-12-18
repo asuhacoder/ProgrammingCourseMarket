@@ -1,6 +1,8 @@
 package lesson
 
 import (
+	"log"
+
 	uuid "github.com/gofrs/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -33,7 +35,10 @@ func Close() {
 }
 
 func autoMigration() {
-	DB.AutoMigrate(&Lesson{})
+	err := DB.AutoMigrate(&Lesson{})
+	if err != nil {
+		log.Printf("failed to AutoMigrate: %v", err)
+	}
 }
 
 // Lesson Model

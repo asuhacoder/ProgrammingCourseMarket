@@ -30,6 +30,9 @@ func listUsers(c *gin.Context) {
 	stream, err := client.ListUsers(ctx, &pbUser.ListUsersRequest{
 		Token: token,
 	})
+	if err != nil {
+		log.Printf("failed to access grpc server: %v", err)
+	}
 	var responces []gin.H
 	for {
 		r, err := stream.Recv()

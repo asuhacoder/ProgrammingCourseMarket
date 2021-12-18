@@ -98,6 +98,9 @@ func (s *server) CreateLesson(ctx context.Context, in *pb.CreateLessonRequest) (
 		return &pb.CreateLessonReply{}, err
 	}
 	courseID, err := uuid.FromString(in.GetCourseId())
+	if err != nil {
+		log.Printf("failed to convert string to uuid: %v", err)
+	}
 	dbCases := []db.TestCase{}
 	log.Printf("in.GetTestCase: %v", in.GetTestCase())
 	for _, t := range in.GetTestCase() {
@@ -164,6 +167,9 @@ func (s *server) UpdateLesson(ctx context.Context, in *pb.UpdateLessonRequest) (
 	}
 
 	uUID, err := uuid.FromString(in.GetUuid())
+	if err != nil {
+		log.Printf("failed to convert string to uuid: %v", err)
+	}
 	result := db.DB.First(&lesson, "UUID = ?", uUID)
 	if result.Error != nil {
 		log.Printf("failed to update lesson: %v", result.Error)

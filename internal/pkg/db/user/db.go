@@ -1,6 +1,8 @@
 package user
 
 import (
+	"log"
+
 	uuid "github.com/gofrs/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -33,7 +35,10 @@ func Close() {
 }
 
 func autoMigration() {
-	DB.AutoMigrate(&User{})
+	err := DB.AutoMigrate(&User{})
+	if err != nil {
+		log.Printf("failed to AutoMigrate: %v", err)
+	}
 }
 
 // User Model

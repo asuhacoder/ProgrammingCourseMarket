@@ -1,6 +1,7 @@
 package course
 
 import (
+	"log"
 	"time"
 
 	uuid "github.com/gofrs/uuid"
@@ -35,7 +36,10 @@ func Close() {
 }
 
 func autoMigration() {
-	DB.AutoMigrate(&Course{})
+	err := DB.AutoMigrate(&Course{})
+	if err != nil {
+		log.Printf("failed to AutoMigrate: %v", err)
+	}
 }
 
 // CourseModel
