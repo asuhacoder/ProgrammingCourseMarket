@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/runner";
+
+package runner;
+
+service Runner {
+  rpc RunCode (RunCodeRequest) returns (RunCodeReply) {}
+}
+
+message RunCodeRequest {
+  string code = 1;
+  string input = 2;
+  string language = 3;
+  string version = 4;
+}
+
+message RunCodeReply {
+  string output = 1;
+}

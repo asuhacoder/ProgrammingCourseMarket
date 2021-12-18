@@ -106,3 +106,13 @@ services:
       interval: 1s
       timeout: 5s
       retries: 5
+  runner:
+    build:
+      context: ./
+      dockerfile: ./build/package/docker/runner/Dockerfile
+    ports:
+      - 50055:50055
+    tty:
+      true
+    env_file:
+      - jdoodle.env

@@ -12,6 +12,9 @@ protoc:
 	protoc --go_out=. --go_opt=paths=source_relative \
 		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
 		internal/pkg/pb/lesson/lesson.proto
+	protoc --go_out=. --go_opt=paths=source_relative \
+		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
+		internal/pkg/pb/runner/runner.proto
 
 .PHONY: build
 build:
@@ -28,6 +31,8 @@ clean:
 	rm -f internal/pkg/pb/course/course_grpc.pb.go
 	rm -f internal/pkg/pb/lesson/lesson.pb.go
 	rm -f internal/pkg/pb/lesson/lesson_grpc.pb.go
+	rm -f internal/pkg/pb/runner/runner.pb.go
+	rm -f internal/pkg/pb/runner/runner_grpc.pb.go
 
 .PHONY: help
 help:
