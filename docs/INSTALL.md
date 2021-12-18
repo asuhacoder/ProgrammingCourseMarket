@@ -21,6 +21,22 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
 
 4. make
 
+5. pre-commit
+
+```
+pip3 install pre-commit
+```
+
+Make sure that you can run pre-commit command, or restart your machine.    
+
+```
+pre-commit --version
+```
+
+```
+pre-commit install
+```
+
 ## Build
 
 1. run `make build`
