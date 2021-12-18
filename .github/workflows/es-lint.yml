@@ -1,0 +1,21 @@
+name: es-lint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Check the source code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install packages
+        run: npm ci
+      - name: Prettier
+        run: npm run format
+      - name: Lint
+        run: npm run lint
