@@ -10,9 +10,9 @@ import (
 	jwt "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/jwt"
 	pb "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/course"
 	"github.com/gofrs/uuid"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 const (
@@ -91,7 +91,7 @@ func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (
 		log.Printf("failed to create course: %v", result.Error)
 		return &pb.CreateCourseReply{}, result.Error
 	}
-	CreatedAt, _ := ptypes.TimestampProto(course.CREATED_AT)
+	CreatedAt := timestamppb.New(course.CREATED_AT)
 
 	return &pb.CreateCourseReply{
 		Uuid:         course.UUID.String(),
@@ -115,6 +115,9 @@ func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (
 	}
 
 	uUID, err := uuid.FromString(in.GetUuid())
+	if err != nil {
+		log.Printf("failed to convert string to uuid: %v", err)
+	}
 	result := db.DB.First(&course, "UUID = ?", uUID)
 	if result.Error != nil {
 		log.Printf("failed to update course: %v", result.Error)

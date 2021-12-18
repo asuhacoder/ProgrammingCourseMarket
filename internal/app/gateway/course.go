@@ -28,6 +28,9 @@ func listCourses(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	stream, err := client.ListCourses(ctx, new(empty.Empty))
+	if err != nil {
+		log.Printf("failed to access grpc server: %v", err)
+	}
 	var responces []gin.H
 	for {
 		r, err := stream.Recv()

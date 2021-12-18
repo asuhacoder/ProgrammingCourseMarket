@@ -1,6 +1,8 @@
 package gateway
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,5 +15,8 @@ func RunServer() {
 	courseRouters(v1)
 	lessonRouters(v1)
 	runnerRouters(v1)
-	r.Run()
+	err := r.Run()
+	if err != nil {
+		log.Printf("failed to run gateway: %v", err)
+	}
 }

@@ -40,6 +40,9 @@ func listLessons(c *gin.Context) {
 	defer cancel()
 	courseID := c.Query("course_id")
 	stream, err := client.ListLessons(ctx, &pbLesson.ListLessonsRequest{CourseId: courseID})
+	if err != nil {
+		log.Printf("failed to access grpc server: %v", err)
+	}
 	var responces []gin.H
 	for {
 		r, err := stream.Recv()
@@ -173,7 +176,11 @@ func updateLesson(c *gin.Context) {
 	defer cancel()
 
 	var s LessonRequest
-	c.Bind(&s)
+	err = c.ShouldBind(&s)
+	if err != nil {
+		log.Printf("failed to bind queries: %v", err)
+		c.AbortWithStatus(400)
+	}
 	log.Printf("request: %v", s)
 
 	r, err := client.UpdateLesson(ctx, &pbLesson.UpdateLessonRequest{
