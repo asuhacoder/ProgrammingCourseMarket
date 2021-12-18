@@ -14,8 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install packages
-        run: npm ci
+        run: yarn install --frozen-lockfile
       - name: Prettier
-        run: npm run format
+        run: yarn prettier --write .
       - name: Lint
-        run: npm run lint
+        run: yarn run lint
