@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/Asuha-a/ProgrammingLessonMarket/internal/pkg/pb/lesson";
+
+package course;
+
+service Lesson {
+  rpc ListLessons (ListLessonsRequest) returns (stream ListLessonsReply) {}
+  rpc GetLesson (GetLessonRequest) returns (GetLessonReply) {}
+  rpc CreateLesson (CreateLessonRequest) returns (CreateLessonReply) {}
+  rpc UpdateLesson (UpdateLessonRequest) returns (UpdateLessonReply) {}
+  rpc DeleteLesson (DeleteLessonRequest) returns (google.protobuf.Empty) {}
+}
+
+message case {
+    string input = 1;
+    string output = 2;
+}
+
+message ListLessonsRequest {
+  string course_id = 1;
+}
+
+message ListLessonsReply {
+  string uuid = 1;
+  string user_id = 2;
+  string course_id = 3;
+  string title = 4;
+  string introduction = 5;
+  string body = 6;
+  string default_code = 7;
+  string answer_code = 8;
+  repeated case test_case = 9;
+  string language = 10;
+}
+
+message GetLessonRequest {
+  string uuid = 1;
+}
+
+message GetLessonReply {
+    string uuid = 1;
+    string user_id = 2;
+    string course_id = 3;
+    string title = 4;
+    string introduction = 5;
+    string body = 6;
+    string default_code = 7;
+    string answer_code = 8;
+    repeated case test_case = 9;
+    string language = 10;
+}
+
+message CreateLessonRequest {
+    string token = 1;
+    string course_id = 2;
+    string title = 3;
+    string introduction = 4;
+    string body = 5;
+    string default_code = 6;
+    string answer_code = 7;
+    repeated case test_case = 8;
+    string language = 9;
+}
+  
+message CreateLessonReply {
+    string uuid = 1;
+    string user_id = 2;
+    string course_id = 3;
+    string title = 4;
+    string introduction = 5;
+    string body = 6;
+    string default_code = 7;
+    string answer_code = 8;
+    repeated case test_case = 9;
+    string language = 10;
+}
+
+message UpdateLessonRequest {
+    string token = 1;
+    string uuid = 2;
+    string title = 3;
+    string introduction = 4;
+    string body = 5;
+    string default_code = 6;
+    string answer_code = 7;
+    repeated case test_case = 8;
+    string language = 9;
+}
+
+message UpdateLessonReply {
+    string uuid = 1;
+    string user_id = 2;
+    string course_id = 3;
+    string title = 4;
+    string introduction = 5;
+    string body = 6;
+    string default_code = 7;
+    string answer_code = 8;
+    repeated case test_case = 9;
+    string language = 10;
+}
+
+message DeleteLessonRequest {
+  string token = 1;
+  string uuid = 2;
+}

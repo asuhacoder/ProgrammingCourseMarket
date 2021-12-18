@@ -38,14 +38,14 @@ func autoMigration() {
 	DB.AutoMigrate(&Course{})
 }
 
-// User Model
+// CourseModel
 type Course struct {
-	UUID       uuid.UUID `gorm:"primaryKey; unique; type:uuid;"`
-	USER_ID    uuid.UUID `gorm:"not null"`
-	TITLE      string    `gorm:"not null"`
-	INTRODUCE  string    `gorm:"not null"`
-	IMAGE      string
-	PRICE      int       `gorm:"not null"`
-	PUBLISHED  bool      `gorm:"not null"`
-	CREATED_AT time.Time `gorm:"autoCreateTime"`
+	UUID         uuid.UUID `gorm:"primaryKey; unique; type:uuid;"`
+	USER_ID      uuid.UUID `gorm:"not null"`
+	TITLE        string    `gorm:"not null"`
+	INTRODUCTION string    `gorm:"not null"`
+	IMAGE        string
+	PRICE        int       `gorm:"not null"`
+	PUBLISHED    bool      `gorm:"not null"`
+	CREATED_AT   time.Time `gorm:"autoCreateTime"`
 }

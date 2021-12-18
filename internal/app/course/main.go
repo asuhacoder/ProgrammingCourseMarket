@@ -35,13 +35,13 @@ func (s *server) ListCourses(_ *empty.Empty, stream pb.Course_ListCoursesServer)
 	}
 	for _, course := range courses {
 		if err := stream.Send(&pb.ListCoursesReply{
-			Uuid:      course.UUID.String(),
-			UserId:    course.USER_ID.String(),
-			Title:     course.TITLE,
-			Introduce: course.INTRODUCE,
-			Image:     course.IMAGE,
-			Price:     int64(course.PRICE),
-			Published: course.PUBLISHED,
+			Uuid:         course.UUID.String(),
+			UserId:       course.USER_ID.String(),
+			Title:        course.TITLE,
+			Introduction: course.INTRODUCTION,
+			Image:        course.IMAGE,
+			Price:        int64(course.PRICE),
+			Published:    course.PUBLISHED,
 		}); err != nil {
 			return err
 		}
@@ -58,13 +58,13 @@ func (s *server) GetCourse(ctx context.Context, in *pb.GetCourseRequest) (*pb.Ge
 		return &pb.GetCourseReply{}, result.Error
 	}
 	return &pb.GetCourseReply{
-		Uuid:      course.UUID.String(),
-		UserId:    course.USER_ID.String(),
-		Title:     course.TITLE,
-		Introduce: course.INTRODUCE,
-		Image:     course.IMAGE,
-		Price:     int64(course.PRICE),
-		Published: course.PUBLISHED,
+		Uuid:         course.UUID.String(),
+		UserId:       course.USER_ID.String(),
+		Title:        course.TITLE,
+		Introduction: course.INTRODUCTION,
+		Image:        course.IMAGE,
+		Price:        int64(course.PRICE),
+		Published:    course.PUBLISHED,
 	}, nil
 }
 
@@ -77,13 +77,13 @@ func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (
 	}
 
 	course := db.Course{
-		UUID:      uuid.Must(uuid.NewV4()),
-		USER_ID:   uUID,
-		TITLE:     in.GetTitle(),
-		INTRODUCE: in.GetIntroduce(),
-		IMAGE:     in.GetImage(),
-		PRICE:     int(in.GetPrice()),
-		PUBLISHED: in.GetPublished(),
+		UUID:         uuid.Must(uuid.NewV4()),
+		USER_ID:      uUID,
+		TITLE:        in.GetTitle(),
+		INTRODUCTION: in.GetIntroduction(),
+		IMAGE:        in.GetImage(),
+		PRICE:        int(in.GetPrice()),
+		PUBLISHED:    in.GetPublished(),
 	}
 	log.Println(course)
 	result := db.DB.Create(&course)
@@ -94,14 +94,14 @@ func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (
 	CreatedAt, _ := ptypes.TimestampProto(course.CREATED_AT)
 
 	return &pb.CreateCourseReply{
-		Uuid:      course.UUID.String(),
-		UserId:    course.USER_ID.String(),
-		Title:     course.TITLE,
-		Introduce: course.INTRODUCE,
-		Image:     course.IMAGE,
-		Price:     int64(course.PRICE),
-		Published: course.PUBLISHED,
-		CreatedAt: CreatedAt,
+		Uuid:         course.UUID.String(),
+		UserId:       course.USER_ID.String(),
+		Title:        course.TITLE,
+		Introduction: course.INTRODUCTION,
+		Image:        course.IMAGE,
+		Price:        int64(course.PRICE),
+		Published:    course.PUBLISHED,
+		CreatedAt:    CreatedAt,
 	}, nil
 }
 
@@ -126,20 +126,20 @@ func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (
 		return &pb.UpdateCourseReply{}, err
 	}
 	course.TITLE = in.GetTitle()
-	course.INTRODUCE = in.GetIntroduce()
+	course.INTRODUCTION = in.GetIntroduction()
 	course.IMAGE = in.GetImage()
 	course.PRICE = int(in.GetPrice())
 	course.PUBLISHED = in.GetPublished()
 	db.DB.Save(&course)
 
 	return &pb.UpdateCourseReply{
-		Uuid:      course.UUID.String(),
-		UserId:    course.USER_ID.String(),
-		Title:     course.TITLE,
-		Introduce: course.INTRODUCE,
-		Image:     course.IMAGE,
-		Price:     int64(course.PRICE),
-		Published: course.PUBLISHED,
+		Uuid:         course.UUID.String(),
+		UserId:       course.USER_ID.String(),
+		Title:        course.TITLE,
+		Introduction: course.INTRODUCTION,
+		Image:        course.IMAGE,
+		Price:        int64(course.PRICE),
+		Published:    course.PUBLISHED,
 	}, nil
 }
 

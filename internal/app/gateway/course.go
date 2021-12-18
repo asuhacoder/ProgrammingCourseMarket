@@ -39,14 +39,14 @@ func listCourses(c *gin.Context) {
 			c.AbortWithStatus(400)
 		} else {
 			course := gin.H{
-				"uuid":       r.GetUuid(),
-				"user_id":    r.GetUserId(),
-				"title":      r.GetTitle(),
-				"introduce":  r.GetIntroduce(),
-				"image":      r.GetImage(),
-				"price":      r.GetPrice(),
-				"published":  r.GetPublished(),
-				"created_at": r.GetCreatedAt(),
+				"uuid":         r.GetUuid(),
+				"user_id":      r.GetUserId(),
+				"title":        r.GetTitle(),
+				"introduction": r.GetIntroduction(),
+				"image":        r.GetImage(),
+				"price":        r.GetPrice(),
+				"published":    r.GetPublished(),
+				"created_at":   r.GetCreatedAt(),
 			}
 			responces = append(responces, course)
 		}
@@ -78,14 +78,14 @@ func getCourse(c *gin.Context) {
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
-			"uuid":       r.GetUuid(),
-			"user_id":    r.GetUserId(),
-			"title":      r.GetTitle(),
-			"introduce":  r.GetIntroduce(),
-			"image":      r.GetImage(),
-			"price":      r.GetPrice(),
-			"published":  r.GetPublished(),
-			"created_at": r.GetCreatedAt(),
+			"uuid":         r.GetUuid(),
+			"user_id":      r.GetUserId(),
+			"title":        r.GetTitle(),
+			"introduction": r.GetIntroduction(),
+			"image":        r.GetImage(),
+			"price":        r.GetPrice(),
+			"published":    r.GetPublished(),
+			"created_at":   r.GetCreatedAt(),
 		})
 	}
 }
@@ -102,7 +102,7 @@ func createCourse(c *gin.Context) {
 
 	token := c.Query("token")
 	title := c.Query("title")
-	introduce := c.Query("introduce")
+	introduction := c.Query("introduction")
 	image := c.Query("image")
 	price, err := strconv.ParseInt(c.Query("price"), 10, 64)
 	if err != nil {
@@ -116,12 +116,12 @@ func createCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.CreateCourse(ctx, &pbCourse.CreateCourseRequest{
-		Token:     token,
-		Title:     title,
-		Introduce: introduce,
-		Image:     image,
-		Price:     price,
-		Published: published,
+		Token:        token,
+		Title:        title,
+		Introduction: introduction,
+		Image:        image,
+		Price:        price,
+		Published:    published,
 	})
 	log.Println("got data")
 	log.Println(err)
@@ -129,14 +129,14 @@ func createCourse(c *gin.Context) {
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
-			"uuid":       r.GetUuid(),
-			"user_id":    r.GetUserId(),
-			"title":      r.GetTitle(),
-			"introduce":  r.GetIntroduce(),
-			"image":      r.GetImage(),
-			"price":      r.GetPrice(),
-			"published":  r.GetPublished(),
-			"created_at": r.GetCreatedAt(),
+			"uuid":         r.GetUuid(),
+			"user_id":      r.GetUserId(),
+			"title":        r.GetTitle(),
+			"introduction": r.GetIntroduction(),
+			"image":        r.GetImage(),
+			"price":        r.GetPrice(),
+			"published":    r.GetPublished(),
+			"created_at":   r.GetCreatedAt(),
 		})
 	}
 }
@@ -154,7 +154,7 @@ func updateCourse(c *gin.Context) {
 	uuid := c.Param("uuid")
 	token := c.Query("token")
 	title := c.Query("title")
-	introduce := c.Query("introduce")
+	introduction := c.Query("introduction")
 	image := c.Query("image")
 	price, err := strconv.ParseInt(c.Query("price"), 10, 64)
 	if err != nil {
@@ -168,13 +168,13 @@ func updateCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.UpdateCourse(ctx, &pbCourse.UpdateCourseRequest{
-		Uuid:      uuid,
-		Token:     token,
-		Title:     title,
-		Introduce: introduce,
-		Image:     image,
-		Price:     price,
-		Published: published,
+		Uuid:         uuid,
+		Token:        token,
+		Title:        title,
+		Introduction: introduction,
+		Image:        image,
+		Price:        price,
+		Published:    published,
 	})
 	log.Println("got data")
 	log.Println(err)
@@ -182,14 +182,14 @@ func updateCourse(c *gin.Context) {
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
-			"uuid":       r.GetUuid(),
-			"user_id":    r.GetUserId(),
-			"title":      r.GetTitle(),
-			"introduce":  r.GetIntroduce(),
-			"image":      r.GetImage(),
-			"price":      r.GetPrice(),
-			"published":  r.GetPublished(),
-			"created_at": r.GetCreatedAt(),
+			"uuid":         r.GetUuid(),
+			"user_id":      r.GetUserId(),
+			"title":        r.GetTitle(),
+			"introduction": r.GetIntroduction(),
+			"image":        r.GetImage(),
+			"price":        r.GetPrice(),
+			"published":    r.GetPublished(),
+			"created_at":   r.GetCreatedAt(),
 		})
 	}
 }
@@ -223,10 +223,10 @@ func deleteCourse(c *gin.Context) {
 }
 
 func courseRouters(router *gin.RouterGroup) {
-	u := router.Group("/courses")
-	u.GET("", listCourses)
-	u.GET(":uuid", getCourse)
-	u.POST("", createCourse)
-	u.PUT(":uuid", updateCourse)
-	u.DELETE(":uuid", deleteCourse)
+	c := router.Group("/courses")
+	c.GET("", listCourses)
+	c.GET(":uuid", getCourse)
+	c.POST("", createCourse)
+	c.PUT(":uuid", updateCourse)
+	c.DELETE(":uuid", deleteCourse)
 }
