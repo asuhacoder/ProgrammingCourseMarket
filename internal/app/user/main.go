@@ -35,10 +35,11 @@ func (s *server) ListUsers(rect *pb.ListUsersRequest, stream pb.User_ListUsersSe
 	}
 	for _, user := range users {
 		if err := stream.Send(&pb.ListUsersReply{
-			Uuid:       user.UUID.String(),
-			Email:      user.EMAIL,
-			Permission: user.PERMISSION,
-			Password:   user.PASSWORD,
+			Uuid:         user.UUID.String(),
+			Name:         user.NAME,
+			Introduction: user.INTRODUCTION,
+			Email:        user.EMAIL,
+			Permission:   user.PERMISSION,
 		}); err != nil {
 			return err
 		}
@@ -55,9 +56,11 @@ func (s *server) GetUser(ctx context.Context, in *pb.GetUserRequest) (*pb.GetUse
 		return &pb.GetUserReply{}, result.Error
 	}
 	return &pb.GetUserReply{
-		Uuid:       user.UUID.String(),
-		Email:      user.EMAIL,
-		Permission: user.PERMISSION,
+		Uuid:         user.UUID.String(),
+		Name:         user.NAME,
+		Introduction: user.INTRODUCTION,
+		Email:        user.EMAIL,
+		Permission:   user.PERMISSION,
 	}, nil
 }
 
@@ -68,10 +71,12 @@ func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.
 	}
 
 	user := db.User{
-		UUID:       uuid.Must(uuid.NewV4()),
-		EMAIL:      string(in.GetEmail()),
-		PERMISSION: "normal",
-		PASSWORD:   string(hash),
+		UUID:         uuid.Must(uuid.NewV4()),
+		NAME:         in.GetName(),
+		INTRODUCTION: in.GetIntroduction(),
+		EMAIL:        in.GetEmail(),
+		PERMISSION:   "normal",
+		PASSWORD:     string(hash),
 	}
 	log.Println(user)
 	result := db.DB.Create(&user)
@@ -86,10 +91,12 @@ func (s *server) CreateUser(ctx context.Context, in *pb.CreateUserRequest) (*pb.
 	}
 
 	return &pb.CreateUserReply{
-		Token:      ss,
-		Uuid:       user.UUID.String(),
-		Email:      user.EMAIL,
-		Permission: user.PERMISSION,
+		Token:        ss,
+		Uuid:         user.UUID.String(),
+		Name:         user.NAME,
+		Introduction: user.INTRODUCTION,
+		Email:        user.EMAIL,
+		Permission:   user.PERMISSION,
 	}, nil
 }
 
@@ -104,11 +111,13 @@ func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.
 		log.Printf("failed to update user: %v", result.Error)
 		return &pb.UpdateUserReply{Token: ""}, result.Error
 	}
-	hash, err := bcrypt.GenerateFromPassword([]byte(in.GetNewPassword()), bcrypt.MinCost)
+	hash, err := bcrypt.GenerateFromPassword([]byte(in.GetPassword()), bcrypt.MinCost)
 	if err != nil {
 		panic(err)
 	}
-	user.EMAIL = in.GetNewEmail()
+	user.NAME = in.GetName()
+	user.INTRODUCTION = in.GetIntroduction()
+	user.EMAIL = in.GetEmail()
 	user.PASSWORD = string(hash)
 	db.DB.Save(&user)
 
@@ -117,7 +126,14 @@ func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.
 		panic(err)
 	}
 
-	return &pb.UpdateUserReply{Token: ss}, nil
+	return &pb.UpdateUserReply{
+		Token:        ss,
+		Uuid:         user.UUID.String(),
+		Name:         user.NAME,
+		Introduction: user.INTRODUCTION,
+		Email:        user.EMAIL,
+		Permission:   user.PERMISSION,
+	}, nil
 }
 
 func (s *server) DeleteUser(ctx context.Context, in *pb.DeleteUserRequest) (*empty.Empty, error) {

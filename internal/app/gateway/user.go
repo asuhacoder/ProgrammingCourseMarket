@@ -15,6 +15,22 @@ const (
 	userAddress = "user:50051"
 )
 
+type CreateUserRequest struct {
+	Name         string `form:"name" json:"name"`
+	Introduction string `form:"introduction" json:"introduction"`
+	Email        string `form:"email" json:"email"`
+	Password     string `form:"password" json:"password"`
+}
+
+type UpdateUserRequest struct {
+	Token        string `form:"token" json:"token"`
+	Uuid         string `form:"uuid" json:"uuid"`
+	Name         string `form:"name" json:"name"`
+	Introduction string `form:"introduction" json:"introduction"`
+	Email        string `form:"email" json:"email"`
+	Password     string `form:"password" json:"password"`
+}
+
 func listUsers(c *gin.Context) {
 	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
@@ -44,10 +60,11 @@ func listUsers(c *gin.Context) {
 			c.AbortWithStatus(400)
 		} else {
 			user := gin.H{
-				"uuid":       r.GetUuid(),
-				"email":      r.GetEmail(),
-				"permission": r.GetPermission(),
-				"password":   r.GetPassword(),
+				"uuid":         r.GetUuid(),
+				"name":         r.GetName(),
+				"introduction": r.GetIntroduction(),
+				"email":        r.GetEmail(),
+				"permission":   r.GetPermission(),
 			}
 			responces = append(responces, user)
 		}
@@ -79,9 +96,11 @@ func getUser(c *gin.Context) {
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
-			"uuid":       r.GetUuid(),
-			"email":      r.GetEmail(),
-			"permission": r.GetPermission(),
+			"uuid":         r.GetUuid(),
+			"name":         r.GetName(),
+			"introduction": r.GetIntroduction(),
+			"email":        r.GetEmail(),
+			"permission":   r.GetPermission(),
 		})
 	}
 }
@@ -96,14 +115,20 @@ func createUser(c *gin.Context) {
 	defer conn.Close()
 	client := pbUser.NewUserClient(conn)
 
-	email := c.Query("email")
-	password := c.Query("password")
+	var s CreateUserRequest
+	err = c.ShouldBind(&s)
+	if err != nil {
+		log.Printf("failed to bind request: %v", err)
+		c.AbortWithStatus(400)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.CreateUser(ctx, &pbUser.CreateUserRequest{
-		Email:    email,
-		Password: password,
+		Name:         s.Name,
+		Introduction: s.Introduction,
+		Email:        s.Email,
+		Password:     s.Password,
 	})
 	log.Println("got data")
 	log.Println(err)
@@ -111,10 +136,12 @@ func createUser(c *gin.Context) {
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
-			"token":      r.GetToken(),
-			"uuid":       r.GetUuid(),
-			"email":      r.GetEmail(),
-			"permission": r.GetPermission(),
+			"token":        r.GetToken(),
+			"uuid":         r.GetUuid(),
+			"name":         r.GetName(),
+			"introduction": r.GetIntroduction(),
+			"email":        r.GetEmail(),
+			"permission":   r.GetPermission(),
 		})
 	}
 }
@@ -129,18 +156,22 @@ func updateUser(c *gin.Context) {
 	defer conn.Close()
 	client := pbUser.NewUserClient(conn)
 
-	token := c.Query(("token"))
-	newEmail := c.Query("email")
-	newPassword := c.Query("password")
-	uuid := c.Param("uuid")
+	var s UpdateUserRequest
+	err = c.ShouldBind(&s)
+	if err != nil {
+		log.Printf("failed to bind request: %v", err)
+		c.AbortWithStatus(400)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.UpdateUser(ctx, &pbUser.UpdateUserRequest{
-		Token:       token,
-		NewEmail:    newEmail,
-		NewPassword: newPassword,
-		Uuid:        uuid,
+		Token:        s.Token,
+		Name:         s.Name,
+		Introduction: s.Introduction,
+		Email:        s.Email,
+		Password:     s.Password,
+		Uuid:         s.Uuid,
 	})
 	log.Println("got data")
 	log.Println(err)

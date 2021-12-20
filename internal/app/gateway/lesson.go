@@ -138,7 +138,7 @@ func createLesson(c *gin.Context) {
 	var s CreateLessonRequest
 	err = c.ShouldBind(&s)
 	if err != nil {
-		log.Printf("failed to bind queries: %v", err)
+		log.Printf("failed to bind request: %v", err)
 		c.AbortWithStatus(400)
 	}
 
@@ -191,7 +191,7 @@ func updateLesson(c *gin.Context) {
 	var s UpdateLessonRequest
 	err = c.ShouldBind(&s)
 	if err != nil {
-		log.Printf("failed to bind queries: %v", err)
+		log.Printf("failed to bind request: %v", err)
 		c.AbortWithStatus(400)
 	}
 
@@ -241,7 +241,7 @@ func deleteLesson(c *gin.Context) {
 	var s DeleteLessonRequest
 	err = c.ShouldBind(&s)
 	if err != nil {
-		log.Printf("failed to bind queries: %v", err)
+		log.Printf("failed to bind request: %v", err)
 		c.AbortWithStatus(400)
 	}
 	uuid := c.Param("uuid")
