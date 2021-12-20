@@ -34,7 +34,7 @@ func runCode(c *gin.Context) {
 	var s RunnerRequest
 	err = c.ShouldBind(&s)
 	if err != nil {
-		log.Printf("failed to bind queries: %v", err)
+		log.Printf("failed to bind request: %v", err)
 		c.AbortWithStatus(400)
 	}
 

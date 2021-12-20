@@ -20,9 +20,10 @@ message ListUsersRequest {
 
 message ListUsersReply {
   string uuid = 1;
-  string email = 2;
-  string permission = 3;
-  string password = 4;
+  string name = 2;
+  string introduction = 3;
+  string email = 4;
+  string permission = 5;
 }
 
 message GetUserRequest {
@@ -31,31 +32,44 @@ message GetUserRequest {
 
 message GetUserReply {
   string uuid = 1;
-  string email = 2;
-  string permission = 3;
+  string name = 2;
+  string introduction = 3;
+  string email = 4;
+  string permission = 5;
 }
 
 message CreateUserRequest {
-  string email = 1;
-  string password = 2;
+  string name = 1;
+  string introduction = 2;
+  string email = 3;
+  string password = 4;
 }
   
 message CreateUserReply {
   string token = 1;
   string uuid = 2;
-  string email = 3;
-  string permission = 4;
+  string name = 3;
+  string introduction = 4;
+  string email = 5;
+  string permission = 6;
 }
 
 message UpdateUserRequest {
   string token = 1;
-  string newEmail = 2;
-  string newPassword = 3;
-  string uuid = 4;
+  string name = 2;
+  string introduction = 3;
+  string email = 4;
+  string password = 5;
+  string uuid = 6;
 }
 
 message UpdateUserReply {
   string token = 1;
+  string uuid = 2;
+  string name = 3;
+  string introduction = 4;
+  string email = 5;
+  string permission = 6;
 }
 
 message DeleteUserRequest {
