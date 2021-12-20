@@ -14,9 +14,15 @@ service Lesson {
   rpc DeleteLesson (DeleteLessonRequest) returns (google.protobuf.Empty) {}
 }
 
+message caseWithID {
+  string lesson_id = 1;
+  string input = 2;
+  string output = 3;
+}
+
 message case {
-    string input = 1;
-    string output = 2;
+  string input = 1;
+  string output = 2;
 }
 
 message ListLessonsRequest {
@@ -86,7 +92,7 @@ message UpdateLessonRequest {
     string body = 5;
     string default_code = 6;
     string answer_code = 7;
-    repeated case test_case = 8;
+    repeated caseWithID test_case = 8;
     string language = 9;
 }
 
@@ -99,7 +105,7 @@ message UpdateLessonReply {
     string body = 6;
     string default_code = 7;
     string answer_code = 8;
-    repeated case test_case = 9;
+    repeated caseWithID test_case = 9;
     string language = 10;
 }
 
