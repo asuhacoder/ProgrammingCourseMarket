@@ -15,7 +15,7 @@ const (
 	lessonAddress = "lesson:50054"
 )
 
-type LessonRequest struct {
+type CreateLessonRequest struct {
 	Token        string           `form:"token" json:"token"`
 	CourseID     string           `form:"course_id" json:"course_id"`
 	Title        string           `form:"title" json:"title"`
@@ -25,6 +25,23 @@ type LessonRequest struct {
 	AnswerCode   string           `form:"answer_code" json:"answer_code"`
 	TestCase     []*pbLesson.Case `form:"test_case" json:"test_case"`
 	Language     string           `form:"language" json:"language"`
+}
+
+type UpdateLessonRequest struct {
+	Token        string                 `form:"token" json:"token"`
+	Uuid         string                 `form:"uuid" json:"uuid"`
+	CourseID     string                 `form:"course_id" json:"course_id"`
+	Title        string                 `form:"title" json:"title"`
+	Introduction string                 `form:"introduction" json:"introduction"`
+	Body         string                 `form:"body" json:"body"`
+	DefaultCode  string                 `form:"default_code" json:"default_code"`
+	AnswerCode   string                 `form:"answer_code" json:"answer_code"`
+	TestCase     []*pbLesson.CaseWithID `form:"test_case" json:"test_case"`
+	Language     string                 `form:"language" json:"language"`
+}
+
+type DeleteLessonRequest struct {
+	Token string `form:"token" json:"token"`
 }
 
 func listLessons(c *gin.Context) {
@@ -118,7 +135,7 @@ func createLesson(c *gin.Context) {
 	defer conn.Close()
 	client := pbLesson.NewLessonClient(conn)
 
-	var s LessonRequest
+	var s CreateLessonRequest
 	err = c.ShouldBind(&s)
 	if err != nil {
 		log.Printf("failed to bind queries: %v", err)
@@ -171,15 +188,18 @@ func updateLesson(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	var s LessonRequest
+	var s UpdateLessonRequest
 	err = c.ShouldBind(&s)
 	if err != nil {
 		log.Printf("failed to bind queries: %v", err)
 		c.AbortWithStatus(400)
 	}
 
+	uuid := c.Param("uuid")
+
 	r, err := client.UpdateLesson(ctx, &pbLesson.UpdateLessonRequest{
 		Token:        s.Token,
+		Uuid:         uuid,
 		Title:        s.Title,
 		Introduction: s.Introduction,
 		Body:         s.Body,
@@ -218,13 +238,18 @@ func deleteLesson(c *gin.Context) {
 	defer conn.Close()
 	client := pbLesson.NewLessonClient(conn)
 
-	token := c.Query("token")
+	var s DeleteLessonRequest
+	err = c.ShouldBind(&s)
+	if err != nil {
+		log.Printf("failed to bind queries: %v", err)
+		c.AbortWithStatus(400)
+	}
 	uuid := c.Param("uuid")
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.DeleteLesson(ctx, &pbLesson.DeleteLessonRequest{
-		Token: token,
+		Token: s.Token,
 		Uuid:  uuid,
 	})
 	log.Println("got data")

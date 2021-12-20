@@ -9,12 +9,10 @@ import (
 )
 
 var (
-	// DB instance
 	DB  *gorm.DB
 	err error
 )
 
-// Init DB
 func Init() {
 	DB, err = gorm.Open(postgres.New(postgres.Config{
 		DSN: "host=user_db user=gorm password=gorm dbname=gorm port=5432 sslmode=disable TimeZone=Asia/Tokyo",
@@ -25,7 +23,6 @@ func Init() {
 	autoMigration()
 }
 
-// Close DB
 func Close() {
 	dbSQL, err := DB.DB()
 	if err != nil {
@@ -41,7 +38,6 @@ func autoMigration() {
 	}
 }
 
-// User Model
 type User struct {
 	UUID       uuid.UUID `gorm:"primaryKey; unique; type:uuid;"`
 	EMAIL      string    `gorm:"unique"`
