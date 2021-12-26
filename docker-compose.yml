@@ -116,3 +116,9 @@ services:
       true
     env_file:
       - jdoodle.env
+  web:
+    build:
+      context: ./
+      dockerfile: ./build/package/docker/web/Dockerfile
+    ports: 
+      - 3000:3000
