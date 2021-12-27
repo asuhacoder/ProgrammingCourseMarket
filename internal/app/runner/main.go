@@ -64,7 +64,6 @@ func (s *server) RunCode(ctx context.Context, in *pb.RunCodeRequest) (*pb.RunCod
 }
 
 func RunServer() {
-	log.Println("test")
 
 	lis, err := net.Listen("tcp", port)
 	if err != nil {

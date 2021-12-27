@@ -104,7 +104,7 @@ func (s *server) UpdateUser(ctx context.Context, in *pb.UpdateUserRequest) (*pb.
 	var user db.User
 	uuid, _, err := jwt.ParseJWT(in.GetToken())
 	if err != nil {
-		log.Println(err)
+		log.Printf("failed to parse jwt: %v", err)
 	}
 	result := db.DB.First(&user, "UUID = ?", uuid)
 	if result.Error != nil {
@@ -143,12 +143,12 @@ func (s *server) DeleteUser(ctx context.Context, in *pb.DeleteUserRequest) (*emp
 		return new(empty.Empty), errors.New("invalid access")
 	}
 	if err != nil {
-		log.Println(err)
+
 		return new(empty.Empty), err
 	}
 	result := db.DB.First(&user, "UUID = ?", uuid)
 	if result.Error != nil {
-		log.Println(err)
+
 		return new(empty.Empty), result.Error
 	}
 	result = db.DB.Delete(&user, "UUID = ?", uuid)
@@ -161,7 +161,7 @@ func (s *server) DeleteUser(ctx context.Context, in *pb.DeleteUserRequest) (*emp
 }
 
 func RunServer() {
-	log.Println("test")
+
 	db.Init()
 	defer db.Close()
 

@@ -75,8 +75,7 @@ func getCourse(c *gin.Context) {
 	r, err := client.GetCourse(ctx, &pbCourse.GetCourseRequest{
 		Uuid: uuid,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
@@ -126,8 +125,7 @@ func createCourse(c *gin.Context) {
 		Price:        price,
 		Published:    published,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
@@ -179,8 +177,7 @@ func updateCourse(c *gin.Context) {
 		Price:        price,
 		Published:    published,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
@@ -216,8 +213,7 @@ func deleteCourse(c *gin.Context) {
 		Token: token,
 		Uuid:  uuid,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
