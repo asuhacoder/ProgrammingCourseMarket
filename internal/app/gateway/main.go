@@ -13,6 +13,7 @@ func RunServer() {
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Content-Type"},
 		AllowCredentials: false,
 		MaxAge:           12 * time.Hour,
 	}))
