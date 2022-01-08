@@ -113,7 +113,7 @@ func (s *server) GetLesson(ctx context.Context, in *pb.GetLessonRequest) (*pb.Ge
 func (s *server) CreateLesson(ctx context.Context, in *pb.CreateLessonRequest) (*pb.CreateLessonReply, error) {
 	uUID, _, err := jwt.ParseJWT(in.GetToken())
 	if err != nil {
-		log.Println(err)
+
 		log.Printf("failed to create lesson: %v", err)
 		return &pb.CreateLessonReply{}, err
 	}
@@ -180,7 +180,7 @@ func (s *server) UpdateLesson(ctx context.Context, in *pb.UpdateLessonRequest) (
 	var lesson db.Lesson
 	userUuid, _, err := jwt.ParseJWT(in.GetToken())
 	if err != nil {
-		log.Println(err)
+
 		log.Printf("failed to create lesson: %v", err)
 		return &pb.UpdateLessonReply{}, err
 	}
@@ -250,13 +250,16 @@ func (s *server) DeleteLesson(ctx context.Context, in *pb.DeleteLessonRequest) (
 	userUuid, _, err := jwt.ParseJWT(in.GetToken())
 
 	if err != nil {
-		log.Println(err)
+
 		return new(empty.Empty), err
 	}
 	uUID, err := uuid.FromString(in.GetUuid())
+	if err != nil {
+		log.Printf("failed to convert string to uuid: %v", err)
+	}
 	result := db.LessonDB.First(&lesson, "UUID = ?", uUID)
 	if result.Error != nil {
-		log.Println(err)
+
 		return new(empty.Empty), result.Error
 	}
 	if userUuid != lesson.USER_ID {
@@ -287,7 +290,7 @@ func (s *server) DeleteLesson(ctx context.Context, in *pb.DeleteLessonRequest) (
 }
 
 func RunServer() {
-	log.Println("test")
+
 	db.LessonInit()
 	defer db.LessonClose()
 	db.CaseInit()

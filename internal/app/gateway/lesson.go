@@ -105,8 +105,7 @@ func getLesson(c *gin.Context) {
 	r, err := client.GetLesson(ctx, &pbLesson.GetLessonRequest{
 		Uuid: uuid,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
@@ -155,8 +154,7 @@ func createLesson(c *gin.Context) {
 		TestCase:     s.TestCase,
 		Language:     s.Language,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
@@ -208,8 +206,7 @@ func updateLesson(c *gin.Context) {
 		TestCase:     s.TestCase,
 		Language:     s.Language,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
@@ -252,8 +249,7 @@ func deleteLesson(c *gin.Context) {
 		Token: s.Token,
 		Uuid:  uuid,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {

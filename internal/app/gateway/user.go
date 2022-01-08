@@ -90,8 +90,7 @@ func getUser(c *gin.Context) {
 	r, err := client.GetUser(ctx, &pbUser.GetUserRequest{
 		Uuid: uuid,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
@@ -130,8 +129,7 @@ func createUser(c *gin.Context) {
 		Email:        s.Email,
 		Password:     s.Password,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
@@ -173,8 +171,7 @@ func updateUser(c *gin.Context) {
 		Password:     s.Password,
 		Uuid:         s.Uuid,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
@@ -201,8 +198,7 @@ func deleteUser(c *gin.Context) {
 		Token: token,
 		Uuid:  uuid,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {

@@ -71,7 +71,7 @@ func (s *server) GetCourse(ctx context.Context, in *pb.GetCourseRequest) (*pb.Ge
 func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (*pb.CreateCourseReply, error) {
 	uUID, _, err := jwt.ParseJWT(in.GetToken())
 	if err != nil {
-		log.Println(err)
+
 		log.Printf("failed to create course: %v", err)
 		return &pb.CreateCourseReply{}, err
 	}
@@ -109,7 +109,7 @@ func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (
 	var course db.Course
 	userUuid, _, err := jwt.ParseJWT(in.GetToken())
 	if err != nil {
-		log.Println(err)
+
 		log.Printf("failed to create course: %v", err)
 		return &pb.UpdateCourseReply{}, err
 	}
@@ -151,13 +151,16 @@ func (s *server) DeleteCourse(ctx context.Context, in *pb.DeleteCourseRequest) (
 	userUuid, _, err := jwt.ParseJWT(in.GetToken())
 
 	if err != nil {
-		log.Println(err)
+
 		return new(empty.Empty), err
 	}
 	uUID, err := uuid.FromString(in.GetUuid())
+	if err != nil {
+		log.Printf("failed to convert string to uuid: %v", err)
+	}
 	result := db.DB.First(&course, "UUID = ?", uUID)
 	if result.Error != nil {
-		log.Println(err)
+
 		return new(empty.Empty), result.Error
 	}
 	if userUuid != course.USER_ID {
@@ -173,7 +176,7 @@ func (s *server) DeleteCourse(ctx context.Context, in *pb.DeleteCourseRequest) (
 }
 
 func RunServer() {
-	log.Println("test")
+
 	db.Init()
 	defer db.Close()
 

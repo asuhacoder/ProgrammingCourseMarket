@@ -45,7 +45,6 @@ func (s *server) Login(ctx context.Context, in *pb.LoginRequest) (*pb.LoginReply
 }
 
 func RunServer() {
-	log.Println("test")
 	db.Init()
 	defer db.Close()
 

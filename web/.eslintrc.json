@@ -14,6 +14,8 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
+    "no-console": "off",
+    "react/jsx-props-no-spreading": "off",
     "react/jsx-filename-extension": [
       2,
       {
@@ -35,7 +37,8 @@
         "ts": "never",
         "tsx": "never"
       }
-   ]
+   ],
+   "max-len": "off"
   },
   "settings": {
     "import/resolver": {

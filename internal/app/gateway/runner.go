@@ -46,8 +46,7 @@ func runCode(c *gin.Context) {
 		Language: s.Language,
 		Version:  s.Version,
 	})
-	log.Println("got data")
-	log.Println(err)
+
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
