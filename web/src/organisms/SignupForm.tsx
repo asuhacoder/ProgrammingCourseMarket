@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import userState from '../contexts/Contexts';
+import userState from '../recoil/UserState';
 
 interface State {
   from: Location;
