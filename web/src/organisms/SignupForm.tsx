@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {
-  TextField,
+  Stack,
   Button,
-  Box,
 } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import userState from '../recoil/UserState';
+import { StackStyle, ButtonDivStyle } from './SignupForm.css';
+import CustomTextField from '../atoms/CustomTextField';
 
 interface State {
   from: Location;
@@ -126,11 +127,14 @@ function SignupForm() {
   };
 
   return (
-    <Box
-      component="form"
-      autoComplete="off"
+    <Stack
+      id="organisms-signup-form-stack"
+      className={StackStyle}
+      justifyContent="flex-start"
+      alignItems="flex-start"
+      spacing={2}
     >
-      <TextField
+      <CustomTextField
         required
         id="outlined-required"
         label="Name(required)"
@@ -140,7 +144,7 @@ function SignupForm() {
         onChange={handleNameChange}
         onBlur={validateName}
       />
-      <TextField
+      <CustomTextField
         required
         id="outlined-required"
         label="Email(required)"
@@ -150,7 +154,7 @@ function SignupForm() {
         onChange={handleEmailChange}
         onBlur={validateEmail}
       />
-      <TextField
+      <CustomTextField
         id="outlined-basic"
         label="Introduction"
         value={introduction}
@@ -161,7 +165,7 @@ function SignupForm() {
         multiline
         maxRows={20}
       />
-      <TextField
+      <CustomTextField
         required
         type="password"
         id="outlined-password-input"
@@ -172,8 +176,16 @@ function SignupForm() {
         onChange={handlePasswordChange}
         onBlur={validatePassword}
       />
-      <Button variant="contained" onClick={submitSignupForm}>Submit</Button>
-    </Box>
+      <div className={ButtonDivStyle}>
+        <Button
+          id="organisms-signup-form-button"
+          variant="contained"
+          onClick={submitSignupForm}
+        >
+          Submit
+        </Button>
+      </div>
+    </Stack>
   );
 }
 export default SignupForm;
