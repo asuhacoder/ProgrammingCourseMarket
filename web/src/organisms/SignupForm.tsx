@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import {
   Stack,
-  Button,
 } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import userState from '../recoil/UserState';
-import { StackStyle, ButtonDivStyle } from './SignupForm.css';
+import userState from '../config/Recoil';
+import StackStyle from './SignupForm.css';
 import CustomTextField from '../atoms/CustomTextField';
+import ButtonDiv from '../molecules/ButtonDiv';
 
 interface State {
   from: Location;
@@ -176,15 +176,10 @@ function SignupForm() {
         onChange={handlePasswordChange}
         onBlur={validatePassword}
       />
-      <div className={ButtonDivStyle}>
-        <Button
-          id="organisms-signup-form-button"
-          variant="contained"
-          onClick={submitSignupForm}
-        >
-          Submit
-        </Button>
-      </div>
+      <ButtonDiv
+        body="Submit"
+        onClick={submitSignupForm}
+      />
     </Stack>
   );
 }
