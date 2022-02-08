@@ -18,7 +18,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthClient interface {
-	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error)
+	Authn(ctx context.Context, in *AuthnRequest, opts ...grpc.CallOption) (*AuthnReply, error)
+	Authz(ctx context.Context, in *AuthzRequest, opts ...grpc.CallOption) (*AuthzReply, error)
 }
 
 type authClient struct {
@@ -29,9 +30,18 @@ func NewAuthClient(cc grpc.ClientConnInterface) AuthClient {
 	return &authClient{cc}
 }
 
-func (c *authClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error) {
-	out := new(LoginReply)
-	err := c.cc.Invoke(ctx, "/auth.Auth/Login", in, out, opts...)
+func (c *authClient) Authn(ctx context.Context, in *AuthnRequest, opts ...grpc.CallOption) (*AuthnReply, error) {
+	out := new(AuthnReply)
+	err := c.cc.Invoke(ctx, "/auth.Auth/Authn", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authClient) Authz(ctx context.Context, in *AuthzRequest, opts ...grpc.CallOption) (*AuthzReply, error) {
+	out := new(AuthzReply)
+	err := c.cc.Invoke(ctx, "/auth.Auth/Authz", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +52,8 @@ func (c *authClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.C
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility
 type AuthServer interface {
-	Login(context.Context, *LoginRequest) (*LoginReply, error)
+	Authn(context.Context, *AuthnRequest) (*AuthnReply, error)
+	Authz(context.Context, *AuthzRequest) (*AuthzReply, error)
 	mustEmbedUnimplementedAuthServer()
 }
 
@@ -50,8 +61,11 @@ type AuthServer interface {
 type UnimplementedAuthServer struct {
 }
 
-func (UnimplementedAuthServer) Login(context.Context, *LoginRequest) (*LoginReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+func (UnimplementedAuthServer) Authn(context.Context, *AuthnRequest) (*AuthnReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Authn not implemented")
+}
+func (UnimplementedAuthServer) Authz(context.Context, *AuthzRequest) (*AuthzReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Authz not implemented")
 }
 func (UnimplementedAuthServer) mustEmbedUnimplementedAuthServer() {}
 
@@ -66,20 +80,38 @@ func RegisterAuthServer(s grpc.ServiceRegistrar, srv AuthServer) {
 	s.RegisterService(&Auth_ServiceDesc, srv)
 }
 
-func _Auth_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LoginRequest)
+func _Auth_Authn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AuthnRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServer).Login(ctx, in)
+		return srv.(AuthServer).Authn(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth.Auth/Login",
+		FullMethod: "/auth.Auth/Authn",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).Login(ctx, req.(*LoginRequest))
+		return srv.(AuthServer).Authn(ctx, req.(*AuthnRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Auth_Authz_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AuthzRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).Authz(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.Auth/Authz",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).Authz(ctx, req.(*AuthzRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -92,8 +124,12 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AuthServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Login",
-			Handler:    _Auth_Login_Handler,
+			MethodName: "Authn",
+			Handler:    _Auth_Authn_Handler,
+		},
+		{
+			MethodName: "Authz",
+			Handler:    _Auth_Authz_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

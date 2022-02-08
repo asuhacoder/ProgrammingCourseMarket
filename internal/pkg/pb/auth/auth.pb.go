@@ -20,7 +20,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type LoginRequest struct {
+type AuthnRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -29,8 +29,8 @@ type LoginRequest struct {
 	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 }
 
-func (x *LoginRequest) Reset() {
-	*x = LoginRequest{}
+func (x *AuthnRequest) Reset() {
+	*x = AuthnRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_internal_pkg_pb_auth_auth_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -38,13 +38,13 @@ func (x *LoginRequest) Reset() {
 	}
 }
 
-func (x *LoginRequest) String() string {
+func (x *AuthnRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*LoginRequest) ProtoMessage() {}
+func (*AuthnRequest) ProtoMessage() {}
 
-func (x *LoginRequest) ProtoReflect() protoreflect.Message {
+func (x *AuthnRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_internal_pkg_pb_auth_auth_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -56,26 +56,26 @@ func (x *LoginRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
-func (*LoginRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use AuthnRequest.ProtoReflect.Descriptor instead.
+func (*AuthnRequest) Descriptor() ([]byte, []int) {
 	return file_internal_pkg_pb_auth_auth_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *LoginRequest) GetEmail() string {
+func (x *AuthnRequest) GetEmail() string {
 	if x != nil {
 		return x.Email
 	}
 	return ""
 }
 
-func (x *LoginRequest) GetPassword() string {
+func (x *AuthnRequest) GetPassword() string {
 	if x != nil {
 		return x.Password
 	}
 	return ""
 }
 
-type LoginReply struct {
+type AuthnReply struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -86,8 +86,8 @@ type LoginReply struct {
 	Permission string `protobuf:"bytes,4,opt,name=permission,proto3" json:"permission,omitempty"`
 }
 
-func (x *LoginReply) Reset() {
-	*x = LoginReply{}
+func (x *AuthnReply) Reset() {
+	*x = AuthnReply{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_internal_pkg_pb_auth_auth_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -95,13 +95,13 @@ func (x *LoginReply) Reset() {
 	}
 }
 
-func (x *LoginReply) String() string {
+func (x *AuthnReply) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*LoginReply) ProtoMessage() {}
+func (*AuthnReply) ProtoMessage() {}
 
-func (x *LoginReply) ProtoReflect() protoreflect.Message {
+func (x *AuthnReply) ProtoReflect() protoreflect.Message {
 	mi := &file_internal_pkg_pb_auth_auth_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -113,33 +113,151 @@ func (x *LoginReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use LoginReply.ProtoReflect.Descriptor instead.
-func (*LoginReply) Descriptor() ([]byte, []int) {
+// Deprecated: Use AuthnReply.ProtoReflect.Descriptor instead.
+func (*AuthnReply) Descriptor() ([]byte, []int) {
 	return file_internal_pkg_pb_auth_auth_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *LoginReply) GetToken() string {
+func (x *AuthnReply) GetToken() string {
 	if x != nil {
 		return x.Token
 	}
 	return ""
 }
 
-func (x *LoginReply) GetUuid() string {
+func (x *AuthnReply) GetUuid() string {
 	if x != nil {
 		return x.Uuid
 	}
 	return ""
 }
 
-func (x *LoginReply) GetEmail() string {
+func (x *AuthnReply) GetEmail() string {
 	if x != nil {
 		return x.Email
 	}
 	return ""
 }
 
-func (x *LoginReply) GetPermission() string {
+func (x *AuthnReply) GetPermission() string {
+	if x != nil {
+		return x.Permission
+	}
+	return ""
+}
+
+type AuthzRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Token string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+}
+
+func (x *AuthzRequest) Reset() {
+	*x = AuthzRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_pkg_pb_auth_auth_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AuthzRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuthzRequest) ProtoMessage() {}
+
+func (x *AuthzRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_pkg_pb_auth_auth_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuthzRequest.ProtoReflect.Descriptor instead.
+func (*AuthzRequest) Descriptor() ([]byte, []int) {
+	return file_internal_pkg_pb_auth_auth_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *AuthzRequest) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+type AuthzReply struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Token      string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	Uuid       string `protobuf:"bytes,2,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	Email      string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	Permission string `protobuf:"bytes,4,opt,name=permission,proto3" json:"permission,omitempty"`
+}
+
+func (x *AuthzReply) Reset() {
+	*x = AuthzReply{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_internal_pkg_pb_auth_auth_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AuthzReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuthzReply) ProtoMessage() {}
+
+func (x *AuthzReply) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_pkg_pb_auth_auth_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuthzReply.ProtoReflect.Descriptor instead.
+func (*AuthzReply) Descriptor() ([]byte, []int) {
+	return file_internal_pkg_pb_auth_auth_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *AuthzReply) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *AuthzReply) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
+}
+
+func (x *AuthzReply) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *AuthzReply) GetPermission() string {
 	if x != nil {
 		return x.Permission
 	}
@@ -151,26 +269,38 @@ var File_internal_pkg_pb_auth_auth_proto protoreflect.FileDescriptor
 var file_internal_pkg_pb_auth_auth_proto_rawDesc = []byte{
 	0x0a, 0x1f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x70,
 	0x62, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x12, 0x04, 0x61, 0x75, 0x74, 0x68, 0x22, 0x40, 0x0a, 0x0c, 0x4c, 0x6f, 0x67, 0x69, 0x6e,
+	0x6f, 0x12, 0x04, 0x61, 0x75, 0x74, 0x68, 0x22, 0x40, 0x0a, 0x0c, 0x41, 0x75, 0x74, 0x68, 0x6e,
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x1a, 0x0a,
 	0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x22, 0x6c, 0x0a, 0x0a, 0x4c, 0x6f, 0x67,
-	0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e,
+	0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x22, 0x6c, 0x0a, 0x0a, 0x41, 0x75, 0x74,
+	0x68, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x12, 0x12, 0x0a,
 	0x04, 0x75, 0x75, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x75, 0x75, 0x69,
 	0x64, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x1e, 0x0a, 0x0a, 0x70, 0x65, 0x72, 0x6d, 0x69,
 	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x70, 0x65, 0x72,
-	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x32, 0x37, 0x0a, 0x04, 0x41, 0x75, 0x74, 0x68, 0x12,
-	0x2f, 0x0a, 0x05, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x12, 0x2e, 0x61, 0x75, 0x74, 0x68, 0x2e,
-	0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x10, 0x2e, 0x61,
-	0x75, 0x74, 0x68, 0x2e, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00,
-	0x42, 0x41, 0x5a, 0x3f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x41,
-	0x73, 0x75, 0x68, 0x61, 0x2d, 0x61, 0x2f, 0x50, 0x72, 0x6f, 0x67, 0x72, 0x61, 0x6d, 0x6d, 0x69,
-	0x6e, 0x67, 0x43, 0x6f, 0x75, 0x72, 0x73, 0x65, 0x4d, 0x61, 0x72, 0x6b, 0x65, 0x74, 0x2f, 0x69,
-	0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x70, 0x62, 0x2f, 0x61,
-	0x75, 0x74, 0x68, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x22, 0x24, 0x0a, 0x0c, 0x41, 0x75, 0x74, 0x68, 0x7a,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x22, 0x6c, 0x0a,
+	0x0a, 0x41, 0x75, 0x74, 0x68, 0x7a, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x74,
+	0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65,
+	0x6e, 0x12, 0x12, 0x0a, 0x04, 0x75, 0x75, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x04, 0x75, 0x75, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x1e, 0x0a, 0x0a, 0x70,
+	0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0a, 0x70, 0x65, 0x72, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x32, 0x68, 0x0a, 0x04, 0x41,
+	0x75, 0x74, 0x68, 0x12, 0x2f, 0x0a, 0x05, 0x41, 0x75, 0x74, 0x68, 0x6e, 0x12, 0x12, 0x2e, 0x61,
+	0x75, 0x74, 0x68, 0x2e, 0x41, 0x75, 0x74, 0x68, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x10, 0x2e, 0x61, 0x75, 0x74, 0x68, 0x2e, 0x41, 0x75, 0x74, 0x68, 0x6e, 0x52, 0x65, 0x70,
+	0x6c, 0x79, 0x22, 0x00, 0x12, 0x2f, 0x0a, 0x05, 0x41, 0x75, 0x74, 0x68, 0x7a, 0x12, 0x12, 0x2e,
+	0x61, 0x75, 0x74, 0x68, 0x2e, 0x41, 0x75, 0x74, 0x68, 0x7a, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x10, 0x2e, 0x61, 0x75, 0x74, 0x68, 0x2e, 0x41, 0x75, 0x74, 0x68, 0x7a, 0x52, 0x65,
+	0x70, 0x6c, 0x79, 0x22, 0x00, 0x42, 0x41, 0x5a, 0x3f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
+	0x63, 0x6f, 0x6d, 0x2f, 0x41, 0x73, 0x75, 0x68, 0x61, 0x2d, 0x61, 0x2f, 0x50, 0x72, 0x6f, 0x67,
+	0x72, 0x61, 0x6d, 0x6d, 0x69, 0x6e, 0x67, 0x43, 0x6f, 0x75, 0x72, 0x73, 0x65, 0x4d, 0x61, 0x72,
+	0x6b, 0x65, 0x74, 0x2f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x70, 0x6b, 0x67,
+	0x2f, 0x70, 0x62, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -185,16 +315,20 @@ func file_internal_pkg_pb_auth_auth_proto_rawDescGZIP() []byte {
 	return file_internal_pkg_pb_auth_auth_proto_rawDescData
 }
 
-var file_internal_pkg_pb_auth_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_internal_pkg_pb_auth_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_internal_pkg_pb_auth_auth_proto_goTypes = []interface{}{
-	(*LoginRequest)(nil), // 0: auth.LoginRequest
-	(*LoginReply)(nil),   // 1: auth.LoginReply
+	(*AuthnRequest)(nil), // 0: auth.AuthnRequest
+	(*AuthnReply)(nil),   // 1: auth.AuthnReply
+	(*AuthzRequest)(nil), // 2: auth.AuthzRequest
+	(*AuthzReply)(nil),   // 3: auth.AuthzReply
 }
 var file_internal_pkg_pb_auth_auth_proto_depIdxs = []int32{
-	0, // 0: auth.Auth.Login:input_type -> auth.LoginRequest
-	1, // 1: auth.Auth.Login:output_type -> auth.LoginReply
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	0, // 0: auth.Auth.Authn:input_type -> auth.AuthnRequest
+	2, // 1: auth.Auth.Authz:input_type -> auth.AuthzRequest
+	1, // 2: auth.Auth.Authn:output_type -> auth.AuthnReply
+	3, // 3: auth.Auth.Authz:output_type -> auth.AuthzReply
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -207,7 +341,7 @@ func file_internal_pkg_pb_auth_auth_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_internal_pkg_pb_auth_auth_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LoginRequest); i {
+			switch v := v.(*AuthnRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -219,7 +353,31 @@ func file_internal_pkg_pb_auth_auth_proto_init() {
 			}
 		}
 		file_internal_pkg_pb_auth_auth_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LoginReply); i {
+			switch v := v.(*AuthnReply); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_internal_pkg_pb_auth_auth_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AuthzRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_internal_pkg_pb_auth_auth_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AuthzReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -237,7 +395,7 @@ func file_internal_pkg_pb_auth_auth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_internal_pkg_pb_auth_auth_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

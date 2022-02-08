@@ -20,12 +20,12 @@ type server struct {
 	pb.UnimplementedAuthServer
 }
 
-func (s *server) Login(ctx context.Context, in *pb.LoginRequest) (*pb.LoginReply, error) {
+func (s *server) Authn(ctx context.Context, in *pb.AuthnRequest) (*pb.AuthnReply, error) {
 	var user db.User
 	result := db.DB.Where("email = ?", in.GetEmail()).First(&user)
 	if result.Error != nil {
 		log.Printf("failed to get user: %v", result.Error)
-		return &pb.LoginReply{Token: ""}, result.Error
+		return &pb.AuthnReply{}, result.Error
 	}
 	err := bcrypt.CompareHashAndPassword([]byte(user.PASSWORD), []byte(in.GetPassword()))
 	if err != nil {
@@ -36,8 +36,28 @@ func (s *server) Login(ctx context.Context, in *pb.LoginRequest) (*pb.LoginReply
 	if err != nil {
 		panic(err)
 	}
-	return &pb.LoginReply{
+	return &pb.AuthnReply{
 		Token:      ss,
+		Uuid:       user.UUID.String(),
+		Email:      user.EMAIL,
+		Permission: user.PERMISSION,
+	}, nil
+}
+
+func (s *server) Authz(ctx context.Context, in *pb.AuthzRequest) (*pb.AuthzReply, error) {
+	var user db.User
+	uuid, _, err := jwt.ParseJWT(in.GetToken())
+	if err != nil {
+		log.Printf("invalid token: %v", err)
+	}
+	result := db.DB.Where("uuid = ?", uuid).First(&user)
+	if result.Error != nil {
+		log.Printf("failed to get user: %v", result.Error)
+		return &pb.AuthzReply{}, result.Error
+	}
+
+	return &pb.AuthzReply{
+		Token:      in.GetToken(),
 		Uuid:       user.UUID.String(),
 		Email:      user.EMAIL,
 		Permission: user.PERMISSION,
