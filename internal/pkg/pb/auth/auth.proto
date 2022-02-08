@@ -17,8 +17,10 @@ message AuthnRequest {
 message AuthnReply {
   string token = 1;
   string uuid = 2;
-  string email = 3;
-  string permission = 4;
+  string name = 3;
+  string introduction = 4;
+  string email = 5;
+  string permission = 6;
 }
 
 message AuthzRequest {
@@ -28,6 +30,8 @@ message AuthzRequest {
 message AuthzReply {
   string token = 1;
   string uuid = 2;
-  string email = 3;
-  string permission = 4;
+  string name = 3;
+  string introduction = 4;
+  string email = 5;
+  string permission = 6;
 }
