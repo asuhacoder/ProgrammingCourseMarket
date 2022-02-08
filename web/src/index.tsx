@@ -1,12 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import { RecoilRoot } from 'recoil';
 import App from './App';
+import Theme from './config/Theme';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <RecoilRoot>
+      <ThemeProvider theme={Theme}>
+        <App />
+      </ThemeProvider>
+    </RecoilRoot>
   </BrowserRouter>,
   document.getElementById('root'),
 );
