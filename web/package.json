@@ -12,6 +12,8 @@
     "@linaria/core": "^3.0.0-beta.15",
     "@linaria/react": "^3.0.0-beta.15",
     "@linaria/shaker": "^3.0.0-beta.15",
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/styles": "^4.11.4",
     "@mui/material": "^5.2.4",
     "@testing-library/dom": "^8.11.1",
     "@testing-library/jest-dom": "^5.14.1",

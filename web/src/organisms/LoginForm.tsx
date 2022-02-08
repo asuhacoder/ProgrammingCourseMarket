@@ -6,7 +6,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import userState from '../config/Recoil';
-import StackStyle from './SignupForm.css';
+import StackStyle from './LoginForm.css';
 import CustomTextField from '../atoms/CustomTextField';
 import ButtonDiv from '../molecules/ButtonDiv';
 
@@ -14,40 +14,19 @@ interface State {
   from: Location;
 }
 
-function SignupForm() {
+function LoginForm() {
   const setUser = useRecoilState(userState)[1];
 
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [introduction, setIntroduction] = useState('');
   const [password, setPassword] = useState('');
-  const [nameHasError, setNameHasError] = useState(false);
-  const [nameHelperText, setNameHelperText] = useState('');
   const [emailHasError, setEmailHasError] = useState(false);
   const [emailHelperText, setEmailHelperText] = useState('');
-  const [introductionHasError, setIntroductionHasError] = useState(false);
-  const [introductionHelperText, setIntroductionHelperText] = useState('');
   const [passwordHasError, setPasswordHasError] = useState(false);
   const [passwordHelperText, setPasswordHelperText] = useState('');
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  const validateName = (): boolean => {
-    let isValid = true;
-    if (name.length < 3) {
-      isValid = false;
-      setNameHasError(true);
-      setNameHelperText('length of name must be more than or equal 3');
-    } else if (name.length > 20) {
-      setNameHasError(true);
-      setNameHelperText('length of name must be less than or equal 20');
-    } else {
-      setNameHasError(false);
-      setNameHelperText('');
-    }
-    return isValid;
-  };
   const validateEmail = (): boolean => {
     let isValid = true;
     const re = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
@@ -58,18 +37,6 @@ function SignupForm() {
     } else {
       setEmailHasError(false);
       setEmailHelperText('');
-    }
-    return isValid;
-  };
-  const validateIntroduction = (): boolean => {
-    let isValid = true;
-    if (introduction.length > 500) {
-      isValid = false;
-      setIntroductionHasError(true);
-      setIntroductionHelperText('length of introduction must be less than or equal 500');
-    } else {
-      setIntroductionHasError(false);
-      setIntroductionHelperText('');
     }
     return isValid;
   };
@@ -86,23 +53,17 @@ function SignupForm() {
     return isValid;
   };
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setName(e.target.value);
-  };
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setEmail(e.target.value);
-  };
-  const handleIntroductionChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setIntroduction(e.target.value);
   };
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setPassword(e.target.value);
   };
 
-  const submitSignupForm = (): void => {
-    if (validateName() && validateEmail() && validateIntroduction() && validatePassword()) {
-      axios.post('http://localhost:8080/api/v1/users', {
-        name, email, password, introduction,
+  const submitLoginForm = (): void => {
+    if (validateEmail() && validatePassword()) {
+      axios.post('http://localhost:8080/api/v1/auth', {
+        email, password,
       })
         .then((response) => {
           console.log(response);
@@ -128,22 +89,12 @@ function SignupForm() {
 
   return (
     <Stack
-      id="organisms-signup-form-stack"
+      id="organisms-login-form-stack"
       className={StackStyle}
       justifyContent="flex-start"
       alignItems="flex-start"
       spacing={2}
     >
-      <CustomTextField
-        required
-        id="outlined-required"
-        label="Name(required)"
-        value={name}
-        helperText={nameHelperText}
-        error={nameHasError}
-        onChange={handleNameChange}
-        onBlur={validateName}
-      />
       <CustomTextField
         required
         id="outlined-required"
@@ -153,17 +104,6 @@ function SignupForm() {
         error={emailHasError}
         onChange={handleEmailChange}
         onBlur={validateEmail}
-      />
-      <CustomTextField
-        id="outlined-basic"
-        label="Introduction"
-        value={introduction}
-        helperText={introductionHelperText}
-        error={introductionHasError}
-        onChange={handleIntroductionChange}
-        onBlur={validateIntroduction}
-        multiline
-        maxRows={20}
       />
       <CustomTextField
         required
@@ -178,9 +118,9 @@ function SignupForm() {
       />
       <ButtonDiv
         body="Submit"
-        onClick={submitSignupForm}
+        onClick={submitLoginForm}
       />
     </Stack>
   );
 }
-export default SignupForm;
+export default LoginForm;
