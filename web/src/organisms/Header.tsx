@@ -46,7 +46,9 @@ function Header() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Skhole
+            <CustomLink to="/">
+              Skhole
+            </CustomLink>
           </Typography>
           {JSON.stringify(user) === JSON.stringify(defaultUser) && (
             <div>
