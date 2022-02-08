@@ -37,10 +37,12 @@ func (s *server) Authn(ctx context.Context, in *pb.AuthnRequest) (*pb.AuthnReply
 		panic(err)
 	}
 	return &pb.AuthnReply{
-		Token:      ss,
-		Uuid:       user.UUID.String(),
-		Email:      user.EMAIL,
-		Permission: user.PERMISSION,
+		Token:        ss,
+		Uuid:         user.UUID.String(),
+		Name:         user.NAME,
+		Introduction: user.INTRODUCTION,
+		Email:        user.EMAIL,
+		Permission:   user.PERMISSION,
 	}, nil
 }
 
@@ -57,10 +59,12 @@ func (s *server) Authz(ctx context.Context, in *pb.AuthzRequest) (*pb.AuthzReply
 	}
 
 	return &pb.AuthzReply{
-		Token:      in.GetToken(),
-		Uuid:       user.UUID.String(),
-		Email:      user.EMAIL,
-		Permission: user.PERMISSION,
+		Token:        in.GetToken(),
+		Uuid:         user.UUID.String(),
+		Name:         user.NAME,
+		Introduction: user.INTRODUCTION,
+		Email:        user.EMAIL,
+		Permission:   user.PERMISSION,
 	}, nil
 }
 

@@ -48,10 +48,12 @@ func authn(c *gin.Context) {
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
-			"token":      r.GetToken(),
-			"uuid":       r.GetUuid(),
-			"email":      r.GetEmail(),
-			"permission": r.GetPermission(),
+			"token":        r.GetToken(),
+			"uuid":         r.GetUuid(),
+			"name":         r.GetName(),
+			"introduction": r.GetIntroduction(),
+			"email":        r.GetEmail(),
+			"permission":   r.GetPermission(),
 		})
 	}
 }
@@ -80,10 +82,12 @@ func authz(c *gin.Context) {
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
-			"token":      r.GetToken(),
-			"uuid":       r.GetUuid(),
-			"email":      r.GetEmail(),
-			"permission": r.GetPermission(),
+			"token":        r.GetToken(),
+			"uuid":         r.GetUuid(),
+			"name":         r.GetName(),
+			"introduction": r.GetIntroduction(),
+			"email":        r.GetEmail(),
+			"permission":   r.GetPermission(),
 		})
 	}
 }

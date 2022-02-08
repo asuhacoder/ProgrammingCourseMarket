@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import userState from '../config/Recoil';
+import { userState } from '../config/Recoil';
 import StackStyle from './LoginForm.css';
 import CustomTextField from '../atoms/CustomTextField';
 import ButtonDiv from '../molecules/ButtonDiv';
@@ -62,7 +62,7 @@ function LoginForm() {
 
   const submitLoginForm = (): void => {
     if (validateEmail() && validatePassword()) {
-      axios.post('http://localhost:8080/api/v1/auth', {
+      axios.post('http://localhost:8080/api/v1/authn', {
         email, password,
       })
         .then((response) => {
