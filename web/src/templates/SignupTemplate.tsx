@@ -1,11 +1,9 @@
 import React from 'react';
 import SignupForm from '../organisms/SignupForm';
 
-function SignupTemplate(props: any) {
+function SignupTemplate() {
   return (
-    <SignupForm
-      {...props}
-    />
+    <SignupForm />
   );
 }
 export default SignupTemplate;
