@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {
-  Stack,
-} from '@mui/material';
+import { Stack } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userState } from '../config/Recoil';
@@ -82,7 +80,7 @@ function LoginForm() {
         }, (error) => {
           console.log(error);
           setEmailHasError(true);
-          setEmailHelperText('this email address is already used');
+          setEmailHelperText('email address or password is incorrect');
         });
     }
   };

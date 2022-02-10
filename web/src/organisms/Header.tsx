@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,17 +10,12 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { useRecoilState, SetterOrUpdater } from 'recoil';
-import { userState, User } from '../config/Recoil';
+import { userState, User, defaultUser } from '../config/Recoil';
 import CustomLink from '../atoms/CustomLink';
+import LinkStyle from './Header.css';
 
 function Header() {
-  const defaultUser = {
-    token: '',
-    uuid: '',
-    name: '',
-    email: '',
-    introduction: '',
-  };
+  const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser]:[User, SetterOrUpdater<User>] = useRecoilState(userState);
   console.log(user);
@@ -39,6 +34,7 @@ function Header() {
     window.localStorage.removeItem('programming-course-market');
     setUser(defaultUser);
     handleClose();
+    navigate('/');
   };
 
   return (
@@ -62,6 +58,9 @@ function Header() {
           )}
           {JSON.stringify(user) !== JSON.stringify(defaultUser) && (
             <div>
+              <CustomLink to="/course/editor">
+                <Button color="inherit">Create Course</Button>
+              </CustomLink>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -90,6 +89,15 @@ function Header() {
                 <MenuItem>
                   name:
                   {user.name}
+                </MenuItem>
+                <MenuItem>
+                  email:
+                  {user.email}
+                </MenuItem>
+                <MenuItem>
+                  <Link className={LinkStyle} to="/mycontents">
+                    MyContents
+                  </Link>
                 </MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </Menu>
