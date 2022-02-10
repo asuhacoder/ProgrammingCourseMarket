@@ -6,6 +6,7 @@ import { userState } from './config/Recoil';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
+import CourseDetail from './pages/CourseDetail';
 
 function App() {
   const [user, setUser] = useRecoilState(userState);
@@ -35,6 +36,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/course/detail" element={<CourseDetail />} />
       </Routes>
     </div>
   );
