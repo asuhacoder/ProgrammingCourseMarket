@@ -2,16 +2,18 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { userState } from './config/Recoil';
+import { userState, defaultUser } from './config/Recoil';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import CourseDetail from './pages/CourseDetail';
 import CourseEditor from './pages/CourseEditor';
+import MyContents from './pages/MyContents';
 
 function App() {
+  console.log('token', window.localStorage.getItem('programming-course-market'));
   const [user, setUser] = useRecoilState(userState);
-  if (JSON.stringify(user) === '{}') {
+  if (JSON.stringify(user) === JSON.stringify(defaultUser)) {
     const token = window.localStorage.getItem('programming-course-market');
     axios.post('http://localhost:8080/api/v1/authz', {
       token,
@@ -30,6 +32,7 @@ function App() {
         console.log(error);
       });
   }
+  console.log('user', user);
 
   return (
     <div className="App">
@@ -39,6 +42,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/course/detail" element={<CourseDetail />} />
         <Route path="/course/editor" element={<CourseEditor />} />
+        <Route path="/mycontents" element={<MyContents />} />
       </Routes>
     </div>
   );
