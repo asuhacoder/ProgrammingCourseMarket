@@ -31,6 +31,10 @@ type UpdateUserRequest struct {
 	Password     string `form:"password" json:"password"`
 }
 
+type DeleteUserRequest struct {
+	Token string `form:"token" json:"token"`
+}
+
 func listUsers(c *gin.Context) {
 	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
@@ -189,13 +193,18 @@ func deleteUser(c *gin.Context) {
 	defer conn.Close()
 	client := pbUser.NewUserClient(conn)
 
-	token := c.Query("token")
 	uuid := c.Param("uuid")
+	var s DeleteUserRequest
+	err = c.ShouldBind(&s)
+	if err != nil {
+		log.Printf("failed to bind request: %v", err)
+		c.AbortWithStatus(400)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.DeleteUser(ctx, &pbUser.DeleteUserRequest{
-		Token: token,
+		Token: s.Token,
 		Uuid:  uuid,
 	})
 

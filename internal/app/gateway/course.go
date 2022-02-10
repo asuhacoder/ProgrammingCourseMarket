@@ -4,7 +4,6 @@ import (
 	"context"
 	"io"
 	"log"
-	"strconv"
 	"time"
 
 	pbCourse "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/course"
@@ -16,6 +15,19 @@ import (
 const (
 	courseAddress = "course:50053"
 )
+
+type CourseCreateUpdateRequest struct {
+	Token        string `form:"token" json:"token"`
+	Title        string `from:"title" json:"title"`
+	Introduction string `from:"introduction" json:"introduction"`
+	Image        string `from:"image" json:"image"`
+	Price        int64  `from:"price" json:"price"`
+	IsPublished  bool   `form:"is_published" json:"is_published"`
+}
+
+type CourseDeleteRequest struct {
+	Token string `form:"token" json:"token"`
+}
 
 func listCourses(c *gin.Context) {
 	conn, err := grpc.Dial(courseAddress, grpc.WithInsecure(), grpc.WithBlock())
@@ -102,28 +114,22 @@ func createCourse(c *gin.Context) {
 	defer conn.Close()
 	client := pbCourse.NewCourseClient(conn)
 
-	token := c.Query("token")
-	title := c.Query("title")
-	introduction := c.Query("introduction")
-	image := c.Query("image")
-	price, err := strconv.ParseInt(c.Query("price"), 10, 64)
+	var s CourseCreateUpdateRequest
+	err = c.ShouldBind(&s)
 	if err != nil {
-		c.AbortWithStatus(400)
-	}
-	isPublished, err := strconv.ParseBool(c.Query("is_published"))
-	if err != nil {
+		log.Printf("failed to bind request: %v", err)
 		c.AbortWithStatus(400)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.CreateCourse(ctx, &pbCourse.CreateCourseRequest{
-		Token:        token,
-		Title:        title,
-		Introduction: introduction,
-		Image:        image,
-		Price:        price,
-		IsPublished:  isPublished,
+		Token:        s.Token,
+		Title:        s.Title,
+		Introduction: s.Introduction,
+		Image:        s.Image,
+		Price:        s.Price,
+		IsPublished:  s.IsPublished,
 	})
 
 	if err != nil {
@@ -153,16 +159,10 @@ func updateCourse(c *gin.Context) {
 	client := pbCourse.NewCourseClient(conn)
 
 	uuid := c.Param("uuid")
-	token := c.Query("token")
-	title := c.Query("title")
-	introduction := c.Query("introduction")
-	image := c.Query("image")
-	price, err := strconv.ParseInt(c.Query("price"), 10, 64)
+	var s CourseCreateUpdateRequest
+	err = c.ShouldBind(&s)
 	if err != nil {
-		c.AbortWithStatus(400)
-	}
-	isPublished, err := strconv.ParseBool(c.Query("is_published"))
-	if err != nil {
+		log.Printf("failed to bind request: %v", err)
 		c.AbortWithStatus(400)
 	}
 
@@ -170,12 +170,12 @@ func updateCourse(c *gin.Context) {
 	defer cancel()
 	r, err := client.UpdateCourse(ctx, &pbCourse.UpdateCourseRequest{
 		Uuid:         uuid,
-		Token:        token,
-		Title:        title,
-		Introduction: introduction,
-		Image:        image,
-		Price:        price,
-		IsPublished:  isPublished,
+		Token:        s.Token,
+		Title:        s.Title,
+		Introduction: s.Introduction,
+		Image:        s.Image,
+		Price:        s.Price,
+		IsPublished:  s.IsPublished,
 	})
 
 	if err != nil {
@@ -204,13 +204,18 @@ func deleteCourse(c *gin.Context) {
 	defer conn.Close()
 	client := pbCourse.NewCourseClient(conn)
 
-	token := c.Query("token")
 	uuid := c.Param("uuid")
+	var s CourseDeleteRequest
+	err = c.ShouldBind(&s)
+	if err != nil {
+		log.Printf("failed to bind request: %v", err)
+		c.AbortWithStatus(400)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.DeleteCourse(ctx, &pbCourse.DeleteCourseRequest{
-		Token: token,
+		Token: s.Token,
 		Uuid:  uuid,
 	})
 
