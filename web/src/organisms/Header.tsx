@@ -62,6 +62,9 @@ function Header() {
           )}
           {JSON.stringify(user) !== JSON.stringify(defaultUser) && (
             <div>
+              <CustomLink to="/course/editor">
+                <Button color="inherit">Create Course</Button>
+              </CustomLink>
               <IconButton
                 size="large"
                 aria-label="account of current user"
