@@ -13,6 +13,7 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"gorm.io/gorm"
 )
 
 const (
@@ -23,11 +24,24 @@ type server struct {
 	pb.UnimplementedCourseServer
 }
 
-func (s *server) ListCourses(_ *empty.Empty, stream pb.Course_ListCoursesServer) error {
+func (s *server) ListCourses(in *pb.ListCoursesRequest, stream pb.Course_ListCoursesServer) error {
+	uuid, _, err := jwt.ParseJWT(in.GetToken())
+	if err != nil {
+		log.Printf("failed to parse jwt: %v", err)
+	}
 	log.Println("ListCourses running")
 	var courses []db.Course
-	result := db.DB.Find(&courses)
-	log.Println("got all courses")
+	var result *gorm.DB
+	if in.GetOnlyPublic() && in.GetOnlyMine() {
+		result = db.DB.Where("IS_PUBLIC = ?", true).Where("UUID = ?", uuid).Find(&courses)
+	} else if in.GetOnlyPublic() {
+		result = db.DB.Where("IS_PUBLIC = ?", true).Find(&courses)
+	} else if in.GetOnlyMine() {
+		result = db.DB.Where("UUID = ?", uuid).Find(&courses)
+	} else {
+		result = db.DB.Find(&courses)
+	}
+	log.Println("listed courses")
 	log.Println(result.Error)
 	if result.Error != nil {
 		log.Fatalf("failed to list courses: %v", result.Error)

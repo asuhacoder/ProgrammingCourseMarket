@@ -8,13 +8,18 @@ import (
 
 	pbCourse "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/course"
 	"github.com/gin-gonic/gin"
-	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
 )
 
 const (
 	courseAddress = "course:50053"
 )
+
+type CourseListRequest struct {
+	Token      string `form:"token" json:"token"`
+	OnlyPublic bool   `form:"only_public" json:"only_public"`
+	OnlyMine   bool   `form:"only_mine" json:"only_mine"`
+}
 
 type CourseCreateUpdateRequest struct {
 	Token        string `form:"token" json:"token"`
@@ -37,9 +42,20 @@ func listCourses(c *gin.Context) {
 	defer conn.Close()
 	client := pbCourse.NewCourseClient(conn)
 
+	var s CourseListRequest
+	err = c.ShouldBind(&s)
+	if err != nil {
+		log.Printf("failed to bind request: %v", err)
+		c.AbortWithStatus(400)
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	stream, err := client.ListCourses(ctx, new(empty.Empty))
+	stream, err := client.ListCourses(ctx, &pbCourse.ListCoursesRequest{
+		Token:      s.Token,
+		OnlyPublic: s.OnlyPublic,
+		OnlyMine:   s.OnlyMine,
+	})
 	if err != nil {
 		log.Printf("failed to access grpc server: %v", err)
 	}
