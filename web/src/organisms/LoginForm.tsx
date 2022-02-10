@@ -82,7 +82,7 @@ function LoginForm() {
         }, (error) => {
           console.log(error);
           setEmailHasError(true);
-          setEmailHelperText('this email address is already used');
+          setEmailHelperText('email address or password is incorrect');
         });
     }
   };
