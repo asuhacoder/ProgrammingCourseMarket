@@ -19,7 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CourseClient interface {
-	ListCourses(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (Course_ListCoursesClient, error)
+	ListCourses(ctx context.Context, in *ListCoursesRequest, opts ...grpc.CallOption) (Course_ListCoursesClient, error)
 	GetCourse(ctx context.Context, in *GetCourseRequest, opts ...grpc.CallOption) (*GetCourseReply, error)
 	CreateCourse(ctx context.Context, in *CreateCourseRequest, opts ...grpc.CallOption) (*CreateCourseReply, error)
 	UpdateCourse(ctx context.Context, in *UpdateCourseRequest, opts ...grpc.CallOption) (*UpdateCourseReply, error)
@@ -34,7 +34,7 @@ func NewCourseClient(cc grpc.ClientConnInterface) CourseClient {
 	return &courseClient{cc}
 }
 
-func (c *courseClient) ListCourses(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (Course_ListCoursesClient, error) {
+func (c *courseClient) ListCourses(ctx context.Context, in *ListCoursesRequest, opts ...grpc.CallOption) (Course_ListCoursesClient, error) {
 	stream, err := c.cc.NewStream(ctx, &Course_ServiceDesc.Streams[0], "/course.Course/ListCourses", opts...)
 	if err != nil {
 		return nil, err
@@ -106,7 +106,7 @@ func (c *courseClient) DeleteCourse(ctx context.Context, in *DeleteCourseRequest
 // All implementations must embed UnimplementedCourseServer
 // for forward compatibility
 type CourseServer interface {
-	ListCourses(*empty.Empty, Course_ListCoursesServer) error
+	ListCourses(*ListCoursesRequest, Course_ListCoursesServer) error
 	GetCourse(context.Context, *GetCourseRequest) (*GetCourseReply, error)
 	CreateCourse(context.Context, *CreateCourseRequest) (*CreateCourseReply, error)
 	UpdateCourse(context.Context, *UpdateCourseRequest) (*UpdateCourseReply, error)
@@ -118,7 +118,7 @@ type CourseServer interface {
 type UnimplementedCourseServer struct {
 }
 
-func (UnimplementedCourseServer) ListCourses(*empty.Empty, Course_ListCoursesServer) error {
+func (UnimplementedCourseServer) ListCourses(*ListCoursesRequest, Course_ListCoursesServer) error {
 	return status.Errorf(codes.Unimplemented, "method ListCourses not implemented")
 }
 func (UnimplementedCourseServer) GetCourse(context.Context, *GetCourseRequest) (*GetCourseReply, error) {
@@ -147,7 +147,7 @@ func RegisterCourseServer(s grpc.ServiceRegistrar, srv CourseServer) {
 }
 
 func _Course_ListCourses_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(empty.Empty)
+	m := new(ListCoursesRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}

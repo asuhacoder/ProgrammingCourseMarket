@@ -8,11 +8,17 @@ option go_package = "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/
 package course;
 
 service Course {
-  rpc ListCourses (google.protobuf.Empty) returns (stream ListCoursesReply) {}
+  rpc ListCourses (ListCoursesRequest) returns (stream ListCoursesReply) {}
   rpc GetCourse (GetCourseRequest) returns (GetCourseReply) {}
   rpc CreateCourse (CreateCourseRequest) returns (CreateCourseReply) {}
   rpc UpdateCourse (UpdateCourseRequest) returns (UpdateCourseReply) {}
   rpc DeleteCourse (DeleteCourseRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListCoursesRequest {
+  string token = 1;
+  bool only_public = 2;
+  bool only_mine = 3;
 }
 
 message ListCoursesReply {
