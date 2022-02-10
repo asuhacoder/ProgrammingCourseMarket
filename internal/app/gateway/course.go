@@ -48,7 +48,7 @@ func listCourses(c *gin.Context) {
 				"introduction": r.GetIntroduction(),
 				"image":        r.GetImage(),
 				"price":        r.GetPrice(),
-				"published":    r.GetPublished(),
+				"is_published": r.GetIsPublished(),
 				"created_at":   r.GetCreatedAt(),
 			}
 			responces = append(responces, course)
@@ -86,7 +86,7 @@ func getCourse(c *gin.Context) {
 			"introduction": r.GetIntroduction(),
 			"image":        r.GetImage(),
 			"price":        r.GetPrice(),
-			"published":    r.GetPublished(),
+			"is_published": r.GetIsPublished(),
 			"created_at":   r.GetCreatedAt(),
 		})
 	}
@@ -110,7 +110,7 @@ func createCourse(c *gin.Context) {
 	if err != nil {
 		c.AbortWithStatus(400)
 	}
-	published, err := strconv.ParseBool(c.Query("published"))
+	isPublished, err := strconv.ParseBool(c.Query("is_published"))
 	if err != nil {
 		c.AbortWithStatus(400)
 	}
@@ -123,7 +123,7 @@ func createCourse(c *gin.Context) {
 		Introduction: introduction,
 		Image:        image,
 		Price:        price,
-		Published:    published,
+		IsPublished:  isPublished,
 	})
 
 	if err != nil {
@@ -136,7 +136,7 @@ func createCourse(c *gin.Context) {
 			"introduction": r.GetIntroduction(),
 			"image":        r.GetImage(),
 			"price":        r.GetPrice(),
-			"published":    r.GetPublished(),
+			"is_published": r.GetIsPublished(),
 			"created_at":   r.GetCreatedAt(),
 		})
 	}
@@ -161,7 +161,7 @@ func updateCourse(c *gin.Context) {
 	if err != nil {
 		c.AbortWithStatus(400)
 	}
-	published, err := strconv.ParseBool(c.Query("published"))
+	isPublished, err := strconv.ParseBool(c.Query("is_published"))
 	if err != nil {
 		c.AbortWithStatus(400)
 	}
@@ -175,7 +175,7 @@ func updateCourse(c *gin.Context) {
 		Introduction: introduction,
 		Image:        image,
 		Price:        price,
-		Published:    published,
+		IsPublished:  isPublished,
 	})
 
 	if err != nil {
@@ -188,7 +188,7 @@ func updateCourse(c *gin.Context) {
 			"introduction": r.GetIntroduction(),
 			"image":        r.GetImage(),
 			"price":        r.GetPrice(),
-			"published":    r.GetPublished(),
+			"is_published": r.GetIsPublished(),
 			"created_at":   r.GetCreatedAt(),
 		})
 	}

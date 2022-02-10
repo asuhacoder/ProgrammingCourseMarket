@@ -22,7 +22,7 @@ message ListCoursesReply {
   string introduction = 4;
   string image = 5;
   int64 price = 6;
-  bool published = 7;
+  bool is_published = 7;
   google.protobuf.Timestamp created_at = 8;
 }
 
@@ -37,7 +37,7 @@ message GetCourseReply {
     string introduction = 4;
     string image = 5;
     int64 price = 6;
-    bool published = 7;
+    bool is_published = 7;
     google.protobuf.Timestamp created_at = 8;
 }
 
@@ -47,7 +47,7 @@ message CreateCourseRequest {
     string introduction = 3;
     string image = 4;
     int64 price = 5;
-    bool published = 6;
+    bool is_published = 6;
 }
   
 message CreateCourseReply {
@@ -57,7 +57,7 @@ message CreateCourseReply {
     string introduction = 4;
     string image = 5;
     int64 price = 6;
-    bool published = 7;
+    bool is_published = 7;
     google.protobuf.Timestamp created_at = 8;
 }
 
@@ -68,7 +68,7 @@ message UpdateCourseRequest {
     string introduction = 4;
     string image = 5;
     int64 price = 6;
-    bool published = 7;
+    bool is_published = 7;
 }
 
 message UpdateCourseReply {
@@ -78,7 +78,7 @@ message UpdateCourseReply {
     string introduction = 4;
     string image = 5;
     int64 price = 6;
-    bool published = 7;
+    bool is_published = 7;
     google.protobuf.Timestamp created_at = 8;
 }
 

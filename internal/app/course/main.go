@@ -41,7 +41,7 @@ func (s *server) ListCourses(_ *empty.Empty, stream pb.Course_ListCoursesServer)
 			Introduction: course.INTRODUCTION,
 			Image:        course.IMAGE,
 			Price:        int64(course.PRICE),
-			Published:    course.PUBLISHED,
+			IsPublished:  course.IS_PUBLISHED,
 		}); err != nil {
 			return err
 		}
@@ -64,7 +64,7 @@ func (s *server) GetCourse(ctx context.Context, in *pb.GetCourseRequest) (*pb.Ge
 		Introduction: course.INTRODUCTION,
 		Image:        course.IMAGE,
 		Price:        int64(course.PRICE),
-		Published:    course.PUBLISHED,
+		IsPublished:  course.IS_PUBLISHED,
 	}, nil
 }
 
@@ -83,7 +83,7 @@ func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (
 		INTRODUCTION: in.GetIntroduction(),
 		IMAGE:        in.GetImage(),
 		PRICE:        int(in.GetPrice()),
-		PUBLISHED:    in.GetPublished(),
+		IS_PUBLISHED: in.GetIsPublished(),
 	}
 	log.Println(course)
 	result := db.DB.Create(&course)
@@ -100,7 +100,7 @@ func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (
 		Introduction: course.INTRODUCTION,
 		Image:        course.IMAGE,
 		Price:        int64(course.PRICE),
-		Published:    course.PUBLISHED,
+		IsPublished:  course.IS_PUBLISHED,
 		CreatedAt:    CreatedAt,
 	}, nil
 }
@@ -132,7 +132,7 @@ func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (
 	course.INTRODUCTION = in.GetIntroduction()
 	course.IMAGE = in.GetImage()
 	course.PRICE = int(in.GetPrice())
-	course.PUBLISHED = in.GetPublished()
+	course.IS_PUBLISHED = in.GetIsPublished()
 	db.DB.Save(&course)
 
 	return &pb.UpdateCourseReply{
@@ -142,7 +142,7 @@ func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (
 		Introduction: course.INTRODUCTION,
 		Image:        course.IMAGE,
 		Price:        int64(course.PRICE),
-		Published:    course.PUBLISHED,
+		IsPublished:  course.IS_PUBLISHED,
 	}, nil
 }
 

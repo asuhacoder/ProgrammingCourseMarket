@@ -46,6 +46,6 @@ type Course struct {
 	INTRODUCTION string    `gorm:"not null"`
 	IMAGE        string
 	PRICE        int       `gorm:"not null"`
-	PUBLISHED    bool      `gorm:"not null"`
+	IS_PUBLISHED bool      `gorm:"not null"`
 	CREATED_AT   time.Time `gorm:"autoCreateTime"`
 }
