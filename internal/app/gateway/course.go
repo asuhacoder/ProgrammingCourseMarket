@@ -27,7 +27,7 @@ type CourseCreateUpdateRequest struct {
 	Introduction string `from:"introduction" json:"introduction"`
 	Image        string `from:"image" json:"image"`
 	Price        int64  `from:"price" json:"price"`
-	IsPublished  bool   `form:"is_published" json:"is_published"`
+	IsPublic     bool   `form:"is_public" json:"is_public"`
 }
 
 type CourseDeleteRequest struct {
@@ -76,7 +76,7 @@ func listCourses(c *gin.Context) {
 				"introduction": r.GetIntroduction(),
 				"image":        r.GetImage(),
 				"price":        r.GetPrice(),
-				"is_published": r.GetIsPublished(),
+				"is_public":    r.GetIsPublic(),
 				"created_at":   r.GetCreatedAt(),
 			}
 			responces = append(responces, course)
@@ -114,7 +114,7 @@ func getCourse(c *gin.Context) {
 			"introduction": r.GetIntroduction(),
 			"image":        r.GetImage(),
 			"price":        r.GetPrice(),
-			"is_published": r.GetIsPublished(),
+			"is_public":    r.GetIsPublic(),
 			"created_at":   r.GetCreatedAt(),
 		})
 	}
@@ -145,7 +145,7 @@ func createCourse(c *gin.Context) {
 		Introduction: s.Introduction,
 		Image:        s.Image,
 		Price:        s.Price,
-		IsPublished:  s.IsPublished,
+		IsPublic:     s.IsPublic,
 	})
 
 	if err != nil {
@@ -158,7 +158,7 @@ func createCourse(c *gin.Context) {
 			"introduction": r.GetIntroduction(),
 			"image":        r.GetImage(),
 			"price":        r.GetPrice(),
-			"is_published": r.GetIsPublished(),
+			"is_public":    r.GetIsPublic(),
 			"created_at":   r.GetCreatedAt(),
 		})
 	}
@@ -191,7 +191,7 @@ func updateCourse(c *gin.Context) {
 		Introduction: s.Introduction,
 		Image:        s.Image,
 		Price:        s.Price,
-		IsPublished:  s.IsPublished,
+		IsPublic:     s.IsPublic,
 	})
 
 	if err != nil {
@@ -204,7 +204,7 @@ func updateCourse(c *gin.Context) {
 			"introduction": r.GetIntroduction(),
 			"image":        r.GetImage(),
 			"price":        r.GetPrice(),
-			"is_published": r.GetIsPublished(),
+			"is_public":    r.GetIsPublic(),
 			"created_at":   r.GetCreatedAt(),
 		})
 	}
