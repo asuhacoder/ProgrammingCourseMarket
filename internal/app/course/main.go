@@ -7,7 +7,6 @@ import (
 	"net"
 
 	db "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/db/course"
-	jwt "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/jwt"
 	pb "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/course"
 	"github.com/gofrs/uuid"
 	"github.com/golang/protobuf/ptypes/empty"
@@ -25,19 +24,16 @@ type server struct {
 }
 
 func (s *server) ListCourses(in *pb.ListCoursesRequest, stream pb.Course_ListCoursesServer) error {
-	uuid, _, err := jwt.ParseJWT(in.GetToken())
-	if err != nil {
-		log.Printf("failed to parse jwt: %v", err)
-	}
+	uuid := in.GetUserId()
 	log.Println("ListCourses running")
 	var courses []db.Course
 	var result *gorm.DB
 	if in.GetOnlyPublic() && in.GetOnlyMine() {
-		result = db.DB.Where("IS_PUBLIC = ?", true).Where("UUID = ?", uuid).Find(&courses)
+		result = db.DB.Where("IS_PUBLIC = ?", true).Where("USER_ID = ?", uuid).Find(&courses)
 	} else if in.GetOnlyPublic() {
 		result = db.DB.Where("IS_PUBLIC = ?", true).Find(&courses)
 	} else if in.GetOnlyMine() {
-		result = db.DB.Where("UUID = ?", uuid).Find(&courses)
+		result = db.DB.Where("USER_ID = ?", uuid).Find(&courses)
 	} else {
 		result = db.DB.Find(&courses)
 	}
@@ -83,11 +79,9 @@ func (s *server) GetCourse(ctx context.Context, in *pb.GetCourseRequest) (*pb.Ge
 }
 
 func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (*pb.CreateCourseReply, error) {
-	uUID, _, err := jwt.ParseJWT(in.GetToken())
+	uUID, err := uuid.FromString(in.GetUserId())
 	if err != nil {
-
-		log.Printf("failed to create course: %v", err)
-		return &pb.CreateCourseReply{}, err
+		log.Printf("failed to convert string to uuid: %v", err)
 	}
 
 	course := db.Course{
@@ -121,13 +115,10 @@ func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (
 
 func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (*pb.UpdateCourseReply, error) {
 	var course db.Course
-	userUuid, _, err := jwt.ParseJWT(in.GetToken())
+	userUuid, err := uuid.FromString(in.GetUserId())
 	if err != nil {
-
-		log.Printf("failed to create course: %v", err)
-		return &pb.UpdateCourseReply{}, err
+		log.Printf("failed to convert string to uuid: %v", err)
 	}
-
 	uUID, err := uuid.FromString(in.GetUuid())
 	if err != nil {
 		log.Printf("failed to convert string to uuid: %v", err)
@@ -162,11 +153,9 @@ func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (
 
 func (s *server) DeleteCourse(ctx context.Context, in *pb.DeleteCourseRequest) (*empty.Empty, error) {
 	var course db.Course
-	userUuid, _, err := jwt.ParseJWT(in.GetToken())
-
+	userUuid, err := uuid.FromString(in.GetUserId())
 	if err != nil {
-
-		return new(empty.Empty), err
+		log.Printf("failed to convert string to uuid: %v", err)
 	}
 	uUID, err := uuid.FromString(in.GetUuid())
 	if err != nil {

@@ -16,13 +16,13 @@ const (
 )
 
 type CourseListRequest struct {
-	Token      string `form:"token" json:"token"`
+	UserId     string `form:"user_id" json:"user_id"`
 	OnlyPublic bool   `form:"only_public" json:"only_public"`
 	OnlyMine   bool   `form:"only_mine" json:"only_mine"`
 }
 
 type CourseCreateUpdateRequest struct {
-	Token        string `form:"token" json:"token"`
+	UserId       string `form:"user_id" json:"user_id"`
 	Title        string `from:"title" json:"title"`
 	Introduction string `from:"introduction" json:"introduction"`
 	Image        string `from:"image" json:"image"`
@@ -31,7 +31,7 @@ type CourseCreateUpdateRequest struct {
 }
 
 type CourseDeleteRequest struct {
-	Token string `form:"token" json:"token"`
+	UserId string `form:"user_id" json:"user_id"`
 }
 
 func listCourses(c *gin.Context) {
@@ -52,7 +52,7 @@ func listCourses(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	stream, err := client.ListCourses(ctx, &pbCourse.ListCoursesRequest{
-		Token:      s.Token,
+		UserId:     s.UserId,
 		OnlyPublic: s.OnlyPublic,
 		OnlyMine:   s.OnlyMine,
 	})
@@ -140,7 +140,7 @@ func createCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.CreateCourse(ctx, &pbCourse.CreateCourseRequest{
-		Token:        s.Token,
+		UserId:       s.UserId,
 		Title:        s.Title,
 		Introduction: s.Introduction,
 		Image:        s.Image,
@@ -186,7 +186,7 @@ func updateCourse(c *gin.Context) {
 	defer cancel()
 	r, err := client.UpdateCourse(ctx, &pbCourse.UpdateCourseRequest{
 		Uuid:         uuid,
-		Token:        s.Token,
+		UserId:       s.UserId,
 		Title:        s.Title,
 		Introduction: s.Introduction,
 		Image:        s.Image,
@@ -231,8 +231,8 @@ func deleteCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.DeleteCourse(ctx, &pbCourse.DeleteCourseRequest{
-		Token: s.Token,
-		Uuid:  uuid,
+		UserId: s.UserId,
+		Uuid:   uuid,
 	})
 
 	if err != nil {

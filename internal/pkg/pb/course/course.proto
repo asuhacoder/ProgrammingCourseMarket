@@ -16,7 +16,7 @@ service Course {
 }
 
 message ListCoursesRequest {
-  string token = 1;
+  string user_id = 1;
   bool only_public = 2;
   bool only_mine = 3;
 }
@@ -48,7 +48,7 @@ message GetCourseReply {
 }
 
 message CreateCourseRequest {
-    string token = 1;
+    string user_id = 1;
     string title = 2;
     string introduction = 3;
     string image = 4;
@@ -68,7 +68,7 @@ message CreateCourseReply {
 }
 
 message UpdateCourseRequest {
-    string token = 1;
+    string user_id = 1;
     string uuid = 2;
     string title = 3;
     string introduction = 4;
@@ -89,6 +89,6 @@ message UpdateCourseReply {
 }
 
 message DeleteCourseRequest {
-  string token = 1;
+  string user_id = 1;
   string uuid = 2;
 }
