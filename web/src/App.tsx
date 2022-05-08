@@ -8,7 +8,7 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 import CourseDetail from './pages/CourseDetail';
 import CourseEditor from './pages/CourseEditor';
-import MyContents from './pages/MyContents';
+import MyContentsPage from './pages/MyContentsPage';
 
 function App() {
   console.log('token', window.localStorage.getItem('programming-course-market'));
@@ -42,7 +42,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/course/detail" element={<CourseDetail />} />
         <Route path="/course/editor" element={<CourseEditor />} />
-        <Route path="/mycontents" element={<MyContents />} />
+        <Route path="/mycontents" element={<MyContentsPage />} />
       </Routes>
     </div>
   );

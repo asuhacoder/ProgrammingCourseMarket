@@ -59,7 +59,7 @@ function CourseEditor() {
         image: '',
         price: 0,
         unit_sales: 0,
-        is_published: false,
+        is_public: false,
       })
         .then((response) => {
           console.log(response);
