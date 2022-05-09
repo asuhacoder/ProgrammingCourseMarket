@@ -11,15 +11,16 @@ import CustomTextField from '../atoms/CustomTextField';
 import ButtonDiv from '../molecules/ButtonDiv';
 import TextStyle from './CourseEditor.css';
 
-function CourseEditor() {
+function CourseEditor(props: any) {
+  const { titleProps, introductionProps, isPublicProps } = props;
   const navigate = useNavigate();
-  const [title, setTitle] = useState('');
-  const [introduction, setIntroduction] = useState('');
+  const [title, setTitle] = useState(titleProps);
+  const [introduction, setIntroduction] = useState(introductionProps);
   const [titleHasError, setTitleHasError] = useState(false);
   const [titleHelperText, setTitleHelperText] = useState('');
   const [introductionHasError, setIntroductionHasError] = useState(false);
   const [introductionHelperText, setIntroductionHelperText] = useState('');
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(isPublicProps);
 
   const validateTitle = (): boolean => {
     let isValid = true;

@@ -59,7 +59,7 @@ function Header() {
           )}
           {JSON.stringify(user) !== JSON.stringify(defaultUser) && (
             <div>
-              <CustomLink to="/course/editor">
+              <CustomLink to="/course/editor/new">
                 <Button color="inherit">Create Course</Button>
               </CustomLink>
               <IconButton
