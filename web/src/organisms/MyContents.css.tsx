@@ -12,3 +12,8 @@ export const TypographyStyle = css`
   overflow-wrap: break-word;
   word-break: keep-all;
 `;
+
+export const ButtonDivStyle = css`
+  display: flex;
+  float: right;
+`;

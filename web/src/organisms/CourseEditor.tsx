@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Stack } from '@mui/material';
+import {
+  Stack,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material';
 import CustomTextField from '../atoms/CustomTextField';
 import ButtonDiv from '../molecules/ButtonDiv';
 import TextStyle from './CourseEditor.css';
@@ -14,6 +19,7 @@ function CourseEditor() {
   const [titleHelperText, setTitleHelperText] = useState('');
   const [introductionHasError, setIntroductionHasError] = useState(false);
   const [introductionHelperText, setIntroductionHelperText] = useState('');
+  const [checked, setChecked] = useState(false);
 
   const validateTitle = (): boolean => {
     let isValid = true;
@@ -49,6 +55,9 @@ function CourseEditor() {
   const handleIntroductionChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setIntroduction(e.target.value);
   };
+  const handleIsPublic = (): void => {
+    setChecked(!checked);
+  };
 
   const submitCourseForm = (): void => {
     if (validateTitle() && validateIntroduction()) {
@@ -59,7 +68,7 @@ function CourseEditor() {
         image: '',
         price: 0,
         unit_sales: 0,
-        is_public: false,
+        is_public: checked,
       })
         .then((response) => {
           console.log(response);
@@ -100,6 +109,10 @@ function CourseEditor() {
         minRows={5}
         maxRows={20}
       />
+      <FormGroup>
+        <FormControlLabel control={<Checkbox checked={checked} onChange={handleIsPublic} />} label="Make your course public" />
+      </FormGroup>
+
       <ButtonDiv
         body="Submit"
         onClick={submitCourseForm}
