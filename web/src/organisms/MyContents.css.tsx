@@ -1,5 +1,9 @@
 import { css } from '@linaria/core';
 
+export const NoContentsStyle = css`
+  text-align: center;
+`;
+
 export const MyContentsStyle = css`
   width: 700px;
 `;

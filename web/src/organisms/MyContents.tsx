@@ -8,11 +8,13 @@ import {
 } from '@mui/material';
 import { Course } from '../config/Type';
 import {
+  NoContentsStyle,
   MyContentsStyle,
   CardContentStyle,
   TypographyStyle,
   ButtonDivStyle,
 } from './MyContents.css';
+import CustomLink from '../atoms/CustomLink';
 
 function MyContents(props: any) {
   const { courses } = props;
@@ -22,9 +24,9 @@ function MyContents(props: any) {
   return (
     <div className={MyContentsStyle}>
       {courses === null && (
-        <div>No Contents</div>
+        <div className={NoContentsStyle}>No Contents</div>
       )}
-      {courses.map((course: Course) => (
+      {courses !== null && courses.map((course: Course) => (
         <Card className={CardContentStyle}>
           <CardContent>
             <Typography variant="h4" component="div">
@@ -35,7 +37,9 @@ function MyContents(props: any) {
             </Typography>
             <div className={ButtonDivStyle}>
               <CardActions>
-                <Button variant="contained" size="small">Edit</Button>
+                <CustomLink to={`/course/editor/${course.uuid}`}>
+                  <Button variant="contained" size="small">Edit</Button>
+                </CustomLink>
               </CardActions>
             </div>
 

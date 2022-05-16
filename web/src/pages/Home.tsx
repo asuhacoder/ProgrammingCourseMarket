@@ -8,7 +8,7 @@ function Home() {
   useEffect(() => {
     console.log('useEffect in home is running');
     axios.get('http://localhost:8080/api/v1/courses', {
-      data: {
+      params: {
         only_public: true,
         only_mine: false,
       },

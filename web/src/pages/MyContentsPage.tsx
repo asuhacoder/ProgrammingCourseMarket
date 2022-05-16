@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { userState } from '../config/Recoil';
+import userState from '../config/Recoil';
 import MyContentsTemplate from '../templates/MyContentsTemplate';
 
 function MyContentsPage() {
   const [courses, setCourses] = useState([]);
   const user = useRecoilState(userState)[0];
+  console.log('user.uuid: ', user.uuid);
   console.log('user in my contents pages component', user);
   useEffect(() => {
     console.log('useEffect in mycontents is running', user);
     axios.get('http://localhost:8080/api/v1/courses', {
-      data: {
+      params: {
         user_id: user.uuid,
         only_public: false,
         only_mine: true,

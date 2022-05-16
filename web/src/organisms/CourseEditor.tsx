@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import {
   Stack,
@@ -7,20 +7,38 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@mui/material';
+import { useRecoilState } from 'recoil';
+import userState from '../config/Recoil';
+import { User } from '../config/Type';
 import CustomTextField from '../atoms/CustomTextField';
 import ButtonDiv from '../molecules/ButtonDiv';
 import TextStyle from './CourseEditor.css';
 
-function CourseEditor(props: any) {
-  const { titleProps, introductionProps, isPublicProps } = props;
+function CourseEditor() {
+  const { id } = useParams();
+  const user: User = useRecoilState(userState)[0];
   const navigate = useNavigate();
-  const [title, setTitle] = useState(titleProps);
-  const [introduction, setIntroduction] = useState(introductionProps);
+  const [title, setTitle] = useState('');
+  const [introduction, setIntroduction] = useState('');
   const [titleHasError, setTitleHasError] = useState(false);
   const [titleHelperText, setTitleHelperText] = useState('');
   const [introductionHasError, setIntroductionHasError] = useState(false);
   const [introductionHelperText, setIntroductionHelperText] = useState('');
-  const [checked, setChecked] = useState(isPublicProps);
+  const [checked, setChecked] = useState(false);
+  useEffect(() => {
+    if (id) {
+      console.log('useEffect in home is running');
+      axios.get(`http://localhost:8080/api/v1/courses/${id}`, {})
+        .then((response) => {
+          console.log(response.data);
+          setTitle(response.data.title);
+          setIntroduction(response.data.introduction);
+          setChecked(response.data.is_public);
+        }, (error) => {
+          console.log(error);
+        });
+    }
+  }, []);
 
   const validateTitle = (): boolean => {
     let isValid = true;
@@ -62,21 +80,41 @@ function CourseEditor(props: any) {
 
   const submitCourseForm = (): void => {
     if (validateTitle() && validateIntroduction()) {
-      axios.post('http://localhost:8080/api/v1/courses', {
-        token: window.localStorage.getItem('programming-course-market'),
-        title,
-        introduction,
-        image: '',
-        price: 0,
-        unit_sales: 0,
-        is_public: checked,
-      })
-        .then((response) => {
-          console.log(response);
-          navigate('/');
-        }, (error) => {
-          console.log(error);
-        });
+      if (id) {
+        axios.put(`http://localhost:8080/api/v1/courses/${id}`, {
+          token: window.localStorage.getItem('programming-course-market'),
+          user_id: user.uuid,
+          title,
+          introduction,
+          image: '',
+          price: 0,
+          unit_sales: 0,
+          is_public: checked,
+        })
+          .then((response) => {
+            console.log(response);
+            navigate('/');
+          }, (error) => {
+            console.log(error);
+          });
+      } else {
+        axios.post('http://localhost:8080/api/v1/courses', {
+          token: window.localStorage.getItem('programming-course-market'),
+          user_id: user.uuid,
+          title,
+          introduction,
+          image: '',
+          price: 0,
+          unit_sales: 0,
+          is_public: checked,
+        })
+          .then((response) => {
+            console.log(response);
+            navigate('/');
+          }, (error) => {
+            console.log(error);
+          });
+      }
     }
   };
 
@@ -92,6 +130,7 @@ function CourseEditor(props: any) {
         id="outlined-basic"
         label="Title(required)"
         value={title}
+        defaultValue={title}
         helperText={titleHelperText}
         error={titleHasError}
         onChange={handleTitleChange}
@@ -102,6 +141,7 @@ function CourseEditor(props: any) {
         id="outlined-basic"
         label="Introduction(required)"
         value={introduction}
+        defaultValue={introduction}
         helperText={introductionHelperText}
         error={introductionHasError}
         onChange={handleIntroductionChange}
@@ -110,10 +150,16 @@ function CourseEditor(props: any) {
         minRows={5}
         maxRows={20}
       />
-      <FormGroup>
-        <FormControlLabel control={<Checkbox checked={checked} onChange={handleIsPublic} />} label="Make your course public" />
-      </FormGroup>
-
+      {checked && (
+        <FormGroup>
+          <FormControlLabel control={<Checkbox checked={checked} defaultChecked onChange={handleIsPublic} />} label="Make your course public" />
+        </FormGroup>
+      )}
+      {!checked && (
+        <FormGroup>
+          <FormControlLabel control={<Checkbox checked={checked} onChange={handleIsPublic} />} label="Make your course public" />
+        </FormGroup>
+      )}
       <ButtonDiv
         body="Submit"
         onClick={submitCourseForm}

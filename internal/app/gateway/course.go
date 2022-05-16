@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"log"
+	"strconv"
 	"time"
 
 	pbCourse "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/course"
@@ -15,18 +16,12 @@ const (
 	courseAddress = "course:50053"
 )
 
-type CourseListRequest struct {
-	UserId     string `form:"user_id" json:"user_id"`
-	OnlyPublic bool   `form:"only_public" json:"only_public"`
-	OnlyMine   bool   `form:"only_mine" json:"only_mine"`
-}
-
 type CourseCreateUpdateRequest struct {
 	UserId       string `form:"user_id" json:"user_id"`
-	Title        string `from:"title" json:"title"`
-	Introduction string `from:"introduction" json:"introduction"`
-	Image        string `from:"image" json:"image"`
-	Price        int64  `from:"price" json:"price"`
+	Title        string `form:"title" json:"title"`
+	Introduction string `form:"introduction" json:"introduction"`
+	Image        string `form:"image" json:"image"`
+	Price        int64  `form:"price" json:"price"`
 	IsPublic     bool   `form:"is_public" json:"is_public"`
 }
 
@@ -42,19 +37,24 @@ func listCourses(c *gin.Context) {
 	defer conn.Close()
 	client := pbCourse.NewCourseClient(conn)
 
-	var s CourseListRequest
-	err = c.ShouldBind(&s)
+	userId := c.Query("user_id")
+	onlyPublicString := c.Query("only_public")
+	onlyMineString := c.Query("only_mine")
+	onlyPublic, err := strconv.ParseBool(onlyPublicString)
 	if err != nil {
-		log.Printf("failed to bind request: %v", err)
-		c.AbortWithStatus(400)
+		log.Printf("failed to convert string to bool: %v", err)
+	}
+	onlyMine, err := strconv.ParseBool(onlyMineString)
+	if err != nil {
+		log.Printf("failed to convert string to bool: %v", err)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	stream, err := client.ListCourses(ctx, &pbCourse.ListCoursesRequest{
-		UserId:     s.UserId,
-		OnlyPublic: s.OnlyPublic,
-		OnlyMine:   s.OnlyMine,
+		UserId:     userId,
+		OnlyPublic: onlyPublic,
+		OnlyMine:   onlyMine,
 	})
 	if err != nil {
 		log.Printf("failed to access grpc server: %v", err)

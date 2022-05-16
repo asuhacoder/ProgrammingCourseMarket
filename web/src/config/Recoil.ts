@@ -1,14 +1,9 @@
 import { atom } from 'recoil';
+import { defaultUser } from './Type';
 
-export const defaultUser = {
-  token: '',
-  uuid: '',
-  name: '',
-  email: '',
-  introduction: '',
-};
-
-export const userState = atom({
+const userState = atom({
   key: 'userState',
   default: defaultUser,
 });
+
+export default userState;
