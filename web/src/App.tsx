@@ -42,7 +42,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/course/detail" element={<CourseDetail />} />
+        <Route path="/course/detail/:id" element={<CourseDetail />} />
         <Route path="/course/editor/new" element={<CourseCreator />} />
         <Route path="/course/editor/:id" element={<CourseUpdater />} />
         <Route path="/mycontents" element={<MyContentsPage />} />

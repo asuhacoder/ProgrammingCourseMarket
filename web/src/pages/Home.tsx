@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import HomeTemplate from '../templates/HomeTemplate';
 
@@ -14,8 +13,8 @@ function Home() {
       },
     })
       .then((response) => {
-        setData(response.data);
-        console.log(response.data);
+        setData(response.data.courses);
+        console.log(response.data.courses);
       }, (error) => {
         console.log(error);
       });
@@ -23,8 +22,7 @@ function Home() {
 
   return (
     <div>
-      <HomeTemplate data={data} />
-      <Link to="/course/detail">CourseDetail</Link>
+      <HomeTemplate courses={data} />
     </div>
   );
 }

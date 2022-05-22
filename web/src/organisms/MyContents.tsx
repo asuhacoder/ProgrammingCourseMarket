@@ -69,7 +69,6 @@ function MyContents() {
           </CardContent>
         </Card>
       ))}
-
     </div>
   );
 }
