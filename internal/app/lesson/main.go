@@ -67,16 +67,17 @@ func (s *server) ListLessons(rect *pb.ListLessonsRequest, stream pb.Lesson_ListL
 			log.Printf("failed to get cases: %v", err)
 		}
 		if err := stream.Send(&pb.ListLessonsReply{
-			Uuid:         lesson.UUID.String(),
-			UserId:       lesson.USER_ID.String(),
-			CourseId:     lesson.COURSE_ID.String(),
-			Title:        lesson.TITLE,
-			Introduction: lesson.INTRODUCTION,
-			Body:         lesson.BODY,
-			DefaultCode:  lesson.DEFAULT_CODE,
-			AnswerCode:   lesson.ANSWER_CODE,
-			TestCase:     pbCases,
-			Language:     lesson.LANGUAGE,
+			Uuid:           lesson.UUID.String(),
+			UserId:         lesson.USER_ID.String(),
+			CourseId:       lesson.COURSE_ID.String(),
+			SequenceNumber: lesson.SEQUENCE_NUMBER,
+			Title:          lesson.TITLE,
+			Introduction:   lesson.INTRODUCTION,
+			Body:           lesson.BODY,
+			DefaultCode:    lesson.DEFAULT_CODE,
+			AnswerCode:     lesson.ANSWER_CODE,
+			TestCase:       pbCases,
+			Language:       lesson.LANGUAGE,
 		}); err != nil {
 			return err
 		}
@@ -97,16 +98,17 @@ func (s *server) GetLesson(ctx context.Context, in *pb.GetLessonRequest) (*pb.Ge
 		log.Printf("failed to get cases: %v", err)
 	}
 	return &pb.GetLessonReply{
-		Uuid:         lesson.UUID.String(),
-		UserId:       lesson.USER_ID.String(),
-		CourseId:     lesson.COURSE_ID.String(),
-		Title:        lesson.TITLE,
-		Introduction: lesson.INTRODUCTION,
-		Body:         lesson.BODY,
-		DefaultCode:  lesson.DEFAULT_CODE,
-		AnswerCode:   lesson.ANSWER_CODE,
-		TestCase:     pbCases,
-		Language:     lesson.LANGUAGE,
+		Uuid:           lesson.UUID.String(),
+		UserId:         lesson.USER_ID.String(),
+		CourseId:       lesson.COURSE_ID.String(),
+		SequenceNumber: lesson.SEQUENCE_NUMBER,
+		Title:          lesson.TITLE,
+		Introduction:   lesson.INTRODUCTION,
+		Body:           lesson.BODY,
+		DefaultCode:    lesson.DEFAULT_CODE,
+		AnswerCode:     lesson.ANSWER_CODE,
+		TestCase:       pbCases,
+		Language:       lesson.LANGUAGE,
 	}, nil
 }
 
@@ -123,15 +125,16 @@ func (s *server) CreateLesson(ctx context.Context, in *pb.CreateLessonRequest) (
 	}
 
 	lesson := db.Lesson{
-		UUID:         uuid.Must(uuid.NewV4()),
-		USER_ID:      uUID,
-		COURSE_ID:    courseID,
-		TITLE:        in.GetTitle(),
-		INTRODUCTION: in.GetIntroduction(),
-		BODY:         in.GetBody(),
-		DEFAULT_CODE: in.GetDefaultCode(),
-		ANSWER_CODE:  in.GetAnswerCode(),
-		LANGUAGE:     in.GetLanguage(),
+		UUID:            uuid.Must(uuid.NewV4()),
+		USER_ID:         uUID,
+		COURSE_ID:       courseID,
+		SEQUENCE_NUMBER: in.GetSequenceNumber(),
+		TITLE:           in.GetTitle(),
+		INTRODUCTION:    in.GetIntroduction(),
+		BODY:            in.GetBody(),
+		DEFAULT_CODE:    in.GetDefaultCode(),
+		ANSWER_CODE:     in.GetAnswerCode(),
+		LANGUAGE:        in.GetLanguage(),
 	}
 	log.Println(lesson)
 	result := db.LessonDB.Create(&lesson)
@@ -163,16 +166,17 @@ func (s *server) CreateLesson(ctx context.Context, in *pb.CreateLessonRequest) (
 	log.Printf("pbCases: %v", pbCases)
 
 	return &pb.CreateLessonReply{
-		Uuid:         lesson.UUID.String(),
-		UserId:       lesson.USER_ID.String(),
-		CourseId:     lesson.COURSE_ID.String(),
-		Title:        lesson.TITLE,
-		Introduction: lesson.INTRODUCTION,
-		Body:         lesson.BODY,
-		DefaultCode:  lesson.DEFAULT_CODE,
-		AnswerCode:   lesson.ANSWER_CODE,
-		TestCase:     pbCases,
-		Language:     lesson.LANGUAGE,
+		Uuid:           lesson.UUID.String(),
+		UserId:         lesson.USER_ID.String(),
+		CourseId:       lesson.COURSE_ID.String(),
+		SequenceNumber: lesson.SEQUENCE_NUMBER,
+		Title:          lesson.TITLE,
+		Introduction:   lesson.INTRODUCTION,
+		Body:           lesson.BODY,
+		DefaultCode:    lesson.DEFAULT_CODE,
+		AnswerCode:     lesson.ANSWER_CODE,
+		TestCase:       pbCases,
+		Language:       lesson.LANGUAGE,
 	}, nil
 }
 
@@ -200,6 +204,7 @@ func (s *server) UpdateLesson(ctx context.Context, in *pb.UpdateLessonRequest) (
 		return &pb.UpdateLessonReply{}, err
 	}
 
+	lesson.SEQUENCE_NUMBER = in.GetSequenceNumber()
 	lesson.TITLE = in.GetTitle()
 	lesson.INTRODUCTION = in.GetIntroduction()
 	lesson.BODY = in.GetBody()
@@ -226,22 +231,23 @@ func (s *server) UpdateLesson(ctx context.Context, in *pb.UpdateLessonRequest) (
 		db.CaseDB.Save(&c)
 	}
 
-	pbCases, err = getCasesWithID(lesson)
+	pbCasesWithID, err := getCasesWithID(lesson)
 	if err != nil {
 		log.Printf("failed to get cases: %v", err)
 	}
 
 	return &pb.UpdateLessonReply{
-		Uuid:         lesson.UUID.String(),
-		UserId:       lesson.USER_ID.String(),
-		CourseId:     lesson.COURSE_ID.String(),
-		Title:        lesson.TITLE,
-		Introduction: lesson.INTRODUCTION,
-		Body:         lesson.BODY,
-		DefaultCode:  lesson.DEFAULT_CODE,
-		AnswerCode:   lesson.ANSWER_CODE,
-		TestCase:     pbCases,
-		Language:     lesson.LANGUAGE,
+		Uuid:           lesson.UUID.String(),
+		UserId:         lesson.USER_ID.String(),
+		CourseId:       lesson.COURSE_ID.String(),
+		SequenceNumber: lesson.SEQUENCE_NUMBER,
+		Title:          lesson.TITLE,
+		Introduction:   lesson.INTRODUCTION,
+		Body:           lesson.BODY,
+		DefaultCode:    lesson.DEFAULT_CODE,
+		AnswerCode:     lesson.ANSWER_CODE,
+		TestCase:       pbCasesWithID,
+		Language:       lesson.LANGUAGE,
 	}, nil
 }
 

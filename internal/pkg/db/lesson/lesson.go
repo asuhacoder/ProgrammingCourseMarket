@@ -39,13 +39,14 @@ func lessonAutoMigration() {
 }
 
 type Lesson struct {
-	UUID         uuid.UUID `gorm:"primaryKey; unique; type:uuid;"`
-	USER_ID      uuid.UUID `gorm:"not null"`
-	COURSE_ID    uuid.UUID `gorm:"not null"`
-	TITLE        string    `gorm:"not null"`
-	INTRODUCTION string    `gorm:"not null"`
-	BODY         string    `gorm:"not null"`
-	DEFAULT_CODE string    `gorm:"not null"`
-	ANSWER_CODE  string    `gorm:"not null"`
-	LANGUAGE     string    `gorm:"not null"`
+	UUID            uuid.UUID `gorm:"primaryKey; unique; type:uuid;"`
+	USER_ID         uuid.UUID `gorm:"not null"`
+	COURSE_ID       uuid.UUID `gorm:"not null"`
+	SEQUENCE_NUMBER int64     `gorm:"not null"`
+	TITLE           string    `gorm:"not null"`
+	INTRODUCTION    string    `gorm:"not null"`
+	BODY            string    `gorm:"not null"`
+	DEFAULT_CODE    string    `gorm:"not null"`
+	ANSWER_CODE     string    `gorm:"not null"`
+	LANGUAGE        string    `gorm:"not null"`
 }
