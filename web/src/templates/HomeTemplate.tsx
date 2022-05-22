@@ -3,12 +3,14 @@ import Header from '../organisms/Header';
 import CourseList from '../organisms/CourseList';
 import HomeDivStyle from './HomeTemplate.css';
 
-function HomeTemplate() {
+function HomeTemplate(props: any) {
   return (
     <div>
       <Header />
       <div className={HomeDivStyle}>
-        <CourseList />
+        <CourseList
+          {...props}
+        />
       </div>
     </div>
   );

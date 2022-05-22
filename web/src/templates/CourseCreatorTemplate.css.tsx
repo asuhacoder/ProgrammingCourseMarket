@@ -1,8 +1,8 @@
 import { css } from '@linaria/core';
 
-const CourseEditorDivStyle = css`
+const CourseCreatorDivStyle = css`
   width: 700px;
   margin: 30px auto;
 `;
 
-export default CourseEditorDivStyle;
+export default CourseCreatorDivStyle;

@@ -2,13 +2,15 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { userState, defaultUser } from './config/Recoil';
+import { userState } from './config/Recoil';
+import { defaultUser } from './config/Type';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import CourseDetail from './pages/CourseDetail';
-import CourseEditor from './pages/CourseEditor';
-import MyContents from './pages/MyContents';
+import CourseCreator from './pages/CourseCreator';
+import CourseUpdater from './pages/CourseUpdater';
+import MyContentsPage from './pages/MyContentsPage';
 
 function App() {
   console.log('token', window.localStorage.getItem('programming-course-market'));
@@ -40,9 +42,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/course/detail" element={<CourseDetail />} />
-        <Route path="/course/editor" element={<CourseEditor />} />
-        <Route path="/mycontents" element={<MyContents />} />
+        <Route path="/course/detail/:id" element={<CourseDetail />} />
+        <Route path="/course/editor/new" element={<CourseCreator />} />
+        <Route path="/course/editor/:id" element={<CourseUpdater />} />
+        <Route path="/mycontents" element={<MyContentsPage />} />
       </Routes>
     </div>
   );

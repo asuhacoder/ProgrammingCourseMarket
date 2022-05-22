@@ -7,7 +7,6 @@ import (
 	"net"
 
 	db "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/db/course"
-	jwt "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/jwt"
 	pb "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/course"
 	"github.com/gofrs/uuid"
 	"github.com/golang/protobuf/ptypes/empty"
@@ -25,19 +24,16 @@ type server struct {
 }
 
 func (s *server) ListCourses(in *pb.ListCoursesRequest, stream pb.Course_ListCoursesServer) error {
-	uuid, _, err := jwt.ParseJWT(in.GetToken())
-	if err != nil {
-		log.Printf("failed to parse jwt: %v", err)
-	}
+	uuid := in.GetUserId()
 	log.Println("ListCourses running")
 	var courses []db.Course
 	var result *gorm.DB
 	if in.GetOnlyPublic() && in.GetOnlyMine() {
-		result = db.DB.Where("IS_PUBLIC = ?", true).Where("UUID = ?", uuid).Find(&courses)
+		result = db.DB.Where("IS_PUBLIC = ?", true).Where("USER_ID = ?", uuid).Find(&courses)
 	} else if in.GetOnlyPublic() {
 		result = db.DB.Where("IS_PUBLIC = ?", true).Find(&courses)
 	} else if in.GetOnlyMine() {
-		result = db.DB.Where("UUID = ?", uuid).Find(&courses)
+		result = db.DB.Where("USER_ID = ?", uuid).Find(&courses)
 	} else {
 		result = db.DB.Find(&courses)
 	}
@@ -55,7 +51,7 @@ func (s *server) ListCourses(in *pb.ListCoursesRequest, stream pb.Course_ListCou
 			Introduction: course.INTRODUCTION,
 			Image:        course.IMAGE,
 			Price:        int64(course.PRICE),
-			IsPublished:  course.IS_PUBLISHED,
+			IsPublic:     course.IS_PUBLIC,
 		}); err != nil {
 			return err
 		}
@@ -78,16 +74,14 @@ func (s *server) GetCourse(ctx context.Context, in *pb.GetCourseRequest) (*pb.Ge
 		Introduction: course.INTRODUCTION,
 		Image:        course.IMAGE,
 		Price:        int64(course.PRICE),
-		IsPublished:  course.IS_PUBLISHED,
+		IsPublic:     course.IS_PUBLIC,
 	}, nil
 }
 
 func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (*pb.CreateCourseReply, error) {
-	uUID, _, err := jwt.ParseJWT(in.GetToken())
+	uUID, err := uuid.FromString(in.GetUserId())
 	if err != nil {
-
-		log.Printf("failed to create course: %v", err)
-		return &pb.CreateCourseReply{}, err
+		log.Printf("failed to convert string to uuid: %v", err)
 	}
 
 	course := db.Course{
@@ -97,7 +91,7 @@ func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (
 		INTRODUCTION: in.GetIntroduction(),
 		IMAGE:        in.GetImage(),
 		PRICE:        int(in.GetPrice()),
-		IS_PUBLISHED: in.GetIsPublished(),
+		IS_PUBLIC:    in.GetIsPublic(),
 	}
 	log.Println(course)
 	result := db.DB.Create(&course)
@@ -114,20 +108,17 @@ func (s *server) CreateCourse(ctx context.Context, in *pb.CreateCourseRequest) (
 		Introduction: course.INTRODUCTION,
 		Image:        course.IMAGE,
 		Price:        int64(course.PRICE),
-		IsPublished:  course.IS_PUBLISHED,
+		IsPublic:     course.IS_PUBLIC,
 		CreatedAt:    CreatedAt,
 	}, nil
 }
 
 func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (*pb.UpdateCourseReply, error) {
 	var course db.Course
-	userUuid, _, err := jwt.ParseJWT(in.GetToken())
+	userUuid, err := uuid.FromString(in.GetUserId())
 	if err != nil {
-
-		log.Printf("failed to create course: %v", err)
-		return &pb.UpdateCourseReply{}, err
+		log.Printf("failed to convert string to uuid: %v", err)
 	}
-
 	uUID, err := uuid.FromString(in.GetUuid())
 	if err != nil {
 		log.Printf("failed to convert string to uuid: %v", err)
@@ -146,7 +137,7 @@ func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (
 	course.INTRODUCTION = in.GetIntroduction()
 	course.IMAGE = in.GetImage()
 	course.PRICE = int(in.GetPrice())
-	course.IS_PUBLISHED = in.GetIsPublished()
+	course.IS_PUBLIC = in.GetIsPublic()
 	db.DB.Save(&course)
 
 	return &pb.UpdateCourseReply{
@@ -156,17 +147,15 @@ func (s *server) UpdateCourse(ctx context.Context, in *pb.UpdateCourseRequest) (
 		Introduction: course.INTRODUCTION,
 		Image:        course.IMAGE,
 		Price:        int64(course.PRICE),
-		IsPublished:  course.IS_PUBLISHED,
+		IsPublic:     course.IS_PUBLIC,
 	}, nil
 }
 
 func (s *server) DeleteCourse(ctx context.Context, in *pb.DeleteCourseRequest) (*empty.Empty, error) {
 	var course db.Course
-	userUuid, _, err := jwt.ParseJWT(in.GetToken())
-
+	userUuid, err := uuid.FromString(in.GetUserId())
 	if err != nil {
-
-		return new(empty.Empty), err
+		log.Printf("failed to convert string to uuid: %v", err)
 	}
 	uUID, err := uuid.FromString(in.GetUuid())
 	if err != nil {

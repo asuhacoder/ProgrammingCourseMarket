@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"log"
+	"strconv"
 	"time"
 
 	pbCourse "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/course"
@@ -15,23 +16,17 @@ const (
 	courseAddress = "course:50053"
 )
 
-type CourseListRequest struct {
-	Token      string `form:"token" json:"token"`
-	OnlyPublic bool   `form:"only_public" json:"only_public"`
-	OnlyMine   bool   `form:"only_mine" json:"only_mine"`
-}
-
 type CourseCreateUpdateRequest struct {
-	Token        string `form:"token" json:"token"`
-	Title        string `from:"title" json:"title"`
-	Introduction string `from:"introduction" json:"introduction"`
-	Image        string `from:"image" json:"image"`
-	Price        int64  `from:"price" json:"price"`
-	IsPublished  bool   `form:"is_published" json:"is_published"`
+	UserId       string `form:"user_id" json:"user_id"`
+	Title        string `form:"title" json:"title"`
+	Introduction string `form:"introduction" json:"introduction"`
+	Image        string `form:"image" json:"image"`
+	Price        int64  `form:"price" json:"price"`
+	IsPublic     bool   `form:"is_public" json:"is_public"`
 }
 
 type CourseDeleteRequest struct {
-	Token string `form:"token" json:"token"`
+	UserId string `form:"user_id" json:"user_id"`
 }
 
 func listCourses(c *gin.Context) {
@@ -42,19 +37,24 @@ func listCourses(c *gin.Context) {
 	defer conn.Close()
 	client := pbCourse.NewCourseClient(conn)
 
-	var s CourseListRequest
-	err = c.ShouldBind(&s)
+	userId := c.Query("user_id")
+	onlyPublicString := c.Query("only_public")
+	onlyMineString := c.Query("only_mine")
+	onlyPublic, err := strconv.ParseBool(onlyPublicString)
 	if err != nil {
-		log.Printf("failed to bind request: %v", err)
-		c.AbortWithStatus(400)
+		log.Printf("failed to convert string to bool: %v", err)
+	}
+	onlyMine, err := strconv.ParseBool(onlyMineString)
+	if err != nil {
+		log.Printf("failed to convert string to bool: %v", err)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	stream, err := client.ListCourses(ctx, &pbCourse.ListCoursesRequest{
-		Token:      s.Token,
-		OnlyPublic: s.OnlyPublic,
-		OnlyMine:   s.OnlyMine,
+		UserId:     userId,
+		OnlyPublic: onlyPublic,
+		OnlyMine:   onlyMine,
 	})
 	if err != nil {
 		log.Printf("failed to access grpc server: %v", err)
@@ -76,7 +76,7 @@ func listCourses(c *gin.Context) {
 				"introduction": r.GetIntroduction(),
 				"image":        r.GetImage(),
 				"price":        r.GetPrice(),
-				"is_published": r.GetIsPublished(),
+				"is_public":    r.GetIsPublic(),
 				"created_at":   r.GetCreatedAt(),
 			}
 			responces = append(responces, course)
@@ -114,7 +114,7 @@ func getCourse(c *gin.Context) {
 			"introduction": r.GetIntroduction(),
 			"image":        r.GetImage(),
 			"price":        r.GetPrice(),
-			"is_published": r.GetIsPublished(),
+			"is_public":    r.GetIsPublic(),
 			"created_at":   r.GetCreatedAt(),
 		})
 	}
@@ -140,12 +140,12 @@ func createCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.CreateCourse(ctx, &pbCourse.CreateCourseRequest{
-		Token:        s.Token,
+		UserId:       s.UserId,
 		Title:        s.Title,
 		Introduction: s.Introduction,
 		Image:        s.Image,
 		Price:        s.Price,
-		IsPublished:  s.IsPublished,
+		IsPublic:     s.IsPublic,
 	})
 
 	if err != nil {
@@ -158,7 +158,7 @@ func createCourse(c *gin.Context) {
 			"introduction": r.GetIntroduction(),
 			"image":        r.GetImage(),
 			"price":        r.GetPrice(),
-			"is_published": r.GetIsPublished(),
+			"is_public":    r.GetIsPublic(),
 			"created_at":   r.GetCreatedAt(),
 		})
 	}
@@ -186,12 +186,12 @@ func updateCourse(c *gin.Context) {
 	defer cancel()
 	r, err := client.UpdateCourse(ctx, &pbCourse.UpdateCourseRequest{
 		Uuid:         uuid,
-		Token:        s.Token,
+		UserId:       s.UserId,
 		Title:        s.Title,
 		Introduction: s.Introduction,
 		Image:        s.Image,
 		Price:        s.Price,
-		IsPublished:  s.IsPublished,
+		IsPublic:     s.IsPublic,
 	})
 
 	if err != nil {
@@ -204,7 +204,7 @@ func updateCourse(c *gin.Context) {
 			"introduction": r.GetIntroduction(),
 			"image":        r.GetImage(),
 			"price":        r.GetPrice(),
-			"is_published": r.GetIsPublished(),
+			"is_public":    r.GetIsPublic(),
 			"created_at":   r.GetCreatedAt(),
 		})
 	}
@@ -231,8 +231,8 @@ func deleteCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.DeleteCourse(ctx, &pbCourse.DeleteCourseRequest{
-		Token: s.Token,
-		Uuid:  uuid,
+		UserId: s.UserId,
+		Uuid:   uuid,
 	})
 
 	if err != nil {
