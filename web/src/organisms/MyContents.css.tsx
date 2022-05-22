@@ -21,3 +21,7 @@ export const ButtonDivStyle = css`
   display: flex;
   float: right;
 `;
+
+export const ButtonStyle = css`
+  margin-right: 10px;
+`;

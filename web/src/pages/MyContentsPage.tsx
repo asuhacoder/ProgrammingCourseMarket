@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import userState from '../config/Recoil';
+import { userState, myContentsState } from '../config/Recoil';
 import MyContentsTemplate from '../templates/MyContentsTemplate';
 
 function MyContentsPage() {
-  const [courses, setCourses] = useState([]);
   const user = useRecoilState(userState)[0];
+  const setMyContents = useRecoilState(myContentsState)[1];
   console.log('user.uuid: ', user.uuid);
   console.log('user in my contents pages component', user);
   useEffect(() => {
@@ -19,7 +19,7 @@ function MyContentsPage() {
       },
     })
       .then((response) => {
-        setCourses(response.data.courses);
+        setMyContents(response.data.courses);
         console.log('suceed', response.data);
       }, (error) => {
         console.log('failed', error);
@@ -27,6 +27,6 @@ function MyContentsPage() {
       });
   }, []);
   console.log('useEffect in mycontents ran');
-  return <MyContentsTemplate courses={courses} />;
+  return <MyContentsTemplate />;
 }
 export default MyContentsPage;

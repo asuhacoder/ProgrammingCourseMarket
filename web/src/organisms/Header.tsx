@@ -10,7 +10,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { useRecoilState, SetterOrUpdater } from 'recoil';
-import userState from '../config/Recoil';
+import { userState } from '../config/Recoil';
 import { User, defaultUser } from '../config/Type';
 import CustomLink from '../atoms/CustomLink';
 import LinkStyle from './Header.css';

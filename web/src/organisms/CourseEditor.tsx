@@ -8,7 +8,7 @@ import {
   Checkbox,
 } from '@mui/material';
 import { useRecoilState } from 'recoil';
-import userState from '../config/Recoil';
+import { userState } from '../config/Recoil';
 import { User } from '../config/Type';
 import CustomTextField from '../atoms/CustomTextField';
 import ButtonDiv from '../molecules/ButtonDiv';

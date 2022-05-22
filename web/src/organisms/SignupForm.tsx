@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Stack } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import userState from '../config/Recoil';
+import { userState } from '../config/Recoil';
 import StackStyle from './SignupForm.css';
 import CustomTextField from '../atoms/CustomTextField';
 import ButtonDiv from '../molecules/ButtonDiv';

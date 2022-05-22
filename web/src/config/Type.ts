@@ -29,3 +29,5 @@ export const defaultCourse = {
   introduction: '',
   is_public: false,
 };
+
+export const defaultCourseArray = [];

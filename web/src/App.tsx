@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import userState from './config/Recoil';
+import { userState } from './config/Recoil';
 import { defaultUser } from './config/Type';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
