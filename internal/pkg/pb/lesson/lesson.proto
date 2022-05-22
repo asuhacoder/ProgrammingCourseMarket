@@ -33,6 +33,38 @@ message ListLessonsReply {
   string uuid = 1;
   string user_id = 2;
   string course_id = 3;
+  int64 sequence_number = 4;
+  string title = 5;
+  string introduction = 6;
+  string body = 7;
+  string default_code = 8;
+  string answer_code = 9;
+  repeated case test_case = 10;
+  string language = 11;
+}
+
+message GetLessonRequest {
+  string uuid = 1;
+}
+
+message GetLessonReply {
+  string uuid = 1;
+  string user_id = 2;
+  string course_id = 3;
+  int64 sequence_number = 4;
+  string title = 5;
+  string introduction = 6;
+  string body = 7;
+  string default_code = 8;
+  string answer_code = 9;
+  repeated case test_case = 10;
+  string language = 11;
+}
+
+message CreateLessonRequest {
+  string token = 1;
+  string course_id = 2;
+  int64 sequence_number = 3;
   string title = 4;
   string introduction = 5;
   string body = 6;
@@ -41,72 +73,48 @@ message ListLessonsReply {
   repeated case test_case = 9;
   string language = 10;
 }
-
-message GetLessonRequest {
-  string uuid = 1;
-}
-
-message GetLessonReply {
-    string uuid = 1;
-    string user_id = 2;
-    string course_id = 3;
-    string title = 4;
-    string introduction = 5;
-    string body = 6;
-    string default_code = 7;
-    string answer_code = 8;
-    repeated case test_case = 9;
-    string language = 10;
-}
-
-message CreateLessonRequest {
-    string token = 1;
-    string course_id = 2;
-    string title = 3;
-    string introduction = 4;
-    string body = 5;
-    string default_code = 6;
-    string answer_code = 7;
-    repeated case test_case = 8;
-    string language = 9;
-}
   
 message CreateLessonReply {
-    string uuid = 1;
-    string user_id = 2;
-    string course_id = 3;
-    string title = 4;
-    string introduction = 5;
-    string body = 6;
-    string default_code = 7;
-    string answer_code = 8;
-    repeated case test_case = 9;
-    string language = 10;
+  string uuid = 1;
+  string user_id = 2;
+  string course_id = 3;
+  int64 sequence_number = 4;
+  string title = 5;
+  string introduction = 6;
+  string body = 7;
+  string default_code = 8;
+  string answer_code = 9;
+  repeated case test_case = 10;
+  string language = 11;
 }
 
 message UpdateLessonRequest {
-    string token = 1;
-    string uuid = 2;
-    string title = 3;
-    string introduction = 4;
-    string body = 5;
-    string default_code = 6;
-    string answer_code = 7;
-    repeated caseWithID test_case = 8;
-    string language = 9;
+  string token = 1;
+  string uuid = 2;
+  string user_id = 3;
+  string course_id = 4;
+  int64 sequence_number = 5;
+  string title = 6;
+  string introduction = 7;
+  string body = 8;
+  string default_code = 9;
+  string answer_code = 10;
+  repeated caseWithID test_case = 11;
+  string language = 12;
 }
 
 message UpdateLessonReply {
-    string uuid = 1;
-    string user_id = 2;
-    string course_id = 3;
-    string title = 4;
-    string introduction = 5;
-    string body = 6;
-    string default_code = 7;
-    string answer_code = 8;
-    repeated caseWithID test_case = 9;
-    string language = 10;
+  string uuid = 1;
+  string user_id = 2;
+  string course_id = 3;
+  int64 sequence_number = 4;
+  string title = 5;
+  string introduction = 6;
+  string body = 7;
+  string default_code = 8;
+  string answer_code = 9;
+  repeated caseWithID test_case = 10;
+  string language = 11;
 }
 
 message DeleteLessonRequest {

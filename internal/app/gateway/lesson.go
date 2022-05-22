@@ -16,28 +16,30 @@ const (
 )
 
 type CreateLessonRequest struct {
-	Token        string           `form:"token" json:"token"`
-	CourseID     string           `form:"course_id" json:"course_id"`
-	Title        string           `form:"title" json:"title"`
-	Introduction string           `form:"introduction" json:"introduction"`
-	Body         string           `form:"body" json:"body"`
-	DefaultCode  string           `form:"default_code" json:"default_code"`
-	AnswerCode   string           `form:"answer_code" json:"answer_code"`
-	TestCase     []*pbLesson.Case `form:"test_case" json:"test_case"`
-	Language     string           `form:"language" json:"language"`
+	Token          string           `form:"token" json:"token"`
+	CourseID       string           `form:"course_id" json:"course_id"`
+	SequenceNumber int64            `form:"sequence_number" json:"sequence_number"`
+	Title          string           `form:"title" json:"title"`
+	Introduction   string           `form:"introduction" json:"introduction"`
+	Body           string           `form:"body" json:"body"`
+	DefaultCode    string           `form:"default_code" json:"default_code"`
+	AnswerCode     string           `form:"answer_code" json:"answer_code"`
+	TestCase       []*pbLesson.Case `form:"test_case" json:"test_case"`
+	Language       string           `form:"language" json:"language"`
 }
 
 type UpdateLessonRequest struct {
-	Token        string                 `form:"token" json:"token"`
-	Uuid         string                 `form:"uuid" json:"uuid"`
-	CourseID     string                 `form:"course_id" json:"course_id"`
-	Title        string                 `form:"title" json:"title"`
-	Introduction string                 `form:"introduction" json:"introduction"`
-	Body         string                 `form:"body" json:"body"`
-	DefaultCode  string                 `form:"default_code" json:"default_code"`
-	AnswerCode   string                 `form:"answer_code" json:"answer_code"`
-	TestCase     []*pbLesson.CaseWithID `form:"test_case" json:"test_case"`
-	Language     string                 `form:"language" json:"language"`
+	Token          string                 `form:"token" json:"token"`
+	Uuid           string                 `form:"uuid" json:"uuid"`
+	CourseID       string                 `form:"course_id" json:"course_id"`
+	SequenceNumber int64                  `form:"sequence_number" json:"sequence_number"`
+	Title          string                 `form:"title" json:"title"`
+	Introduction   string                 `form:"introduction" json:"introduction"`
+	Body           string                 `form:"body" json:"body"`
+	DefaultCode    string                 `form:"default_code" json:"default_code"`
+	AnswerCode     string                 `form:"answer_code" json:"answer_code"`
+	TestCase       []*pbLesson.CaseWithID `form:"test_case" json:"test_case"`
+	Language       string                 `form:"language" json:"language"`
 }
 
 type DeleteLessonRequest struct {
@@ -70,16 +72,17 @@ func listLessons(c *gin.Context) {
 			c.AbortWithStatus(400)
 		} else {
 			lesson := gin.H{
-				"uuid":         r.GetUuid(),
-				"user_id":      r.GetUserId(),
-				"course_id":    r.GetCourseId(),
-				"title":        r.GetTitle(),
-				"introduction": r.GetIntroduction(),
-				"body":         r.GetBody(),
-				"default_code": r.GetDefaultCode(),
-				"answer_code":  r.GetAnswerCode(),
-				"test_case":    r.GetTestCase(),
-				"language":     r.GetLanguage(),
+				"uuid":            r.GetUuid(),
+				"user_id":         r.GetUserId(),
+				"course_id":       r.GetCourseId(),
+				"sequence_number": r.GetSequenceNumber(),
+				"title":           r.GetTitle(),
+				"introduction":    r.GetIntroduction(),
+				"body":            r.GetBody(),
+				"default_code":    r.GetDefaultCode(),
+				"answer_code":     r.GetAnswerCode(),
+				"test_case":       r.GetTestCase(),
+				"language":        r.GetLanguage(),
 			}
 			responces = append(responces, lesson)
 		}
@@ -110,16 +113,17 @@ func getLesson(c *gin.Context) {
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
-			"uuid":         r.GetUuid(),
-			"user_id":      r.GetUserId(),
-			"course_id":    r.GetCourseId(),
-			"title":        r.GetTitle(),
-			"introduction": r.GetIntroduction(),
-			"body":         r.GetBody(),
-			"default_code": r.GetDefaultCode(),
-			"answer_code":  r.GetAnswerCode(),
-			"test_case":    r.GetTestCase(),
-			"language":     r.GetLanguage(),
+			"uuid":            r.GetUuid(),
+			"user_id":         r.GetUserId(),
+			"course_id":       r.GetCourseId(),
+			"sequence_number": r.GetSequenceNumber(),
+			"title":           r.GetTitle(),
+			"introduction":    r.GetIntroduction(),
+			"body":            r.GetBody(),
+			"default_code":    r.GetDefaultCode(),
+			"answer_code":     r.GetAnswerCode(),
+			"test_case":       r.GetTestCase(),
+			"language":        r.GetLanguage(),
 		})
 	}
 }
@@ -144,31 +148,33 @@ func createLesson(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r, err := client.CreateLesson(ctx, &pbLesson.CreateLessonRequest{
-		Token:        s.Token,
-		CourseId:     s.CourseID,
-		Title:        s.Title,
-		Introduction: s.Introduction,
-		Body:         s.Body,
-		DefaultCode:  s.DefaultCode,
-		AnswerCode:   s.AnswerCode,
-		TestCase:     s.TestCase,
-		Language:     s.Language,
+		Token:          s.Token,
+		CourseId:       s.CourseID,
+		SequenceNumber: s.SequenceNumber,
+		Title:          s.Title,
+		Introduction:   s.Introduction,
+		Body:           s.Body,
+		DefaultCode:    s.DefaultCode,
+		AnswerCode:     s.AnswerCode,
+		TestCase:       s.TestCase,
+		Language:       s.Language,
 	})
 
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
-			"uuid":         r.GetUuid(),
-			"user_id":      r.GetUserId(),
-			"course_id":    r.GetCourseId(),
-			"title":        r.GetTitle(),
-			"introduction": r.GetIntroduction(),
-			"body":         r.GetBody(),
-			"default_code": r.GetDefaultCode(),
-			"answer_code":  r.GetAnswerCode(),
-			"test_case":    r.GetTestCase(),
-			"language":     r.GetLanguage(),
+			"uuid":            r.GetUuid(),
+			"user_id":         r.GetUserId(),
+			"course_id":       r.GetCourseId(),
+			"sequence_number": r.GetSequenceNumber(),
+			"title":           r.GetTitle(),
+			"introduction":    r.GetIntroduction(),
+			"body":            r.GetBody(),
+			"default_code":    r.GetDefaultCode(),
+			"answer_code":     r.GetAnswerCode(),
+			"test_case":       r.GetTestCase(),
+			"language":        r.GetLanguage(),
 		})
 	}
 }
@@ -196,31 +202,33 @@ func updateLesson(c *gin.Context) {
 	uuid := c.Param("uuid")
 
 	r, err := client.UpdateLesson(ctx, &pbLesson.UpdateLessonRequest{
-		Token:        s.Token,
-		Uuid:         uuid,
-		Title:        s.Title,
-		Introduction: s.Introduction,
-		Body:         s.Body,
-		DefaultCode:  s.DefaultCode,
-		AnswerCode:   s.AnswerCode,
-		TestCase:     s.TestCase,
-		Language:     s.Language,
+		Token:          s.Token,
+		Uuid:           uuid,
+		SequenceNumber: s.SequenceNumber,
+		Title:          s.Title,
+		Introduction:   s.Introduction,
+		Body:           s.Body,
+		DefaultCode:    s.DefaultCode,
+		AnswerCode:     s.AnswerCode,
+		TestCase:       s.TestCase,
+		Language:       s.Language,
 	})
 
 	if err != nil {
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
-			"uuid":         r.GetUuid(),
-			"user_id":      r.GetUserId(),
-			"course_id":    r.GetCourseId(),
-			"title":        r.GetTitle(),
-			"introduction": r.GetIntroduction(),
-			"body":         r.GetBody(),
-			"default_code": r.GetDefaultCode(),
-			"answer_code":  r.GetAnswerCode(),
-			"test_case":    r.GetTestCase(),
-			"language":     r.GetLanguage(),
+			"uuid":            r.GetUuid(),
+			"user_id":         r.GetUserId(),
+			"course_id":       r.GetCourseId(),
+			"sequence_number": r.GetSequenceNumber(),
+			"title":           r.GetTitle(),
+			"introduction":    r.GetIntroduction(),
+			"body":            r.GetBody(),
+			"default_code":    r.GetDefaultCode(),
+			"answer_code":     r.GetAnswerCode(),
+			"test_case":       r.GetTestCase(),
+			"language":        r.GetLanguage(),
 		})
 	}
 }
