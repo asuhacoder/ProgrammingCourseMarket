@@ -34,7 +34,7 @@ services:
       user_db:
         condition: service_healthy
   user_db:
-    image: postgres:alpine
+    image: postgres:15.2-alpine3.17
     container_name: "user_db"
     environment: 
       POSTGRES_USER: gorm
@@ -44,10 +44,10 @@ services:
     ports:
       - 5432:5432
     healthcheck:
-      test: [CMD-SHELL, "exit", "0"]
-      interval: 3s
+      test: [CMD-SHELL, "pg_isready -U gorm"]
+      interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 20
   course:
     build:
       context: ./
@@ -60,23 +60,20 @@ services:
       course_db:
         condition: service_healthy
   course_db:
-    build: 
-      context: ./build/package/docker/course_db/
-      dockerfile: Dockerfile
+    image: postgres:15.2-alpine3.17
     container_name: "course_db"
-    command: postgres -c port=5433
     environment: 
       POSTGRES_USER: gorm
       POSTGRES_PASSWORD: gorm
       POSTGRES_DB: gorm
       POSTGRES_HOST: course_db
     ports:
-      - 5433:5433
+      - 5433:5432
     healthcheck:
-      test: [CMD-SHELL, "exit", "0"]
-      interval: 3s
+      test: [CMD-SHELL, "pg_isready -U gorm"]
+      interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 20
   lesson:
     build:
       context: ./
@@ -89,23 +86,20 @@ services:
       lesson_db:
         condition: service_healthy
   lesson_db:
-    build: 
-      context: ./build/package/docker/lesson_db/
-      dockerfile: Dockerfile
+    image: postgres:15.2-alpine3.17
     container_name: "lesson_db"
-    command: postgres -c port=5434
     environment: 
       POSTGRES_USER: gorm
       POSTGRES_PASSWORD: gorm
       POSTGRES_DB: gorm
       POSTGRES_HOST: lesson_db
     ports:
-      - 5434:5434
+      - 5434:5432
     healthcheck:
-      test: [CMD-SHELL, "exit", "0"]
-      interval: 3s
+      test: [CMD-SHELL, "pg_isready -U gorm"]
+      interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 20
   runner:
     build:
       context: ./
