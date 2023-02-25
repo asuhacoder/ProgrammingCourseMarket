@@ -60,7 +60,7 @@ function MyContents() {
                 <AlertModal
                   actionButtonBody="Delete"
                   actionButtonColor="error"
-                  modalBody="Are you sure to delete your myContent?"
+                  modalBody="Are you sure to delete your contents?"
                   modalButtonColor="error"
                   onClickActionButton={() => deleteCourse(myContent.uuid)}
                 />
