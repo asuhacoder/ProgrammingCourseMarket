@@ -46,9 +46,9 @@ function CourseEditor() {
       isValid = false;
       setTitleHasError(true);
       setTitleHelperText('length of title must be more than or equal 3');
-    } else if (title.length > 20) {
+    } else if (title.length > 50) {
       setTitleHasError(true);
-      setTitleHelperText('length of title must be less than or equal 20');
+      setTitleHelperText('length of title must be less than or equal 50');
     } else {
       setTitleHasError(false);
       setTitleHelperText('');

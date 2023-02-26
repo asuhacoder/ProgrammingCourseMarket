@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { defaultCourseArray, defaultUser } from './Type';
+import { defaultCourseArray, defaultUser, defaultLessons, Lesson } from './Type';
 
 export const userState = atom({
   key: 'userState',
@@ -9,4 +9,9 @@ export const userState = atom({
 export const myContentsState = atom({
   key: 'myContentsState',
   default: defaultCourseArray,
+});
+
+export const lessonsState = atom<Lesson[]>({
+  key: 'lessonsState',
+  default: defaultLessons,
 });

@@ -7,6 +7,7 @@ import {
   CardContent,
   Typography,
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import { useRecoilState } from 'recoil';
 import { userState, myContentsState } from '../config/Recoil';
 import { User, Course } from '../config/Type';
@@ -17,6 +18,8 @@ import {
   TypographyStyle,
   ButtonDivStyle,
   ButtonStyle,
+  TitleDivStyle,
+  EditIconStyle,
 } from './MyContents.css';
 import CustomLink from '../atoms/CustomLink';
 import AlertModal from '../molecules/AlertModal';
@@ -46,21 +49,26 @@ function MyContents() {
       {myContents !== null && myContents.map((myContent: Course) => (
         <Card key={myContent.uuid} className={CardContentStyle}>
           <CardContent>
-            <Typography variant="h4" component="div">
-              {myContent.title}
-            </Typography>
+            <div className={TitleDivStyle}>
+              <Typography variant="h4" component="div">
+                {myContent.title}
+              </Typography>
+              <CustomLink className={ButtonStyle} to={`/course/editor/${myContent.uuid}`}>
+                <EditIcon className={EditIconStyle} />
+              </CustomLink>
+            </div>
             <Typography variant="body2" className={TypographyStyle}>
               {myContent.introduction}
             </Typography>
             <div className={ButtonDivStyle}>
               <CardActions>
-                <CustomLink className={ButtonStyle} to={`/course/editor/${myContent.uuid}`}>
-                  <Button variant="contained" size="small">Edit</Button>
+                <CustomLink className={ButtonStyle} to={`/course/lesson/editor/${myContent.uuid}`}>
+                  <Button variant="contained" size="small">Edit Lesson List</Button>
                 </CustomLink>
                 <AlertModal
                   actionButtonBody="Delete"
                   actionButtonColor="error"
-                  modalBody="Are you sure to delete your myContent?"
+                  modalBody="Are you sure to delete your contents?"
                   modalButtonColor="error"
                   onClickActionButton={() => deleteCourse(myContent.uuid)}
                 />

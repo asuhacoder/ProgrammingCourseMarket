@@ -31,3 +31,18 @@ export const defaultCourse = {
 };
 
 export const defaultCourseArray = [];
+
+export interface Lesson {
+  uuid: string,
+  user_id: string,
+  course_id: string,
+  sequence_number: number,
+  title: string,
+  introduction: string,
+  body: string,
+  default_code: string,
+  answer_code: string,
+  language: string,
+}
+
+export const defaultLessons = []
