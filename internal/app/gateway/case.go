@@ -9,6 +9,7 @@ import (
 	pbCase "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/case"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -35,7 +36,7 @@ type DeleteCaseRequest struct {
 }
 
 func listCases(c *gin.Context) {
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -75,7 +76,7 @@ func listCases(c *gin.Context) {
 }
 
 func getCase(c *gin.Context) {
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -92,6 +93,7 @@ func getCase(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to get case: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
@@ -106,7 +108,7 @@ func getCase(c *gin.Context) {
 
 func createCase(c *gin.Context) {
 	log.Println("createCase func started")
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -131,6 +133,7 @@ func createCase(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to create case: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
@@ -145,7 +148,7 @@ func createCase(c *gin.Context) {
 
 func updateCase(c *gin.Context) {
 	log.Println("updateCase func started")
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -174,6 +177,7 @@ func updateCase(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to update case: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
@@ -188,7 +192,7 @@ func updateCase(c *gin.Context) {
 
 func deleteCase(c *gin.Context) {
 	log.Println("deleteCase func started")
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -212,6 +216,7 @@ func deleteCase(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to delete case: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, r)

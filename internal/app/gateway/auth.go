@@ -8,6 +8,7 @@ import (
 	pbAuth "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/auth"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -24,7 +25,7 @@ type AuthzRequest struct {
 }
 
 func authn(c *gin.Context) {
-	conn, err := grpc.Dial(authAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(authAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -45,6 +46,7 @@ func authn(c *gin.Context) {
 		Password: s.Password,
 	})
 	if err != nil {
+		log.Printf("failed to authentication: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
@@ -59,7 +61,7 @@ func authn(c *gin.Context) {
 }
 
 func authz(c *gin.Context) {
-	conn, err := grpc.Dial(authAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(authAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -79,6 +81,7 @@ func authz(c *gin.Context) {
 		Token: s.Token,
 	})
 	if err != nil {
+		log.Printf("failed to authorization: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{

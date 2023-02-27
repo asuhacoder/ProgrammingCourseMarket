@@ -9,6 +9,7 @@ import (
 	pbLesson "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/lesson"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -45,7 +46,7 @@ type DeleteLessonRequest struct {
 }
 
 func listLessons(c *gin.Context) {
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(lessonAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -90,7 +91,7 @@ func listLessons(c *gin.Context) {
 }
 
 func getLesson(c *gin.Context) {
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(lessonAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -107,6 +108,7 @@ func getLesson(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to get lesson: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
@@ -126,7 +128,7 @@ func getLesson(c *gin.Context) {
 
 func createLesson(c *gin.Context) {
 	log.Println("createLesson func started")
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(lessonAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -156,6 +158,7 @@ func createLesson(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to create lesson: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
@@ -175,7 +178,7 @@ func createLesson(c *gin.Context) {
 
 func updateLesson(c *gin.Context) {
 	log.Println("updateLesson func started")
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(lessonAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -208,6 +211,7 @@ func updateLesson(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to update lesson: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
@@ -227,7 +231,7 @@ func updateLesson(c *gin.Context) {
 
 func deleteLesson(c *gin.Context) {
 	log.Println("deleteLesson func started")
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(lessonAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -251,6 +255,7 @@ func deleteLesson(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to delete lesson: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, r)

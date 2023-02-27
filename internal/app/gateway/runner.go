@@ -8,6 +8,7 @@ import (
 	pbRunner "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/runner"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -23,7 +24,7 @@ type RunnerRequest struct {
 
 func runCode(c *gin.Context) {
 	log.Println("runCode func started")
-	conn, err := grpc.Dial(runnerAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(runnerAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -48,6 +49,7 @@ func runCode(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to run code: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
