@@ -24,6 +24,7 @@ func RunServer() {
 	courseRouters(v1)
 	lessonRouters(v1)
 	runnerRouters(v1)
+	caseRouters(v1)
 	err := r.Run()
 	if err != nil {
 		log.Printf("failed to run gateway: %v", err)

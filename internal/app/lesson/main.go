@@ -22,38 +22,10 @@ type server struct {
 	pb.UnimplementedLessonServer
 }
 
-func getCases(lesson db.Lesson) ([]*pb.Case, error) {
-	var pbCases []*pb.Case
-	uUID := lesson.UUID
-	var dbCases []db.TestCase
-	result := db.CaseDB.Find(&dbCases, "LESSON_ID = ?", uUID)
-	if result.Error != nil {
-		log.Printf("failed to get cases: %v", result.Error)
-	}
-	for _, c := range dbCases {
-		pbCases = append(pbCases, &pb.Case{Input: c.INPUT, Output: c.OUTPUT})
-	}
-	return pbCases, result.Error
-}
-
-func getCasesWithID(lesson db.Lesson) ([]*pb.CaseWithID, error) {
-	var pbCases []*pb.CaseWithID
-	uUID := lesson.UUID
-	var dbCases []db.TestCase
-	result := db.CaseDB.Find(&dbCases, "LESSON_ID = ?", uUID)
-	if result.Error != nil {
-		log.Printf("failed to get cases: %v", result.Error)
-	}
-	for _, c := range dbCases {
-		pbCases = append(pbCases, &pb.CaseWithID{LessonId: c.LESSON_ID.String(), Input: c.INPUT, Output: c.OUTPUT})
-	}
-	return pbCases, result.Error
-}
-
 func (s *server) ListLessons(rect *pb.ListLessonsRequest, stream pb.Lesson_ListLessonsServer) error {
 	log.Println("ListLessons running")
 	var lessons []db.Lesson
-	result := db.LessonDB.Find(&lessons)
+	result := db.LessonDB.Where("COURSE_ID = ?", rect.GetCourseId()).Find(&lessons)
 	log.Println("got all lessons")
 	log.Println(result.Error)
 	if result.Error != nil {
@@ -62,10 +34,6 @@ func (s *server) ListLessons(rect *pb.ListLessonsRequest, stream pb.Lesson_ListL
 	}
 
 	for _, lesson := range lessons {
-		pbCases, err := getCases(lesson)
-		if err != nil {
-			log.Printf("failed to get cases: %v", err)
-		}
 		if err := stream.Send(&pb.ListLessonsReply{
 			Uuid:           lesson.UUID.String(),
 			UserId:         lesson.USER_ID.String(),
@@ -76,7 +44,6 @@ func (s *server) ListLessons(rect *pb.ListLessonsRequest, stream pb.Lesson_ListL
 			Body:           lesson.BODY,
 			DefaultCode:    lesson.DEFAULT_CODE,
 			AnswerCode:     lesson.ANSWER_CODE,
-			TestCase:       pbCases,
 			Language:       lesson.LANGUAGE,
 		}); err != nil {
 			return err
@@ -93,10 +60,6 @@ func (s *server) GetLesson(ctx context.Context, in *pb.GetLessonRequest) (*pb.Ge
 		log.Printf("failed to get a lesson: %v", result.Error)
 		return &pb.GetLessonReply{}, result.Error
 	}
-	pbCases, err := getCases(lesson)
-	if err != nil {
-		log.Printf("failed to get cases: %v", err)
-	}
 	return &pb.GetLessonReply{
 		Uuid:           lesson.UUID.String(),
 		UserId:         lesson.USER_ID.String(),
@@ -107,7 +70,6 @@ func (s *server) GetLesson(ctx context.Context, in *pb.GetLessonRequest) (*pb.Ge
 		Body:           lesson.BODY,
 		DefaultCode:    lesson.DEFAULT_CODE,
 		AnswerCode:     lesson.ANSWER_CODE,
-		TestCase:       pbCases,
 		Language:       lesson.LANGUAGE,
 	}, nil
 }
@@ -143,28 +105,6 @@ func (s *server) CreateLesson(ctx context.Context, in *pb.CreateLessonRequest) (
 		return &pb.CreateLessonReply{}, result.Error
 	}
 
-	log.Printf("in.GetTestCase: %v", in.GetTestCase())
-	for _, t := range in.GetTestCase() {
-		dbCase := db.TestCase{
-			UUID:      uuid.Must(uuid.NewV4()),
-			LESSON_ID: lesson.UUID,
-			INPUT:     t.Input,
-			OUTPUT:    t.Output,
-		}
-		result := db.CaseDB.Create(&dbCase)
-		log.Printf("dbCase: %v", dbCase)
-		if result.Error != nil {
-			log.Printf("failed to create cases: %v", result.Error)
-			return &pb.CreateLessonReply{}, result.Error
-		}
-	}
-
-	pbCases, err := getCases(lesson)
-	if err != nil {
-		log.Printf("failed to get cases: %v", err)
-	}
-	log.Printf("pbCases: %v", pbCases)
-
 	return &pb.CreateLessonReply{
 		Uuid:           lesson.UUID.String(),
 		UserId:         lesson.USER_ID.String(),
@@ -175,7 +115,6 @@ func (s *server) CreateLesson(ctx context.Context, in *pb.CreateLessonRequest) (
 		Body:           lesson.BODY,
 		DefaultCode:    lesson.DEFAULT_CODE,
 		AnswerCode:     lesson.ANSWER_CODE,
-		TestCase:       pbCases,
 		Language:       lesson.LANGUAGE,
 	}, nil
 }
@@ -213,29 +152,6 @@ func (s *server) UpdateLesson(ctx context.Context, in *pb.UpdateLessonRequest) (
 	lesson.LANGUAGE = in.GetLanguage()
 	db.LessonDB.Save(&lesson)
 
-	var newDbCases []db.TestCase
-	pbCases := in.GetTestCase()
-	for _, c := range pbCases {
-		newDbCases = append(newDbCases, db.TestCase{INPUT: c.Input, OUTPUT: c.Output})
-	}
-
-	var dbCases []db.TestCase
-	result = db.CaseDB.First(&dbCases, "LESSON_ID = ?", uUID)
-	if result.Error != nil {
-		log.Printf("failed to update case: %v", result.Error)
-		return &pb.UpdateLessonReply{}, result.Error
-	}
-	for i, c := range dbCases {
-		c.INPUT = newDbCases[i].INPUT
-		c.OUTPUT = newDbCases[i].OUTPUT
-		db.CaseDB.Save(&c)
-	}
-
-	pbCasesWithID, err := getCasesWithID(lesson)
-	if err != nil {
-		log.Printf("failed to get cases: %v", err)
-	}
-
 	return &pb.UpdateLessonReply{
 		Uuid:           lesson.UUID.String(),
 		UserId:         lesson.USER_ID.String(),
@@ -246,7 +162,6 @@ func (s *server) UpdateLesson(ctx context.Context, in *pb.UpdateLessonRequest) (
 		Body:           lesson.BODY,
 		DefaultCode:    lesson.DEFAULT_CODE,
 		AnswerCode:     lesson.ANSWER_CODE,
-		TestCase:       pbCasesWithID,
 		Language:       lesson.LANGUAGE,
 	}, nil
 }
@@ -271,19 +186,6 @@ func (s *server) DeleteLesson(ctx context.Context, in *pb.DeleteLessonRequest) (
 	if userUuid != lesson.USER_ID {
 		return new(empty.Empty), errors.New("invalid user id")
 	}
-	var cases []db.TestCase
-	result = db.CaseDB.Find(&cases, "LESSON_ID = ?", lesson.UUID)
-	if result.Error != nil {
-		log.Printf("failed to find cases: %v", result.Error)
-		return new(empty.Empty), result.Error
-	}
-	for _, c := range cases {
-		result = db.CaseDB.Delete(&c, "UUID = ?", c.UUID)
-		if result.Error != nil {
-			log.Printf("failed to delete a case: %v", result.Error)
-			return new(empty.Empty), result.Error
-		}
-	}
 
 	result = db.LessonDB.Delete(&lesson, "UUID = ?", uUID)
 	log.Println(lesson, result.Error)
@@ -296,11 +198,8 @@ func (s *server) DeleteLesson(ctx context.Context, in *pb.DeleteLessonRequest) (
 }
 
 func RunServer() {
-
 	db.LessonInit()
 	defer db.LessonClose()
-	db.CaseInit()
-	defer db.CaseClose()
 
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
