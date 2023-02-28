@@ -9,6 +9,7 @@ import (
 	pbUser "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/user"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -36,7 +37,7 @@ type DeleteUserRequest struct {
 }
 
 func listUsers(c *gin.Context) {
-	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -79,7 +80,7 @@ func listUsers(c *gin.Context) {
 }
 
 func getUser(c *gin.Context) {
-	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -96,6 +97,7 @@ func getUser(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to get user: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
@@ -110,7 +112,7 @@ func getUser(c *gin.Context) {
 
 func createUser(c *gin.Context) {
 	log.Println("createUser func started")
-	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -135,6 +137,7 @@ func createUser(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to create user: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
@@ -150,7 +153,7 @@ func createUser(c *gin.Context) {
 
 func updateUser(c *gin.Context) {
 	log.Println("updateUser func started")
-	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -177,6 +180,7 @@ func updateUser(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to update user: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, r.GetToken())
@@ -185,7 +189,7 @@ func updateUser(c *gin.Context) {
 
 func deleteUser(c *gin.Context) {
 	log.Println("deleteUser func started")
-	conn, err := grpc.Dial(userAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -209,6 +213,7 @@ func deleteUser(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to delete user: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, r)

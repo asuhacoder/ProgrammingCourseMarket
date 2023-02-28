@@ -100,6 +100,32 @@ services:
       interval: 10s
       timeout: 5s
       retries: 20
+  case:
+    build:
+      context: ./
+      dockerfile: ./build/package/docker/case/Dockerfile
+    ports:
+      - 50056:50056
+    tty:
+      true
+    depends_on: 
+      case_db:
+        condition: service_healthy
+  case_db:
+    image: postgres:15.2-alpine3.17
+    container_name: "case_db"
+    environment: 
+      POSTGRES_USER: gorm
+      POSTGRES_PASSWORD: gorm
+      POSTGRES_DB: gorm
+      POSTGRES_HOST: case_db
+    ports:
+      - 5435:5432
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U gorm"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
   runner:
     build:
       context: ./

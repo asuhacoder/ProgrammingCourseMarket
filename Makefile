@@ -14,6 +14,9 @@ protoc:
 		internal/pkg/pb/lesson/lesson.proto
 	protoc --go_out=. --go_opt=paths=source_relative \
 		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
+		internal/pkg/pb/case/case.proto
+	protoc --go_out=. --go_opt=paths=source_relative \
+		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
 		internal/pkg/pb/runner/runner.proto
 
 .PHONY: build

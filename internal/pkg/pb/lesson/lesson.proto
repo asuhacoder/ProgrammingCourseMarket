@@ -4,7 +4,7 @@ import "google/protobuf/empty.proto";
 
 option go_package = "github.com/Asuha-a/ProgrammingLessonMarket/internal/pkg/pb/lesson";
 
-package course;
+package lesson;
 
 service Lesson {
   rpc ListLessons (ListLessonsRequest) returns (stream ListLessonsReply) {}
@@ -12,17 +12,6 @@ service Lesson {
   rpc CreateLesson (CreateLessonRequest) returns (CreateLessonReply) {}
   rpc UpdateLesson (UpdateLessonRequest) returns (UpdateLessonReply) {}
   rpc DeleteLesson (DeleteLessonRequest) returns (google.protobuf.Empty) {}
-}
-
-message caseWithID {
-  string lesson_id = 1;
-  string input = 2;
-  string output = 3;
-}
-
-message case {
-  string input = 1;
-  string output = 2;
 }
 
 message ListLessonsRequest {
@@ -39,8 +28,7 @@ message ListLessonsReply {
   string body = 7;
   string default_code = 8;
   string answer_code = 9;
-  repeated case test_case = 10;
-  string language = 11;
+  string language = 10;
 }
 
 message GetLessonRequest {
@@ -57,8 +45,7 @@ message GetLessonReply {
   string body = 7;
   string default_code = 8;
   string answer_code = 9;
-  repeated case test_case = 10;
-  string language = 11;
+  string language = 10;
 }
 
 message CreateLessonRequest {
@@ -70,8 +57,7 @@ message CreateLessonRequest {
   string body = 6;
   string default_code = 7;
   string answer_code = 8;
-  repeated case test_case = 9;
-  string language = 10;
+  string language = 9;
 }
   
 message CreateLessonReply {
@@ -84,8 +70,7 @@ message CreateLessonReply {
   string body = 7;
   string default_code = 8;
   string answer_code = 9;
-  repeated case test_case = 10;
-  string language = 11;
+  string language = 10;
 }
 
 message UpdateLessonRequest {
@@ -99,8 +84,7 @@ message UpdateLessonRequest {
   string body = 8;
   string default_code = 9;
   string answer_code = 10;
-  repeated caseWithID test_case = 11;
-  string language = 12;
+  string language = 11;
 }
 
 message UpdateLessonReply {
@@ -113,8 +97,7 @@ message UpdateLessonReply {
   string body = 7;
   string default_code = 8;
   string answer_code = 9;
-  repeated caseWithID test_case = 10;
-  string language = 11;
+  string language = 10;
 }
 
 message DeleteLessonRequest {

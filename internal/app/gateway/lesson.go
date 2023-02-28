@@ -9,6 +9,7 @@ import (
 	pbLesson "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/lesson"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -16,30 +17,28 @@ const (
 )
 
 type CreateLessonRequest struct {
-	Token          string           `form:"token" json:"token"`
-	CourseID       string           `form:"course_id" json:"course_id"`
-	SequenceNumber int64            `form:"sequence_number" json:"sequence_number"`
-	Title          string           `form:"title" json:"title"`
-	Introduction   string           `form:"introduction" json:"introduction"`
-	Body           string           `form:"body" json:"body"`
-	DefaultCode    string           `form:"default_code" json:"default_code"`
-	AnswerCode     string           `form:"answer_code" json:"answer_code"`
-	TestCase       []*pbLesson.Case `form:"test_case" json:"test_case"`
-	Language       string           `form:"language" json:"language"`
+	Token          string `form:"token" json:"token"`
+	CourseID       string `form:"course_id" json:"course_id"`
+	SequenceNumber int64  `form:"sequence_number" json:"sequence_number"`
+	Title          string `form:"title" json:"title"`
+	Introduction   string `form:"introduction" json:"introduction"`
+	Body           string `form:"body" json:"body"`
+	DefaultCode    string `form:"default_code" json:"default_code"`
+	AnswerCode     string `form:"answer_code" json:"answer_code"`
+	Language       string `form:"language" json:"language"`
 }
 
 type UpdateLessonRequest struct {
-	Token          string                 `form:"token" json:"token"`
-	Uuid           string                 `form:"uuid" json:"uuid"`
-	CourseID       string                 `form:"course_id" json:"course_id"`
-	SequenceNumber int64                  `form:"sequence_number" json:"sequence_number"`
-	Title          string                 `form:"title" json:"title"`
-	Introduction   string                 `form:"introduction" json:"introduction"`
-	Body           string                 `form:"body" json:"body"`
-	DefaultCode    string                 `form:"default_code" json:"default_code"`
-	AnswerCode     string                 `form:"answer_code" json:"answer_code"`
-	TestCase       []*pbLesson.CaseWithID `form:"test_case" json:"test_case"`
-	Language       string                 `form:"language" json:"language"`
+	Token          string `form:"token" json:"token"`
+	Uuid           string `form:"uuid" json:"uuid"`
+	CourseID       string `form:"course_id" json:"course_id"`
+	SequenceNumber int64  `form:"sequence_number" json:"sequence_number"`
+	Title          string `form:"title" json:"title"`
+	Introduction   string `form:"introduction" json:"introduction"`
+	Body           string `form:"body" json:"body"`
+	DefaultCode    string `form:"default_code" json:"default_code"`
+	AnswerCode     string `form:"answer_code" json:"answer_code"`
+	Language       string `form:"language" json:"language"`
 }
 
 type DeleteLessonRequest struct {
@@ -47,7 +46,7 @@ type DeleteLessonRequest struct {
 }
 
 func listLessons(c *gin.Context) {
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(lessonAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -81,7 +80,6 @@ func listLessons(c *gin.Context) {
 				"body":            r.GetBody(),
 				"default_code":    r.GetDefaultCode(),
 				"answer_code":     r.GetAnswerCode(),
-				"test_case":       r.GetTestCase(),
 				"language":        r.GetLanguage(),
 			}
 			responces = append(responces, lesson)
@@ -93,7 +91,7 @@ func listLessons(c *gin.Context) {
 }
 
 func getLesson(c *gin.Context) {
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(lessonAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -110,6 +108,7 @@ func getLesson(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to get lesson: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
@@ -122,7 +121,6 @@ func getLesson(c *gin.Context) {
 			"body":            r.GetBody(),
 			"default_code":    r.GetDefaultCode(),
 			"answer_code":     r.GetAnswerCode(),
-			"test_case":       r.GetTestCase(),
 			"language":        r.GetLanguage(),
 		})
 	}
@@ -130,7 +128,7 @@ func getLesson(c *gin.Context) {
 
 func createLesson(c *gin.Context) {
 	log.Println("createLesson func started")
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(lessonAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -156,11 +154,11 @@ func createLesson(c *gin.Context) {
 		Body:           s.Body,
 		DefaultCode:    s.DefaultCode,
 		AnswerCode:     s.AnswerCode,
-		TestCase:       s.TestCase,
 		Language:       s.Language,
 	})
 
 	if err != nil {
+		log.Printf("failed to create lesson: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
@@ -173,7 +171,6 @@ func createLesson(c *gin.Context) {
 			"body":            r.GetBody(),
 			"default_code":    r.GetDefaultCode(),
 			"answer_code":     r.GetAnswerCode(),
-			"test_case":       r.GetTestCase(),
 			"language":        r.GetLanguage(),
 		})
 	}
@@ -181,7 +178,7 @@ func createLesson(c *gin.Context) {
 
 func updateLesson(c *gin.Context) {
 	log.Println("updateLesson func started")
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(lessonAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -210,11 +207,11 @@ func updateLesson(c *gin.Context) {
 		Body:           s.Body,
 		DefaultCode:    s.DefaultCode,
 		AnswerCode:     s.AnswerCode,
-		TestCase:       s.TestCase,
 		Language:       s.Language,
 	})
 
 	if err != nil {
+		log.Printf("failed to update lesson: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, gin.H{
@@ -227,7 +224,6 @@ func updateLesson(c *gin.Context) {
 			"body":            r.GetBody(),
 			"default_code":    r.GetDefaultCode(),
 			"answer_code":     r.GetAnswerCode(),
-			"test_case":       r.GetTestCase(),
 			"language":        r.GetLanguage(),
 		})
 	}
@@ -235,7 +231,7 @@ func updateLesson(c *gin.Context) {
 
 func deleteLesson(c *gin.Context) {
 	log.Println("deleteLesson func started")
-	conn, err := grpc.Dial(lessonAddress, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(lessonAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -259,6 +255,7 @@ func deleteLesson(c *gin.Context) {
 	})
 
 	if err != nil {
+		log.Printf("failed to delete lesson: %v", err)
 		c.AbortWithStatus(400)
 	} else {
 		c.JSON(200, r)

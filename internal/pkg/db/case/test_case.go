@@ -1,4 +1,4 @@
-package lesson
+package test_case
 
 import (
 	"log"
@@ -10,6 +10,7 @@ import (
 
 var (
 	CaseDB *gorm.DB
+	err    error
 )
 
 func CaseInit() {
@@ -39,6 +40,7 @@ func caseAutoMigration() {
 
 type TestCase struct {
 	UUID      uuid.UUID `gorm:"primaryKey; unique; type:uuid;"`
+	USER_ID   uuid.UUID `gorm:"not null"`
 	LESSON_ID uuid.UUID `gorm:"not null"`
 	INPUT     string    `gorm:"not null"`
 	OUTPUT    string    `gorm:"not null"`

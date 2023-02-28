@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/Asuha-a/ProgrammingLessonMarket/internal/pkg/pb/case";
+
+package case;
+
+
+service Case {
+  rpc ListCases (ListCasesRequest) returns (stream ListCasesReply) {}
+  rpc GetCase (GetCaseRequest) returns (GetCaseReply) {}
+  rpc CreateCase (CreateCaseRequest) returns (CreateCaseReply) {}
+  rpc UpdateCase (UpdateCaseRequest) returns (UpdateCaseReply) {}
+  rpc DeleteCase (DeleteCaseRequest) returns (google.protobuf.Empty) {}
+}
+
+message ListCasesRequest {
+  string lesson_id = 1;
+}
+
+message ListCasesReply {
+  string uuid = 1;
+  string user_id = 2;
+  string lesson_id = 3;
+  string input = 4;
+  string output = 5;
+}
+
+message GetCaseRequest {
+  string uuid = 1;
+}
+
+message GetCaseReply {
+  string uuid = 1;
+  string user_id = 2;
+  string lesson_id = 3;
+  string input = 4;
+  string output = 5;
+}
+
+message CreateCaseRequest {
+  string token = 1;
+  string lesson_id = 2;
+  string input = 3;
+  string output = 4;
+}
+
+message CreateCaseReply {
+  string uuid = 1;
+  string user_id = 2;
+  string lesson_id = 3;
+  string input = 4;
+  string output = 5;
+}
+
+message UpdateCaseRequest {
+  string token = 1;
+  string uuid = 2;
+  string user_id = 3;
+  string lesson_id = 4;
+  string input = 5;
+  string output = 6;
+}
+
+message UpdateCaseReply {
+  string uuid = 1;
+  string user_id = 2;
+  string lesson_id = 3;
+  string input = 4;
+  string output = 5;
+}
+
+message DeleteCaseRequest {
+  string token = 1;
+  string uuid = 2;
+}
