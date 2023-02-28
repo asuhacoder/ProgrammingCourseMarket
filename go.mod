@@ -9,7 +9,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/protobuf v1.5.2
 	github.com/stretchr/testify v1.8.1
-	golang.org/x/crypto v0.0.0-20211202192323-5770296d904e
+	golang.org/x/crypto v0.1.0
 	google.golang.org/grpc v1.53.0
 	google.golang.org/protobuf v1.28.1
 	gorm.io/driver/postgres v1.2.3
