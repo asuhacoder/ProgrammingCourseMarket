@@ -33,11 +33,11 @@ export const UpdateLessons = (courseID: string, user: User, lesson: Lesson): voi
         course_id: courseID,
         sequence_number: lesson.sequence_number,
         title: lesson.title,
-        introduction: '',
-        body: '',
-        default_code: '',
-        answer_code: '',
-        language: '',
+        introduction: lesson.introduction,
+        body: lesson.body,
+        default_code: lesson.default_code,
+        answer_code: lesson.answer_code,
+        language: lesson.language,
       })
         .then((response) => {
           console.log(response);

@@ -23,7 +23,7 @@ function CourseDetail(props: any) {
   console.log('lessons: ', lessons)
   return (
     <Stack
-    className={CourseDetailStackStyle}
+      className={CourseDetailStackStyle}
       justifyContent="flex-start"
       alignItems="flex-start"
       spacing={2}

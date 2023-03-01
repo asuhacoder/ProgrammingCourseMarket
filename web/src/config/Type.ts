@@ -46,3 +46,16 @@ export interface Lesson {
 }
 
 export const defaultLessons = []
+
+export const defaultLesson = {
+  uuid: '',
+  user_id: '',
+  course_id: '',
+  sequence_number: 0,
+  title: '',
+  introduction: '',
+  body: '',
+  default_code: '',
+  answer_code: '',
+  language: '',
+}
