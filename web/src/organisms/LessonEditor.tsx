@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Tabs, Tab, Typography, Box } from '@mui/material';
 import LessonTitleEditor from './LessonTitleEditor'
 import LessonBodyEditor from './LessonBodyEditor'
+import LessonLanguageEditor from './LessonLanguageEditor'
 import { PanelStyle } from './LessonEditor.css';
 
 interface TabPanelProps {
@@ -52,21 +53,23 @@ function LessonEditor() {
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
             <Tab label="Body Editor" {...a11yProps(0)} />
-            <Tab label="Default Code Editor" {...a11yProps(1)} />
-            <Tab label="Answer Code Editor" {...a11yProps(2)} />
-            <Tab label="Test Cases Editor" {...a11yProps(3)} />
+            <Tab label="Language Editor" {...a11yProps(1)} />
+            <Tab label="Default Code Editor" {...a11yProps(2)} />
+            <Tab label="Answer Code Editor" {...a11yProps(3)} />
+            <Tab label="Test Cases Editor" {...a11yProps(4)} />
           </Tabs>
         </Box>
         <div className={PanelStyle}>
           <LessonBodyEditor value={value} index={0} />
-          <TabPanel value={value} index={1}>
-            Item Two
-          </TabPanel>
+          <LessonLanguageEditor value={value} index={1} />
           <TabPanel value={value} index={2}>
             Item Three
           </TabPanel>
           <TabPanel value={value} index={3}>
             Item Four
+          </TabPanel>
+          <TabPanel value={value} index={4}>
+            Item Five
           </TabPanel>
         </div>
       </Box>

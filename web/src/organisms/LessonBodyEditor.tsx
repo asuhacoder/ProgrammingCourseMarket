@@ -15,12 +15,12 @@ interface TabPanelProps {
   value: number;
 }
 
-function LessonEditor(props: TabPanelProps) {
+function LessonBodyEditor(props: TabPanelProps) {
   const user: User = useRecoilState(userState)[0];
   const [lesson, setLesson]:[Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
   const { children, value, index, ...other } = props;
   const [body, setBody] = useState<string | undefined>('');
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     setBody(lesson.body);
   }, [lesson]);
@@ -98,4 +98,4 @@ function LessonEditor(props: TabPanelProps) {
     </div>
   );
 }
-export default LessonEditor;
+export default LessonBodyEditor;

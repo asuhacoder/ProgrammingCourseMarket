@@ -95,7 +95,7 @@ function LessonListEditor() {
           body: "**Hello world!!!**",
           default_code: '',
           answer_code: '',
-          language: 'python',
+          language: 'Python 3@4',
         })
           .then((response) => {
             console.log(response);
