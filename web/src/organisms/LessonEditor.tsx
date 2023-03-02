@@ -5,6 +5,7 @@ import LessonTitleEditor from './LessonTitleEditor';
 import LessonBodyEditor from './LessonBodyEditor';
 import LessonLanguageEditor from './LessonLanguageEditor';
 import LessonCodeEditor from './LessonCodeEditor';
+import LessonCaseEditor from './LessonCaseEditor'
 import { PanelStyle } from './LessonEditor.css';
 
 interface TabPanelProps {
@@ -65,9 +66,7 @@ function LessonEditor() {
           <LessonLanguageEditor value={value} index={1} />
           <LessonCodeEditor value={value} index={2} defaultOrAnswer={'default_code'} />
           <LessonCodeEditor value={value} index={3} defaultOrAnswer={'answer_code'} />
-          <TabPanel value={value} index={4}>
-            Item Five
-          </TabPanel>
+          <LessonCaseEditor value={value} index={4} />
         </div>
       </Box>
     </div>

@@ -4,8 +4,8 @@ import axios from 'axios';
 import Editor from "@monaco-editor/react";
 import { Snackbar } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { User, Lesson } from '../config/Type';
-import { userState, lessonState } from '../config/Recoil';
+import { User, Lesson, Case } from '../config/Type';
+import { userState, lessonState, casesState } from '../config/Recoil';
 import data from '../config/language.json';
 import { LessonCodeEditorStyle } from './LessonCodeEditor.css';
 
@@ -20,10 +20,9 @@ function LessonCodeEditor(props: TabPanelProps) {
   const languageList = data as any;
   const user: User = useRecoilState(userState)[0];
   const [lesson, setLesson]:[Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
+  const [cases, setCases]:[Case[], SetterOrUpdater<Case[]>] = useRecoilState<Case[]>(casesState);
   const { children, value, index, defaultOrAnswer, ...other } = props;
 	const [code , setCode] = useState('');
-  const [codeHasError, setCodeHasError] = useState(false);
-  const [codeHelperText, setCodeHelperText] = useState('');
   const [open, setOpen] = React.useState(false);
   const options = {
     readOnly: false,
@@ -53,6 +52,35 @@ function LessonCodeEditor(props: TabPanelProps) {
     setCode(value as string);
   }
 
+  function updateAllCases() {
+    let tmp: Case[] = [];
+    cases.map((testCase: Case) => (
+      axios.post('http://localhost:8080/api/v1/runner', {
+        code: code,
+        input: testCase.input,
+        language: languageList[lesson.language.split('@')[0]]["jdoodle"],
+        version: lesson.language.split('@')[1],
+      })
+        .then((response) => {
+          axios.put(`http://localhost:8080/api/v1/cases/${testCase.uuid}`, {
+            token: window.localStorage.getItem('programming-course-market'),
+            uuid: testCase.uuid,
+            lesson_id: lesson.uuid,
+            input: testCase.input,
+            output: response.data.output,
+          })
+            .then((response) => {
+              tmp = tmp.concat([response.data]);
+              setCases(tmp);
+            })
+        }, (error) => {
+          tmp = tmp.concat(Object.assign({}, testCase));
+          setCases(tmp);
+          console.log(error);
+        })
+    ));
+  }
+
   const submitCode = (): void => {
     const newLesson:Lesson = {
       uuid: lesson.uuid,
@@ -73,6 +101,9 @@ function LessonCodeEditor(props: TabPanelProps) {
       ...newLesson,
     })
       .then((response) => {
+        if (defaultOrAnswer === 'answer_code') {
+          updateAllCases();
+        }
         console.log(response);
         setOpen(true);
       }, (error) => {
