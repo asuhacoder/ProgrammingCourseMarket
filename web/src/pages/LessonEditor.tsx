@@ -3,14 +3,12 @@ import { SetterOrUpdater, useRecoilState } from 'recoil';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Lesson } from '../config/Type';
-import { lessonState, languageState, versionState } from '../config/Recoil';
+import { lessonState } from '../config/Recoil';
 import LessonEditorTemplate from '../templates/LessonEditorTemplate';
 
 function LessonEditor() {
   const { id } = useParams();
   const [lesson, setLesson]:[Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
-  const [language, setLanguage]:[string, SetterOrUpdater<string>] = useRecoilState<string>(languageState);
-  const [version, setVersion]:[string, SetterOrUpdater<string>] = useRecoilState<string>(versionState);
   useEffect(() => {
       console.log('useEffect in LessonEditor is running');
       console.log('id: ', id);

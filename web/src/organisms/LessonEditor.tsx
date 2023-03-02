@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Tabs, Tab, Typography, Box } from '@mui/material';
-import LessonTitleEditor from './LessonTitleEditor'
-import LessonBodyEditor from './LessonBodyEditor'
-import LessonLanguageEditor from './LessonLanguageEditor'
+import LessonTitleEditor from './LessonTitleEditor';
+import LessonBodyEditor from './LessonBodyEditor';
+import LessonLanguageEditor from './LessonLanguageEditor';
+import LessonCodeEditor from './LessonCodeEditor';
 import { PanelStyle } from './LessonEditor.css';
 
 interface TabPanelProps {
@@ -62,12 +63,8 @@ function LessonEditor() {
         <div className={PanelStyle}>
           <LessonBodyEditor value={value} index={0} />
           <LessonLanguageEditor value={value} index={1} />
-          <TabPanel value={value} index={2}>
-            Item Three
-          </TabPanel>
-          <TabPanel value={value} index={3}>
-            Item Four
-          </TabPanel>
+          <LessonCodeEditor value={value} index={2} defaultOrAnswer={'default_code'} />
+          <LessonCodeEditor value={value} index={3} defaultOrAnswer={'answer_code'} />
           <TabPanel value={value} index={4}>
             Item Five
           </TabPanel>

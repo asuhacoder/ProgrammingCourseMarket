@@ -20,13 +20,3 @@ export const lessonState = atom<Lesson>({
   key: 'lessonState',
   default: defaultLesson,
 })
-
-export const languageState = atom<string>({
-  key: 'languageState',
-  default: '',
-})
-
-export const versionState = atom<string>({
-  key: 'versionState',
-  default: '',
-})

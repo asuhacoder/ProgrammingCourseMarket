@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { SetterOrUpdater, useRecoilState } from 'recoil';
 import axios from 'axios';
-import MDEditor from '@uiw/react-md-editor';
-import rehypeSanitize from "rehype-sanitize";
 import { Stack, Snackbar, MenuItem, InputLabel, FormControl } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { User, Lesson } from '../config/Type';
-import { userState, lessonState, languageState, versionState } from '../config/Recoil';
+import { userState, lessonState } from '../config/Recoil';
 import data from '../config/language.json';
-import { LessonLanguageEditorStyle, TextStyle, SelectFormStyle } from './LessonLanguageEditor.css';
+import { LessonLanguageEditorStyle, SelectFormStyle } from './LessonLanguageEditor.css';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -28,10 +26,7 @@ function LessonLanguageEditor(props: TabPanelProps) {
   useEffect(() => {
     setLanguage(lesson.language.split('@')[0]);
     setVersion(lesson.language.split('@')[1]);
-    console.log('ran useEffect in LessonLanguageEditor');
   }, [lesson]);
-  console.log('language: ', language);
-  console.log('version: ', version);
 
   const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
