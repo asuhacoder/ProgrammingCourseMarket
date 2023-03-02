@@ -53,7 +53,7 @@ func listLessons(c *gin.Context) {
 	defer conn.Close()
 	client := pbLesson.NewLessonClient(conn)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	courseID := c.Query("course_id")
 	stream, err := client.ListLessons(ctx, &pbLesson.ListLessonsRequest{CourseId: courseID})
@@ -101,7 +101,7 @@ func getLesson(c *gin.Context) {
 
 	uuid := c.Param("uuid")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.GetLesson(ctx, &pbLesson.GetLessonRequest{
 		Uuid: uuid,
@@ -143,7 +143,7 @@ func createLesson(c *gin.Context) {
 		c.AbortWithStatus(400)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.CreateLesson(ctx, &pbLesson.CreateLessonRequest{
 		Token:          s.Token,
@@ -186,7 +186,7 @@ func updateLesson(c *gin.Context) {
 	defer conn.Close()
 	client := pbLesson.NewLessonClient(conn)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 
 	var s UpdateLessonRequest
@@ -247,7 +247,7 @@ func deleteLesson(c *gin.Context) {
 	}
 	uuid := c.Param("uuid")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.DeleteLesson(ctx, &pbLesson.DeleteLessonRequest{
 		Token: s.Token,

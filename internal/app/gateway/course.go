@@ -50,7 +50,7 @@ func listCourses(c *gin.Context) {
 		log.Printf("failed to convert string to bool: %v", err)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	stream, err := client.ListCourses(ctx, &pbCourse.ListCoursesRequest{
 		UserId:     userId,
@@ -99,7 +99,7 @@ func getCourse(c *gin.Context) {
 
 	uuid := c.Param("uuid")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.GetCourse(ctx, &pbCourse.GetCourseRequest{
 		Uuid: uuid,
@@ -139,7 +139,7 @@ func createCourse(c *gin.Context) {
 		c.AbortWithStatus(400)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.CreateCourse(ctx, &pbCourse.CreateCourseRequest{
 		UserId:       s.UserId,
@@ -185,7 +185,7 @@ func updateCourse(c *gin.Context) {
 		c.AbortWithStatus(400)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.UpdateCourse(ctx, &pbCourse.UpdateCourseRequest{
 		Uuid:         uuid,
@@ -232,7 +232,7 @@ func deleteCourse(c *gin.Context) {
 		c.AbortWithStatus(400)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.DeleteCourse(ctx, &pbCourse.DeleteCourseRequest{
 		UserId: s.UserId,
