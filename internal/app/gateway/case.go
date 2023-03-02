@@ -43,7 +43,7 @@ func listCases(c *gin.Context) {
 	defer conn.Close()
 	client := pbCase.NewCaseClient(conn)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	lessonID := c.Query("lesson_id")
 	stream, err := client.ListCases(ctx, &pbCase.ListCasesRequest{LessonId: lessonID})
@@ -86,7 +86,7 @@ func getCase(c *gin.Context) {
 
 	uuid := c.Param("uuid")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.GetCase(ctx, &pbCase.GetCaseRequest{
 		Uuid: uuid,
@@ -123,7 +123,7 @@ func createCase(c *gin.Context) {
 		c.AbortWithStatus(400)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.CreateCase(ctx, &pbCase.CreateCaseRequest{
 		Token:    s.Token,
@@ -156,7 +156,7 @@ func updateCase(c *gin.Context) {
 	defer conn.Close()
 	client := pbCase.NewCaseClient(conn)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 
 	var s UpdateCaseRequest
@@ -208,7 +208,7 @@ func deleteCase(c *gin.Context) {
 	}
 	uuid := c.Param("uuid")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.DeleteCase(ctx, &pbCase.DeleteCaseRequest{
 		Token: s.Token,

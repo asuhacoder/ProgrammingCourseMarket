@@ -43,6 +43,29 @@ export interface Lesson {
   default_code: string,
   answer_code: string,
   language: string,
-}
+};
 
-export const defaultLessons = []
+export const defaultLessons = [];
+
+export const defaultLesson = {
+  uuid: '',
+  user_id: '',
+  course_id: '',
+  sequence_number: 0,
+  title: '',
+  introduction: '',
+  body: '',
+  default_code: '',
+  answer_code: '',
+  language: '',
+};
+
+export interface Case {
+  uuid: string,
+  user_id: string,
+  lesson_id: string,
+  input: string,
+  output: string,
+};
+
+export const defaultCases = [];

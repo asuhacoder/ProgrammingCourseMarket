@@ -9,8 +9,10 @@ import {
   CardContent,
   CardActions,
   Stack,
+  Snackbar,
   Typography,
 } from '@mui/material';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { useRecoilState, SetterOrUpdater } from 'recoil';
 import { userState, lessonsState } from '../config/Recoil';
 import { User, Lesson } from '../config/Type';
@@ -34,6 +36,23 @@ function LessonListEditor() {
   const [title, setTitle] = useState('');
   const [titleHasError, setTitleHasError] = useState(false);
   const [titleHelperText, setTitleHelperText] = useState('');
+  const [open, setOpen] = useState(false);
+
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+    props,
+    ref,
+  ) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const onSortEnd = ({oldIndex, newIndex}: {oldIndex: number, newIndex: number}) => {
     console.log('oldIndex: ', oldIndex);
     console.log('newIndex: ', newIndex);
@@ -41,6 +60,7 @@ function LessonListEditor() {
     setLessons(NumberingLessons(lessons));
     UpdateLessons(id as string,  user, lessons[oldIndex]);
     UpdateLessons(id as string,  user, lessons[newIndex]);
+    setOpen(true);
   };
 
   const validateTitle = (): boolean => {
@@ -72,10 +92,10 @@ function LessonListEditor() {
           sequence_number: lessons.length,
           title,
           introduction: '',
-          body: '',
+          body: "**Hello world!!!**",
           default_code: '',
           answer_code: '',
-          language: '',
+          language: 'Python 3@4',
         })
           .then((response) => {
             console.log(response);
@@ -144,6 +164,11 @@ function LessonListEditor() {
       alignItems="flex-start"
       spacing={2}
     >
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Saved Changes
+        </Alert>
+      </Snackbar>
       <SortableList onSortEnd={onSortEnd} useDragHandle>
         {lessons.map((value: Lesson, index: number) => (
           <SortableItem key={`item-${value.uuid}`} index={index} lesson={value} />

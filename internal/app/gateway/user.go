@@ -46,7 +46,7 @@ func listUsers(c *gin.Context) {
 
 	token := c.Query("token")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	stream, err := client.ListUsers(ctx, &pbUser.ListUsersRequest{
 		Token: token,
@@ -90,7 +90,7 @@ func getUser(c *gin.Context) {
 
 	uuid := c.Param("uuid")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.GetUser(ctx, &pbUser.GetUserRequest{
 		Uuid: uuid,
@@ -127,7 +127,7 @@ func createUser(c *gin.Context) {
 		c.AbortWithStatus(400)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.CreateUser(ctx, &pbUser.CreateUserRequest{
 		Name:         s.Name,
@@ -168,7 +168,7 @@ func updateUser(c *gin.Context) {
 		c.AbortWithStatus(400)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.UpdateUser(ctx, &pbUser.UpdateUserRequest{
 		Token:        s.Token,
@@ -205,7 +205,7 @@ func deleteUser(c *gin.Context) {
 		c.AbortWithStatus(400)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.DeleteUser(ctx, &pbUser.DeleteUserRequest{
 		Token: s.Token,

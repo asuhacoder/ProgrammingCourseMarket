@@ -12,10 +12,14 @@ function LessonListEditor() {
     const [lessons, setLessons]:[Lesson[], SetterOrUpdater<Lesson[]>] = useRecoilState<Lesson[]>(lessonsState);
     useEffect(() => {
       console.log('useEffect in LessonListEditor is running');
-      axios.get(`http://localhost:8080/api/v1/lessons`)
+      axios.get(`http://localhost:8080/api/v1/lessons`, {
+        params: {
+          course_id: id,
+        },
+      })
         .then((response) => {
           console.log(response.data);
-          setLessons(SortLessons([...response.data.lessons.filter((lesson: Lesson) => lesson.course_id === id)]));
+          setLessons(SortLessons(response.data.lessons));
         }, (error) => {
           console.log(error);
         });

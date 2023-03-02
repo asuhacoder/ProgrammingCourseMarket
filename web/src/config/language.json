@@ -1,0 +1,152 @@
+{
+  "Java": {
+    "versions": ["JDK 1.8.0_66", "JDK 9.0.1", "JDK 10.0.1", "JDK 11.0.4", "JDK 17.0.1"],
+    "monaco": "java",
+    "jdoodle": "java"
+  },
+  "C": {
+    "versions": ["GCC 5.3.0", "Zapcc 5.0.0", "GCC 7.2.0", "GCC 8.1.0", "GCC 9.1.0", "GCC 11.1.0"],
+    "monaco": "c",
+    "jdoodle": "c"
+  },
+  "C++": {
+    "versions": ["GCC 5.3.0", "Zapcc 5.0.0", "GCC 7.2.0", "GCC 8.1.0", "GCC 9.1.0", "GCC 11.1.0"],
+    "monaco": "cpp",
+    "jdoodle": "cpp"
+  },
+  "C++ 14": {
+    "versions": ["g++ 14 GCC 5.3.0", "g++ 14 GCC 7.2.0", "g++ 14 GCC 8.1.0", "g++ 14 GCC 9.1.0", "GCC 11.1.0"],
+    "monaco": "cpp14",
+    "jdoodle": "cpp"
+  },
+  "C++ 17": {
+    "versions": ["g++ 17 GCC 9.1.0", "GCC 11.1.0"],
+    "monaco": "cpp17",
+    "jdoodle": "cpp"
+  },
+  "PHP": {
+    "versions": ["5.6.16", "7.1.11", "7.2.5", "7.3.10", "8.0.13"],
+    "monaco": "php",
+    "jdoodle": "php"
+  },
+  "Perl": {
+    "versions": ["5.22.0", "5.26.1", "5.26.2", "5.30.0", "5.34.0"],
+    "monaco": "perl",
+    "jdoodle": "perl"
+  },
+  "Python 2": {
+    "versions": ["2.7.11", "2.7.15", "2.7.16", "2.7.18"],
+    "monaco": "python",
+    "jdoodle": "python2"
+  },
+  "Python 3": {
+    "versions": ["3.5.1", "3.6.3", "3.6.5", "3.7.4", "3.9.9"],
+    "monaco": "python",
+    "jdoodle": "python3"
+  },
+  "Ruby": {
+    "versions": ["2.2.4", "2.4.2p198", "2.5.1p57", "2.6.5", "3.0.2"],
+    "monaco": "ruby",
+    "jdoodle": "ruby"
+  },
+  "GO Lang": {
+    "versions": ["1.5.2", "1.9.2", "1.10.2", "1.13.1", "1.17.3"],
+    "monaco": "go",
+    "jdoodle": "go"
+  },
+  "Scala": {
+    "versions": ["2.12.0", "2.12.4", "2.12.5", "2.13.0", "2.13.6"],
+    "monaco": "scala",
+    "jdoodle": "scala"
+  },
+  "Bash Shell": {
+    "versions": ["4.3.42", "4.4.12", "4.4.19", "5.0.011", "5.1.12"],
+    "monaco": "shell",
+    "jdoodle": "bash"
+  },
+  "SQL": {
+    "versions": ["SQLite 3.9.2", "SQLite 3.21.0", "SQLite 3.23.1", "SQLite 3.29.0", "3.37.0"],
+    "monaco": "sql",
+    "jdoodle": "sql"
+  },
+  "Pascal": {
+    "versions": ["fpc 3.0.0", "fpc-3.0.2", "fpc-3.0.4", "fpc-3.2.2"],
+    "monaco": "pascal",
+    "jdoodle": "pascal"
+  },
+  "C#": {
+    "versions": ["mono 4.2.2", "mono 5.0.0", "mono 5.10.1", "mono 6.0.0", "mono-6.12.0"],
+    "monaco": "csharp",
+    "jdoodle": "csharp"
+  },
+  "Objective C": {
+    "versions": ["GCC 5.3.0", "GCC 7.2.0", "GCC 8.1.0", "GCC 9.1.0", "GCC 11.1.0"],
+    "monaco": "objective-c",
+    "jdoodle": "objc"
+  },
+  "Swift": {
+    "versions": ["2.2", "3.1.1", "4.1", "5.1", "5.5"],
+    "monaco": "swift",
+    "jdoodle": "swift"
+  },
+  "Lua": {
+    "versions": ["5.3.2", "5.3.4", "5.3.5", "5.4.3"],
+    "monaco": "lua",
+    "jdoodle": "lua"
+  },
+  "TCL": {
+    "versions": ["8.6", "8.6.7", "8.6.8", "8.6.9", "8.6.12"],
+    "monaco": "tcl",
+    "jdoodle": "tcl"
+  },
+  "RUST": {
+    "versions": ["1.10.0", "1.21.0", "1.25.0", "1.38.0", "1.56.1"],
+    "monaco": "rust",
+    "jdoodle": "rust"
+  },
+  "R Language": {
+    "versions": ["3.3.1", "3.4.2", "3.5.0", "3.6.1", "4.1.2"],
+    "monaco": "r",
+    "jdoodle": "r"
+  },
+  "Dart": {
+    "versions": ["1.18.0", "1.24.2", "1.24.3", "2.5.1", "2.14.4"],
+    "monaco": "dart",
+    "jdoodle": "dart"
+  },
+  "Clojure": {
+    "versions": ["1.8.0", "1.9.0", "1.10.1", "1.10.3"],
+    "monaco": "clojure",
+    "jdoodle": "clojure"
+  },
+  "NodeJS": {
+    "versions": ["6.3.1", "9.2.0", "10.1.0", "12.11.1", "17.1.0"],
+    "monaco": "javascript",
+    "jdoodle": "nodejs"
+  },
+  "Scheme": {
+    "versions": ["Gauche 0.9.4", "Gauche 0.9.5", "Gauche 0.9.8", "Gauche 0.9.10"],
+    "monaco": "scheme",
+    "jdoodle": "scheme"
+  },
+  "CoffeeScript": {
+    "versions": ["1.11.1", "2.0.0", "2.3.0", "2.4.1", "2.6.1"],
+    "monaco": "coffeescript",
+    "jdoodle": "coffeescript"
+  },
+  "F#": {
+    "versions": ["4.1", "4.5.0"],
+    "monaco": "fsharp",
+    "jdoodle": "fsharp"
+  },
+  "Elixir": {
+    "versions": ["1.3.4", "1.5.2", "1.6.4", "1.9.1", "1.12.2"],
+    "monaco": "elixir",
+    "jdoodle": "elixir"
+  },
+  "Kotlin": {
+    "versions": ["1.1.51 (JRE 9.0.1+11)", "1.2.40 (JRE 10.0.1)", "1.3.50 (JRE 11.0.4)", "1.6.0 (JRE 17.0.1+12)"],
+    "monaco": "kotlin",
+    "jdoodle": "kotlin"
+  }
+}

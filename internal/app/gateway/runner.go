@@ -39,7 +39,7 @@ func runCode(c *gin.Context) {
 		c.AbortWithStatus(400)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	r, err := client.RunCode(ctx, &pbRunner.RunCodeRequest{
 		Code:     s.Code,
