@@ -18,13 +18,17 @@ function CourseDetail() {
       }, (error) => {
         console.log(error);
       });
-    axios.get(`http://localhost:8080/api/v1/lessons`)
-      .then((response) => {
-        console.log(response.data);
-        setLessons(SortLessons([...response.data.lessons.filter((lesson: Lesson) => lesson.course_id === id)]));
-      }, (error) => {
-        console.log(error);
-      });
+      axios.get(`http://localhost:8080/api/v1/lessons`, {
+        params: {
+          course_id: id,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          setLessons(SortLessons(response.data.lessons));
+        }, (error) => {
+          console.log(error);
+        });
     
   }, []);
   return <CourseDetailTemplate lessons={lessons} course={course} />;
