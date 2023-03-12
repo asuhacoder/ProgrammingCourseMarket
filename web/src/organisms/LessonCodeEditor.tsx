@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import { SetterOrUpdater, useRecoilState } from 'recoil';
 import axios from 'axios';
 import Editor from "@monaco-editor/react";
@@ -128,13 +128,13 @@ function LessonCodeEditor(props: TabPanelProps) {
             </Alert>
           </Snackbar>
           <div onBlur={submitCode}>
-          <Editor
-            height="70vh"
-            defaultLanguage={languageList[lesson.language.split('@')[0]].monaco}
-            defaultValue={code}
-            onChange={handleEditorChange}
-            options={options}
-          />
+            <Editor
+              height="70vh"
+              defaultLanguage={languageList[lesson.language.split('@')[0]].monaco}
+              defaultValue={code}
+              onChange={handleEditorChange}
+              options={options}
+            />
           </div>
         </div>
       )}

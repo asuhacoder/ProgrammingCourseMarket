@@ -19,7 +19,6 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser]:[User, SetterOrUpdater<User>] = useRecoilState(userState);
-  console.log(user);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 

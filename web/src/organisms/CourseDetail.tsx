@@ -19,8 +19,6 @@ import {
 
 function CourseDetail(props: any) {
   const { course, lessons } = props;
-  console.log(course);
-  console.log('lessons: ', lessons)
   return (
     <Stack
       className={CourseDetailStackStyle}
@@ -48,7 +46,7 @@ function CourseDetail(props: any) {
           <Card key={lesson.uuid} className={CardContentStyle}>
             <CardContent>
               <Typography variant="h6" component="div">
-                <Link className={TitleLink} to={`/lesson/detail/${lesson.uuid}`}>
+                <Link className={TitleLink} to={`/lesson/${lesson.uuid}`}>
                   {lesson.title}
                 </Link>
               </Typography>
