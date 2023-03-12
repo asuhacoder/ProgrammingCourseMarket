@@ -12,7 +12,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": ["react", "@typescript-eslint", "react-hooks"],
   "rules": {
     "no-console": "off",
     "react/jsx-props-no-spreading": "off",
@@ -38,7 +38,9 @@
         "tsx": "never"
       }
    ],
-   "max-len": "off"
+   "max-len": "off",
+   "react-hooks/rules-of-hooks": "error",
+   "react-hooks/exhaustive-deps": "warn"
   },
   "settings": {
     "import/resolver": {

@@ -13,6 +13,7 @@ import CourseUpdater from './pages/CourseUpdater';
 import MyContentsPage from './pages/MyContentsPage';
 import LessonListEditor from './pages/LessonListEditor';
 import LessonEditor from './pages/LessonEditor';
+import LessonDetail from './pages/LessonDetail';
 
 function App() {
   console.log('token', window.localStorage.getItem('programming-course-market'));
@@ -49,6 +50,7 @@ function App() {
         <Route path="/course/editor/:id" element={<CourseUpdater />} />
         <Route path="/course/lesson/editor/:id" element={<LessonListEditor />} />
         <Route path="/lesson/editor/:id" element={<LessonEditor />} />
+        <Route path="/lesson/:id" element={<LessonDetail />} />
         <Route path="/mycontents" element={<MyContentsPage />} />
       </Routes>
     </div>

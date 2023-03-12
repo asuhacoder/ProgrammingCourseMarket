@@ -128,13 +128,13 @@ function LessonCodeEditor(props: TabPanelProps) {
             </Alert>
           </Snackbar>
           <div onBlur={submitCode}>
-          <Editor
-            height="70vh"
-            defaultLanguage={languageList[lesson.language.split('@')[0]].monaco}
-            defaultValue={code}
-            onChange={handleEditorChange}
-            options={options}
-          />
+            <Editor
+              height="70vh"
+              defaultLanguage={languageList[lesson.language.split('@')[0]].monaco}
+              defaultValue={code}
+              onChange={handleEditorChange}
+              options={options}
+            />
           </div>
         </div>
       )}

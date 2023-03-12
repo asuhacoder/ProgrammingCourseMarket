@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { SetterOrUpdater, useRecoilState } from 'recoil';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Lesson, Case } from '../config/Type';
+import { Lesson, Case, defaultLesson, defaultCases } from '../config/Type';
 import { lessonState, casesState } from '../config/Recoil';
-import LessonEditorTemplate from '../templates/LessonEditorTemplate';
+import LessonDetailTemplate from '../templates/LessonDetailTemplate';
 
-function LessonEditor() {
+function LessonDetail() {
   const { id } = useParams();
-  const [lesson, setLesson]:[Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
-  const [cases, setCases]:[Case[], SetterOrUpdater<Case[]>] = useRecoilState<Case[]>(casesState);
+  const [lesson, setLesson] = useState(defaultLesson);
+  const [cases, setCases] = useState(defaultCases);
+  console.log('LessonDetail in page');
   useEffect(() => {
-    console.log('useEffect in LessonEditor is running');
+    console.log('useEffect in LessonDetail is running');
     console.log('id: ', id);
     axios.get(`http://localhost:8080/api/v1/lessons/${id}`)
     .then((response) => {
@@ -32,6 +33,6 @@ function LessonEditor() {
         console.log(error);
     });
   }, [id]);
-  return <LessonEditorTemplate />;
+  return <LessonDetailTemplate lesson={lesson} cases={cases} />;
 }
-export default LessonEditor;
+export default LessonDetail;
