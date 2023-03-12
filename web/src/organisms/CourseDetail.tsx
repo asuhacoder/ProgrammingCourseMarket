@@ -19,8 +19,6 @@ import {
 
 function CourseDetail(props: any) {
   const { course, lessons } = props;
-  console.log(course);
-  console.log('lessons: ', lessons)
   return (
     <Stack
       className={CourseDetailStackStyle}

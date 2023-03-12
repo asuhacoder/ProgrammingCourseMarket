@@ -9,7 +9,7 @@ import { SortLessons } from '../utils/LessonsUtils';
 
 function LessonListEditor() {
     const { id } = useParams();
-    const [lessons, setLessons]:[Lesson[], SetterOrUpdater<Lesson[]>] = useRecoilState<Lesson[]>(lessonsState);
+    const [, setLessons]:[Lesson[], SetterOrUpdater<Lesson[]>] = useRecoilState<Lesson[]>(lessonsState);
     useEffect(() => {
       console.log('useEffect in LessonListEditor is running');
       axios.get(`http://localhost:8080/api/v1/lessons`, {

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { SetterOrUpdater, useRecoilState } from 'recoil';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Lesson, Case, defaultLesson, defaultCases } from '../config/Type';
-import { lessonState, casesState } from '../config/Recoil';
+import { defaultLesson, defaultCases } from '../config/Type';
 import LessonDetailTemplate from '../templates/LessonDetailTemplate';
 
 function LessonDetail() {

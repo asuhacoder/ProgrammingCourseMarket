@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { SetterOrUpdater, useRecoilState } from 'recoil';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -8,8 +8,8 @@ import LessonEditorTemplate from '../templates/LessonEditorTemplate';
 
 function LessonEditor() {
   const { id } = useParams();
-  const [lesson, setLesson]:[Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
-  const [cases, setCases]:[Case[], SetterOrUpdater<Case[]>] = useRecoilState<Case[]>(casesState);
+  const [, setLesson]:[Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
+  const [, setCases]:[Case[], SetterOrUpdater<Case[]>] = useRecoilState<Case[]>(casesState);
   useEffect(() => {
     console.log('useEffect in LessonEditor is running');
     console.log('id: ', id);

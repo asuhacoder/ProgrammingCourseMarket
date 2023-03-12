@@ -8,12 +8,6 @@ import LessonCodeEditor from './LessonCodeEditor';
 import LessonCaseEditor from './LessonCaseEditor'
 import { PanelStyle } from './LessonEditor.css';
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -22,7 +16,6 @@ function a11yProps(index: number) {
 }
 
 function LessonEditor() {
-  const { id } = useParams();
   const [value, setValue] = useState(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);

@@ -1,7 +1,15 @@
 import React from 'react';
 import axios from 'axios';
 import { SetterOrUpdater, useRecoilState } from 'recoil';
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, List, ListItem } from '@mui/material';
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper
+} from '@mui/material';
 import { User, Case } from '../config/Type';
 import { userState, casesState } from '../config/Recoil';
 import AlertModal from '../molecules/AlertModal';

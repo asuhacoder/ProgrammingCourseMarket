@@ -1,6 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Box, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Modal, CircularProgress, Stack } from '@mui/material';
+import {
+  Box,
+  Button,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+  Modal,
+  CircularProgress,
+  Stack
+} from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { Case } from '../config/Type';

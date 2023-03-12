@@ -18,7 +18,6 @@ function a11yProps(index: number) {
 }
 
 function LessonDetail(props: any) {
-  const navigate = useNavigate();
   const { lesson, cases } = props;
   const languageList = data as any;
   const { id } = useParams();

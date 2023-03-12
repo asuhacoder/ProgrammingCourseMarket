@@ -3,8 +3,8 @@ import { SetterOrUpdater, useRecoilState } from 'recoil';
 import axios from 'axios';
 import { Stack, Snackbar } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { User, Lesson, Case } from '../config/Type';
-import { userState, lessonState, casesState } from '../config/Recoil';
+import { Lesson, Case } from '../config/Type';
+import { lessonState, casesState } from '../config/Recoil';
 import data from '../config/language.json';
 import CustomTextField from '../atoms/CustomTextField';
 import ButtonDiv from '../molecules/ButtonDiv';
@@ -19,8 +19,7 @@ interface TabPanelProps {
 
 function LessonCaseEditor(props: TabPanelProps) {
   const languageList = data as any;
-  const user: User = useRecoilState(userState)[0];
-  const [lesson, setLesson]:[Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
+  const [lesson,]:[Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
   const [cases, setCases]:[Case[], SetterOrUpdater<Case[]>] = useRecoilState<Case[]>(casesState);
   const { children, value, index, ...other } = props;
   const [open, setOpen] = useState(false);
