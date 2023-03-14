@@ -17,6 +17,8 @@ jobs:
 
     - name: Check out code
       uses: actions/checkout@v2
+      with:
+        token: ${{secrets.SKHOLE_GITHUB_TOKEN}}
     
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
