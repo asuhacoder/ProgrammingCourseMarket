@@ -100,20 +100,20 @@ services:
       interval: 10s
       timeout: 5s
       retries: 20
-  case:
+  test_case:
     build:
       context: ./
-      dockerfile: ./build/package/docker/case/Dockerfile
+      dockerfile: ./build/package/docker/test_case/Dockerfile
     ports:
       - 50056:50056
     tty:
       true
     depends_on: 
-      case_db:
+      test_case_db:
         condition: service_healthy
-  case_db:
+  test_case_db:
     image: postgres:15.2-alpine3.17
-    container_name: "case_db"
+    container_name: "test_case_db"
     environment: 
       POSTGRES_USER: gorm
       POSTGRES_PASSWORD: gorm
