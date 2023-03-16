@@ -25,17 +25,19 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-3
-
+        aws-region: us-east-2
+        
+    - name: setup terraform
+      uses: hashicorp/setup-terraform@v1.3.2
+      
+    - name: terraform init
+      id: init
+      working-directory: ${{ inputs.TF_WORK_DIR }}
+      run: terraform init
+      
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build, tag, and push image to Amazon ECR
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: skhole.club
-        USER_IMAGE_TAG: skhole.club-user
-      run: |
-        docker build . -t $ECR_REGISTRY/$ECR_REPOSITORY:$USER_IMAGE_TAG -f build/package/docker/user/Dockerfile
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$USER_IMAGE_TAG
+    - name: terraform-apply
+      uses: dflook/terraform-apply@v1.29.1
