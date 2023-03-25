@@ -33,4 +33,4 @@ jobs:
         yarn install
         yarn build
     - name: Deploy app build to S3 bucket
-      run: aws s3 sync ./dist/ s3://static-skhole-20230325 --delete
+      run: aws s3 sync ./web/dist/ s3://static-skhole-20230325 --delete
