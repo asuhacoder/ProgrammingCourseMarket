@@ -99,28 +99,35 @@ function SignupForm() {
 
   const submitSignupForm = (): void => {
     if (validateName() && validateEmail() && validateIntroduction() && validatePassword()) {
-      axios.post('http://localhost:8080/api/v1/users', {
-        name, email, password, introduction,
-      })
-        .then((response) => {
-          console.log(response);
-          window.localStorage.setItem('programming-course-market', response.data.token);
-          setUser({
-            token: response.data.token,
-            uuid: response.data.uuid,
-            name: response.data.name,
-            email: response.data.email,
-            introduction: response.data.introduction,
-          });
-          const state = location.state as State;
-          const from = state.from.pathname || '/';
-          console.log('from: ', from);
-          navigate(from, { replace: true });
-        }, (error) => {
-          console.log(error);
-          setEmailHasError(true);
-          setEmailHelperText('this email address is already used');
-        });
+      axios
+        .post('http://localhost:8080/api/v1/users', {
+          name,
+          email,
+          password,
+          introduction,
+        })
+        .then(
+          (response) => {
+            console.log(response);
+            window.localStorage.setItem('programming-course-market', response.data.token);
+            setUser({
+              token: response.data.token,
+              uuid: response.data.uuid,
+              name: response.data.name,
+              email: response.data.email,
+              introduction: response.data.introduction,
+            });
+            const state = location.state as State;
+            const from = state.from.pathname || '/';
+            console.log('from: ', from);
+            navigate(from, { replace: true });
+          },
+          (error) => {
+            console.log(error);
+            setEmailHasError(true);
+            setEmailHelperText('this email address is already used');
+          },
+        );
     }
   };
 
@@ -174,10 +181,7 @@ function SignupForm() {
         onChange={handlePasswordChange}
         onBlur={validatePassword}
       />
-      <ButtonDiv
-        body="Submit"
-        onClick={submitSignupForm}
-      />
+      <ButtonDiv body="Submit" onClick={submitSignupForm} />
     </Stack>
   );
 }

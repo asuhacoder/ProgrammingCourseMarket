@@ -20,22 +20,26 @@ function App() {
   const [user, setUser] = useRecoilState(userState);
   if (JSON.stringify(user) === JSON.stringify(defaultUser)) {
     const token = window.localStorage.getItem('programming-course-market');
-    axios.post('http://localhost:8080/api/v1/authz', {
-      token,
-    })
-      .then((response) => {
-        console.log(response);
-        window.localStorage.setItem('programming-course-market', response.data.token);
-        setUser({
-          token: response.data.token,
-          uuid: response.data.uuid,
-          name: response.data.name,
-          email: response.data.email,
-          introduction: response.data.introduction,
-        });
-      }, (error) => {
-        console.log(error);
-      });
+    axios
+      .post('http://localhost:8080/api/v1/authz', {
+        token,
+      })
+      .then(
+        (response) => {
+          console.log(response);
+          window.localStorage.setItem('programming-course-market', response.data.token);
+          setUser({
+            token: response.data.token,
+            uuid: response.data.uuid,
+            name: response.data.name,
+            email: response.data.email,
+            introduction: response.data.introduction,
+          });
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
   }
   console.log('user', user);
 

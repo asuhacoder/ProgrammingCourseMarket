@@ -8,9 +8,7 @@ function HomeTemplate(props: any) {
     <div>
       <Header />
       <div className={HomeDivStyle}>
-        <CourseList
-          {...props}
-        />
+        <CourseList {...props} />
       </div>
     </div>
   );

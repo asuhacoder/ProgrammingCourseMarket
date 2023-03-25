@@ -12,24 +12,30 @@ function LessonDetail() {
   useEffect(() => {
     console.log('useEffect in LessonDetail is running');
     console.log('id: ', id);
-    axios.get(`http://localhost:8080/api/v1/lessons/${id}`)
-    .then((response) => {
-      setLesson(response.data);
-      console.log('response.data: ', response.data);
-    }, (error) => {
-      console.log(error);
-    });
-    axios.get('http://localhost:8080/api/v1/cases', {
-      params: {
-        lesson_id: id,
+    axios.get(`http://localhost:8080/api/v1/lessons/${id}`).then(
+      (response) => {
+        setLesson(response.data);
+        console.log('response.data: ', response.data);
       },
-    })
-    .then((response) => {
-      setCases(response.data.cases);
-      console.log('response.data: ', response.data.cases);
-    }, (error) => {
+      (error) => {
         console.log(error);
-    });
+      },
+    );
+    axios
+      .get('http://localhost:8080/api/v1/cases', {
+        params: {
+          lesson_id: id,
+        },
+      })
+      .then(
+        (response) => {
+          setCases(response.data.cases);
+          console.log('response.data: ', response.data.cases);
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
   }, [id]);
   return <LessonDetailTemplate lesson={lesson} cases={cases} />;
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Stack, Box, Tabs, Tab, Paper } from '@mui/material';
-import Editor, { Monaco } from "@monaco-editor/react";
+import Editor, { Monaco } from '@monaco-editor/react';
 import MDEditor from '@uiw/react-md-editor';
 import SplitPane from 'react-split-pane';
 import data from '../config/language.json';
@@ -22,7 +22,7 @@ function LessonDetail(props: any) {
   const languageList = data as any;
   const { id } = useParams();
   const [value, setValue] = useState(0);
-  const [code , setCode] = useState(lesson.default_code);
+  const [code, setCode] = useState(lesson.default_code);
   const [language, setLanguage] = useState('plain');
 
   const options = {
@@ -44,7 +44,7 @@ function LessonDetail(props: any) {
   };
   function handleEditorChange(value: string | undefined, event: any) {
     setCode(value as string);
-  };
+  }
   function handleBeforeMount(monaco: Monaco) {
     console.log(monaco);
   }
@@ -64,11 +64,14 @@ function LessonDetail(props: any) {
           <Tab label="Test Cases" {...a11yProps(1)} />
         </Tabs>
       </Box>
-      <Panel value={value} index={0} >
+      <Panel value={value} index={0}>
         <div className={HeightStyle}>
           <SplitPane split="vertical" minSize={50} defaultSize="50%">
             <Paper className={HeightStyle}>
-              <MDEditor.Markdown source={lesson.body} style={{ whiteSpace: 'pre-wrap', height: "650px", overflow:"scroll" }} />
+              <MDEditor.Markdown
+                source={lesson.body}
+                style={{ whiteSpace: 'pre-wrap', height: '650px', overflow: 'scroll' }}
+              />
             </Paper>
             <Paper className={HeightStyle}>
               <Editor
@@ -85,7 +88,7 @@ function LessonDetail(props: any) {
           </SplitPane>
         </div>
       </Panel>
-      <Panel value={value} index={1} >
+      <Panel value={value} index={1}>
         <TestCaseTable cases={cases} />
       </Panel>
     </Stack>

@@ -8,9 +8,7 @@ function LessonDetailTemplate(props: any) {
     <div>
       <Header />
       <div className={LessonDetailDivStyle}>
-        <LessonDetail
-          {...props}
-        />
+        <LessonDetail {...props} />
       </div>
     </div>
   );

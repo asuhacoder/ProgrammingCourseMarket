@@ -60,28 +60,33 @@ function LoginForm() {
 
   const submitLoginForm = (): void => {
     if (validateEmail() && validatePassword()) {
-      axios.post('http://localhost:8080/api/v1/authn', {
-        email, password,
-      })
-        .then((response) => {
-          console.log(response);
-          window.localStorage.setItem('programming-course-market', response.data.token);
-          setUser({
-            token: response.data.token,
-            uuid: response.data.uuid,
-            name: response.data.name,
-            email: response.data.email,
-            introduction: response.data.introduction,
-          });
-          const state = location.state as State;
-          const from = state.from.pathname || '/';
-          console.log('from: ', from);
-          navigate(from, { replace: true });
-        }, (error) => {
-          console.log(error);
-          setEmailHasError(true);
-          setEmailHelperText('email address or password is incorrect');
-        });
+      axios
+        .post('http://localhost:8080/api/v1/authn', {
+          email,
+          password,
+        })
+        .then(
+          (response) => {
+            console.log(response);
+            window.localStorage.setItem('programming-course-market', response.data.token);
+            setUser({
+              token: response.data.token,
+              uuid: response.data.uuid,
+              name: response.data.name,
+              email: response.data.email,
+              introduction: response.data.introduction,
+            });
+            const state = location.state as State;
+            const from = state.from.pathname || '/';
+            console.log('from: ', from);
+            navigate(from, { replace: true });
+          },
+          (error) => {
+            console.log(error);
+            setEmailHasError(true);
+            setEmailHelperText('email address or password is incorrect');
+          },
+        );
     }
   };
 
@@ -114,10 +119,7 @@ function LoginForm() {
         onChange={handlePasswordChange}
         onBlur={validatePassword}
       />
-      <ButtonDiv
-        body="Submit"
-        onClick={submitLoginForm}
-      />
+      <ButtonDiv body="Submit" onClick={submitLoginForm} />
     </Stack>
   );
 }

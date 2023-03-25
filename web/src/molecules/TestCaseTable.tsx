@@ -3,7 +3,7 @@ import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper
 import { Case } from '../config/Type';
 
 function TestCaseTable(props: any) {
-    const { cases } = props;
+  const { cases } = props;
 
   return (
     <TableContainer component={Paper}>
@@ -17,10 +17,7 @@ function TestCaseTable(props: any) {
         </TableHead>
         <TableBody>
           {cases === null && (
-            <TableRow
-              key="empty"
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
+            <TableRow key="empty" sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell component="th" scope="row">
                 No Test Case
               </TableCell>
@@ -28,26 +25,24 @@ function TestCaseTable(props: any) {
               <TableCell align="left">No Data</TableCell>
             </TableRow>
           )}
-          {cases !== null && cases.map((testCase: Case, index: number) => (
-            <TableRow
-              key={testCase.uuid}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                Test Case {index + 1}
-              </TableCell>
-              <TableCell align="left">
-                {testCase.input.split("\n").map((line, idx) => (
-                  <p key={idx}>{line}</p>
-                ))}
-              </TableCell>
-              <TableCell align="left">
-                {testCase.output.split("\n").map((line, idx) => (
-                  <p key={idx}>{line}</p>
-                ))}
-              </TableCell>
-            </TableRow>
-          ))}
+          {cases !== null &&
+            cases.map((testCase: Case, index: number) => (
+              <TableRow key={testCase.uuid} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell component="th" scope="row">
+                  Test Case {index + 1}
+                </TableCell>
+                <TableCell align="left">
+                  {testCase.input.split('\n').map((line, idx) => (
+                    <p key={idx}>{line}</p>
+                  ))}
+                </TableCell>
+                <TableCell align="left">
+                  {testCase.output.split('\n').map((line, idx) => (
+                    <p key={idx}>{line}</p>
+                  ))}
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

@@ -19,7 +19,7 @@ export const lessonsState = atom<Lesson[]>({
 export const lessonState = atom<Lesson>({
   key: 'lessonState',
   default: defaultLesson,
-})
+});
 
 export const casesState = atom<Case[]>({
   key: 'casesState',

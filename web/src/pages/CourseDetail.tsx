@@ -11,25 +11,30 @@ function CourseDetail() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   useEffect(() => {
     console.log('useEffect in CourseDetail is running');
-    axios.get(`http://localhost:8080/api/v1/courses/${id}`)
-      .then((response) => {
+    axios.get(`http://localhost:8080/api/v1/courses/${id}`).then(
+      (response) => {
         setCourse(response.data);
         console.log(response.data);
-      }, (error) => {
+      },
+      (error) => {
         console.log(error);
-      });
-      axios.get(`http://localhost:8080/api/v1/lessons`, {
+      },
+    );
+    axios
+      .get(`http://localhost:8080/api/v1/lessons`, {
         params: {
           course_id: id,
         },
       })
-        .then((response) => {
+      .then(
+        (response) => {
           console.log(response.data);
           setLessons(SortLessons(response.data.lessons));
-        }, (error) => {
+        },
+        (error) => {
           console.log(error);
-        });
-    
+        },
+      );
   }, []);
   return <CourseDetailTemplate lessons={lessons} course={course} />;
 }

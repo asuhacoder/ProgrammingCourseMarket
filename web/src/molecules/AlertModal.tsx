@@ -18,13 +18,7 @@ const style = {
 };
 
 function ButtonWithModal(props: any) {
-  const {
-    actionButtonBody,
-    actionButtonColor,
-    modalBody,
-    modalButtonColor,
-    onClickActionButton,
-  } = props;
+  const { actionButtonBody, actionButtonColor, modalBody, modalButtonColor, onClickActionButton } = props;
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -35,19 +29,21 @@ function ButtonWithModal(props: any) {
 
   return (
     <div>
-      <Button color={actionButtonColor} variant="contained" size="small" onClick={handleOpen}>{actionButtonBody}</Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-describedby="modal-modal-description"
-      >
+      <Button color={actionButtonColor} variant="contained" size="small" onClick={handleOpen}>
+        {actionButtonBody}
+      </Button>
+      <Modal open={open} onClose={handleClose} aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             {modalBody}
           </Typography>
           <div className={ButtonDivStyle}>
-            <Button color={modalButtonColor} variant="contained" size="small" onClick={deleteCourse}>Yes</Button>
-            <Button size="small" onClick={handleClose}>No</Button>
+            <Button color={modalButtonColor} variant="contained" size="small" onClick={deleteCourse}>
+              Yes
+            </Button>
+            <Button size="small" onClick={handleClose}>
+              No
+            </Button>
           </div>
         </Box>
       </Modal>

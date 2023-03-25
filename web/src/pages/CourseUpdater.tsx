@@ -9,17 +9,17 @@ function CourseUpdater() {
   const [data, setData] = useState(defaultCourse);
   useEffect(() => {
     console.log('useEffect in home is running');
-    axios.get(`http://localhost:8080/api/v1/courses/${id}`, {})
-      .then((response) => {
+    axios.get(`http://localhost:8080/api/v1/courses/${id}`, {}).then(
+      (response) => {
         setData(response.data);
         console.log('course data: ', data);
         console.log(response.data);
-      }, (error) => {
+      },
+      (error) => {
         console.log(error);
-      });
+      },
+    );
   }, []);
-  return (
-    <CourseUpdaterTemplate />
-  );
+  return <CourseUpdaterTemplate />;
 }
 export default CourseUpdater;

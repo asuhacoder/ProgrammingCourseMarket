@@ -28,14 +28,14 @@ export const ButtonStyle = css`
 
 export const TitleDivStyle = css`
   display: flex;
-  position:relative;
+  position: relative;
 `;
 
 export const EditIconStyle = css`
-  margin-top:auto;
-  margin-bottom:auto;
-  position:absolute;
-  top:0;
-  bottom:0;
-  height:2em;
+  margin-top: auto;
+  margin-bottom: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 2em;
 `;

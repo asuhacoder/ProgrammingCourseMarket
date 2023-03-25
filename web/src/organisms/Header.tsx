@@ -18,7 +18,7 @@ import LinkStyle from './Header.css';
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser]:[User, SetterOrUpdater<User>] = useRecoilState(userState);
+  const [user, setUser]: [User, SetterOrUpdater<User>] = useRecoilState(userState);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -42,9 +42,7 @@ function Header() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <CustomLink to="/">
-              Skhole
-            </CustomLink>
+            <CustomLink to="/">Skhole</CustomLink>
           </Typography>
           {JSON.stringify(user) === JSON.stringify(defaultUser) && (
             <div>

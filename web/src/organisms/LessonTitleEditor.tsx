@@ -9,15 +9,12 @@ import CustomTextField from '../atoms/CustomTextField';
 
 function LessonTitleEditor() {
   const user: User = useRecoilState(userState)[0];
-  const [lesson, setLesson]:[Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
+  const [lesson, setLesson]: [Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
   const [titleHasError, setTitleHasError] = useState(false);
   const [titleHelperText, setTitleHelperText] = useState('');
   const [open, setOpen] = React.useState(false);
 
-  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-    props,
-    ref,
-  ) {
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
@@ -45,31 +42,35 @@ function LessonTitleEditor() {
     return isValid;
   };
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    let tmp:Lesson = Object.assign({}, lesson);
-    tmp.title = e.target.value
+    let tmp: Lesson = Object.assign({}, lesson);
+    tmp.title = e.target.value;
     setLesson(tmp);
   };
 
   const submitTitle = (): void => {
     if (validateTitle()) {
-      axios.put(`http://localhost:8080/api/v1/lessons/${lesson.uuid}`, {
-        token: window.localStorage.getItem('programming-course-market'),
-        user_id: user.uuid,
-        course_id: lesson.course_id,
-        sequence_number: lesson.sequence_number,
-        title: lesson.title,
-        introduction: lesson.introduction,
-        body: lesson.body,
-        default_code: lesson.default_code,
-        answer_code: lesson.answer_code,
-        language: lesson.language,
-      })
-        .then((response) => {
-          console.log(response);
-          setOpen(true);
-        }, (error) => {
-          console.log(error);
-        });
+      axios
+        .put(`http://localhost:8080/api/v1/lessons/${lesson.uuid}`, {
+          token: window.localStorage.getItem('programming-course-market'),
+          user_id: user.uuid,
+          course_id: lesson.course_id,
+          sequence_number: lesson.sequence_number,
+          title: lesson.title,
+          introduction: lesson.introduction,
+          body: lesson.body,
+          default_code: lesson.default_code,
+          answer_code: lesson.answer_code,
+          language: lesson.language,
+        })
+        .then(
+          (response) => {
+            console.log(response);
+            setOpen(true);
+          },
+          (error) => {
+            console.log(error);
+          },
+        );
     }
   };
 
@@ -91,7 +92,6 @@ function LessonTitleEditor() {
         onBlur={submitTitle}
       />
     </div>
-
   );
 }
 
