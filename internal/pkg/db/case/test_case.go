@@ -15,7 +15,7 @@ var (
 
 func CaseInit() {
 	CaseDB, err = gorm.Open(postgres.New(postgres.Config{
-		DSN: "host=lesson_db user=gorm password=gorm dbname=gorm port=5432 sslmode=disable TimeZone=Asia/Tokyo",
+		DSN: "host=lesson_db user=gorm password=gormpassword dbname=gorm port=5432 sslmode=disable TimeZone=Asia/Tokyo",
 	}), &gorm.Config{})
 	if err != nil {
 		panic(err)

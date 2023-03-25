@@ -135,7 +135,7 @@ services:
     tty:
       true
     env_file:
-      - jdoodle.env
+      - secrets.env
   # web:
   #   build:
   #     context: ./

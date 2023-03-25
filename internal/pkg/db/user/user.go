@@ -15,7 +15,7 @@ var (
 
 func Init() {
 	DB, err = gorm.Open(postgres.New(postgres.Config{
-		DSN: "host=user_db user=gorm password=gorm dbname=gorm port=5432 sslmode=disable TimeZone=Asia/Tokyo",
+		DSN: "host=user_db user=gorm password=gormpassword dbname=gorm port=5432 sslmode=disable TimeZone=Asia/Tokyo",
 	}), &gorm.Config{})
 	if err != nil {
 		panic(err)
