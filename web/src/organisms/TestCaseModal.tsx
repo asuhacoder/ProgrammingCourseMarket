@@ -52,8 +52,10 @@ function TestCaseModal(props: any) {
     let tmp: any = {};
     let done = true;
     cases.forEach((testCase: Case) => {
-      axios
-        .post('http://localhost:8080/api/v1/runner', {
+      const url = new URL(location.href);
+      const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+      instance
+        .post(`/api/v1/runner`, {
           code: code,
           input: testCase.input,
           language: languageList[lesson.language.split('@')[0]]['jdoodle'],

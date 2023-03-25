@@ -36,3 +36,15 @@ resource "aws_acm_certificate_validation" "cert" {
   certificate_arn         = aws_acm_certificate.cert.arn
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
 }
+
+resource "aws_route53_record" "site" {
+  zone_id = data.aws_route53_zone.host_domain.zone_id
+  name    = local.host_domain
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.static-skhole.domain_name
+    zone_id                = aws_cloudfront_distribution.static-skhole.hosted_zone_id
+    evaluate_target_health = false
+  }
+}

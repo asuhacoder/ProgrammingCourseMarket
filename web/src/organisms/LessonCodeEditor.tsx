@@ -24,6 +24,8 @@ function LessonCodeEditor(props: TabPanelProps) {
   const { children, value, index, defaultOrAnswer, ...other } = props;
   const [code, setCode] = useState('');
   const [open, setOpen] = React.useState(false);
+  const url = new URL(location.href);
+  const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
   const options = {
     readOnly: false,
     minimap: { enabled: false },
@@ -52,8 +54,8 @@ function LessonCodeEditor(props: TabPanelProps) {
   function updateAllCases() {
     let tmp: Case[] = [];
     cases.map((testCase: Case) =>
-      axios
-        .post('http://localhost:8080/api/v1/runner', {
+      instance
+        .post(`/api/v1/runner`, {
           code: code,
           input: testCase.input,
           language: languageList[lesson.language.split('@')[0]]['jdoodle'],
@@ -61,8 +63,8 @@ function LessonCodeEditor(props: TabPanelProps) {
         })
         .then(
           (response) => {
-            axios
-              .put(`http://localhost:8080/api/v1/cases/${testCase.uuid}`, {
+            instance
+              .put(`/api/v1/cases/${testCase.uuid}`, {
                 token: window.localStorage.getItem('programming-course-market'),
                 uuid: testCase.uuid,
                 lesson_id: lesson.uuid,
@@ -98,8 +100,8 @@ function LessonCodeEditor(props: TabPanelProps) {
     };
     newLesson[defaultOrAnswer] = code as never;
     setLesson(newLesson);
-    axios
-      .put(`http://localhost:8080/api/v1/lessons/${lesson.uuid}`, {
+    instance
+      .put(`/api/v1/lessons/${lesson.uuid}`, {
         token: window.localStorage.getItem('programming-course-market'),
         ...newLesson,
       })

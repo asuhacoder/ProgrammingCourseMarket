@@ -22,8 +22,10 @@ function MyContents() {
   const user: User = useRecoilState(userState)[0];
   const [myContents, setMyContents] = useRecoilState(myContentsState);
   const deleteCourse = (uuid: string): void => {
-    axios
-      .delete(`http://localhost:8080/api/v1/courses/${uuid}`, {
+    const url = new URL(location.href);
+    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    instance
+      .delete(`/api/v1/courses/${uuid}`, {
         data: {
           user_id: user.uuid,
         },

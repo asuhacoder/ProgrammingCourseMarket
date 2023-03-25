@@ -12,7 +12,9 @@ function LessonDetail() {
   useEffect(() => {
     console.log('useEffect in LessonDetail is running');
     console.log('id: ', id);
-    axios.get(`http://localhost:8080/api/v1/lessons/${id}`).then(
+    const url = new URL(location.href);
+    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    instance.get(`/api/v1/lessons/${id}`).then(
       (response) => {
         setLesson(response.data);
         console.log('response.data: ', response.data);
@@ -21,8 +23,8 @@ function LessonDetail() {
         console.log(error);
       },
     );
-    axios
-      .get('http://localhost:8080/api/v1/cases', {
+    instance
+      .get(`/api/v1/cases`, {
         params: {
           lesson_id: id,
         },

@@ -10,8 +10,10 @@ function CaseTable() {
   const [cases, setCases]: [Case[], SetterOrUpdater<Case[]>] = useRecoilState<Case[]>(casesState);
   const user: User = useRecoilState(userState)[0];
   const deleteCase = (uuid: string): void => {
-    axios
-      .delete(`http://localhost:8080/api/v1/cases/${uuid}`, {
+    const url = new URL(location.href);
+    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    instance
+      .delete(`/api/v1/cases/${uuid}`, {
         data: {
           user_id: user.uuid,
           token: window.localStorage.getItem('programming-course-market'),

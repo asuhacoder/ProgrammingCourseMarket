@@ -51,8 +51,10 @@ function LessonBodyEditor(props: TabPanelProps) {
       language: lesson.language,
     };
     setLesson(newLesson);
-    axios
-      .put(`http://localhost:8080/api/v1/lessons/${lesson.uuid}`, {
+    const url = new URL(location.href);
+    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    instance
+      .put(`/api/v1/lessons/${lesson.uuid}`, {
         token: window.localStorage.getItem('programming-course-market'),
         ...newLesson,
       })

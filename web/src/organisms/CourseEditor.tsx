@@ -20,10 +20,12 @@ function CourseEditor() {
   const [introductionHasError, setIntroductionHasError] = useState(false);
   const [introductionHelperText, setIntroductionHelperText] = useState('');
   const [checked, setChecked] = useState(false);
+  const url = new URL(location.href);
+  const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
   useEffect(() => {
     if (id) {
       console.log('useEffect in home is running');
-      axios.get(`http://localhost:8080/api/v1/courses/${id}`, {}).then(
+      instance.get(`/api/v1/courses/${id}`, {}).then(
         (response) => {
           console.log(response.data);
           setTitle(response.data.title);
@@ -78,8 +80,8 @@ function CourseEditor() {
   const submitCourseForm = (): void => {
     if (validateTitle() && validateIntroduction()) {
       if (id) {
-        axios
-          .put(`http://localhost:8080/api/v1/courses/${id}`, {
+        instance
+          .put(`/api/v1/courses/${id}`, {
             token: window.localStorage.getItem('programming-course-market'),
             user_id: user.uuid,
             title,
@@ -99,8 +101,8 @@ function CourseEditor() {
             },
           );
       } else {
-        axios
-          .post('http://localhost:8080/api/v1/courses', {
+        instance
+          .post(`/api/v1/courses`, {
             token: window.localStorage.getItem('programming-course-market'),
             user_id: user.uuid,
             title,

@@ -11,8 +11,10 @@ function MyContentsPage() {
   console.log('user in my contents pages component', user);
   useEffect(() => {
     console.log('useEffect in mycontents is running', user);
-    axios
-      .get('http://localhost:8080/api/v1/courses', {
+    const url = new URL(location.href);
+    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    instance
+      .get(`/api/v1/courses`, {
         params: {
           user_id: user.uuid,
           only_public: false,

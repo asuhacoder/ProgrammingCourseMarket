@@ -29,6 +29,8 @@ function LessonListEditor() {
   const [titleHasError, setTitleHasError] = useState(false);
   const [titleHelperText, setTitleHelperText] = useState('');
   const [open, setOpen] = useState(false);
+  const url = new URL(location.href);
+  const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
 
   const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -74,8 +76,8 @@ function LessonListEditor() {
 
   const submitNewLesson = (): void => {
     if (validateTitle()) {
-      axios
-        .post('http://localhost:8080/api/v1/lessons', {
+      instance
+        .post(`/api/v1/lessons`, {
           token: window.localStorage.getItem('programming-course-market'),
           user_id: user.uuid,
           course_id: id,
@@ -101,8 +103,8 @@ function LessonListEditor() {
   };
 
   const deleteLesson = (uuid: string): void => {
-    axios
-      .delete(`http://localhost:8080/api/v1/lessons/${uuid}`, {
+    instance
+      .delete(`/api/v1/lessons/${uuid}`, {
         data: {
           user_id: user.uuid,
           token: window.localStorage.getItem('programming-course-market'),
