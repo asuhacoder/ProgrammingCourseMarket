@@ -5,7 +5,7 @@ import LessonTitleEditor from './LessonTitleEditor';
 import LessonBodyEditor from './LessonBodyEditor';
 import LessonLanguageEditor from './LessonLanguageEditor';
 import LessonCodeEditor from './LessonCodeEditor';
-import LessonCaseEditor from './LessonCaseEditor'
+import LessonCaseEditor from './LessonCaseEditor';
 import { PanelStyle } from './LessonEditor.css';
 
 function a11yProps(index: number) {
@@ -43,7 +43,6 @@ function LessonEditor() {
         </div>
       </Box>
     </div>
-
   );
 }
 export default LessonEditor;

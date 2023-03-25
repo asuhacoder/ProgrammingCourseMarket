@@ -1,7 +1,7 @@
 import { css } from '@linaria/core';
 
 const CustomLinkStyle = css`
-  color: #FFF;
+  color: #fff;
   text-decoration: none;
 `;
 

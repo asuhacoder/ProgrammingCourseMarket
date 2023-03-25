@@ -7,15 +7,10 @@ function ButtonDiv(props: any) {
   const { body } = props;
   return (
     <div className={ButtonDivStyle}>
-      <Button
-        color="primary"
-        variant="contained"
-        {...props}
-      >
+      <Button color="primary" variant="contained" {...props}>
         {body}
       </Button>
     </div>
-
   );
 }
 

@@ -1,9 +1,9 @@
 export interface User {
-  token: string,
-  uuid: string,
-  name: string,
-  email: string,
-  introduction: string,
+  token: string;
+  uuid: string;
+  name: string;
+  email: string;
+  introduction: string;
 }
 
 export const defaultUser = {
@@ -15,11 +15,11 @@ export const defaultUser = {
 };
 
 export interface Course {
-  uuid: string,
-  user_id: string,
-  title: string,
-  introduction: string,
-  is_public: boolean,
+  uuid: string;
+  user_id: string;
+  title: string;
+  introduction: string;
+  is_public: boolean;
 }
 
 export const defaultCourse = {
@@ -33,17 +33,17 @@ export const defaultCourse = {
 export const defaultCourseArray = [];
 
 export interface Lesson {
-  uuid: string,
-  user_id: string,
-  course_id: string,
-  sequence_number: number,
-  title: string,
-  introduction: string,
-  body: string,
-  default_code: string,
-  answer_code: string,
-  language: string,
-};
+  uuid: string;
+  user_id: string;
+  course_id: string;
+  sequence_number: number;
+  title: string;
+  introduction: string;
+  body: string;
+  default_code: string;
+  answer_code: string;
+  language: string;
+}
 
 export const defaultLessons = [];
 
@@ -61,11 +61,11 @@ export const defaultLesson = {
 };
 
 export interface Case {
-  uuid: string,
-  user_id: string,
-  lesson_id: string,
-  input: string,
-  output: string,
-};
+  uuid: string;
+  user_id: string;
+  lesson_id: string;
+  input: string;
+  output: string;
+}
 
 export const defaultCases = [];

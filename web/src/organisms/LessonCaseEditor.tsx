@@ -19,16 +19,13 @@ interface TabPanelProps {
 
 function LessonCaseEditor(props: TabPanelProps) {
   const languageList = data as any;
-  const [lesson,]:[Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
-  const [cases, setCases]:[Case[], SetterOrUpdater<Case[]>] = useRecoilState<Case[]>(casesState);
+  const [lesson]: [Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
+  const [cases, setCases]: [Case[], SetterOrUpdater<Case[]>] = useRecoilState<Case[]>(casesState);
   const { children, value, index, ...other } = props;
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
 
-  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-    props,
-    ref,
-  ) {
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
@@ -45,27 +42,32 @@ function LessonCaseEditor(props: TabPanelProps) {
   };
 
   const submitCase = (language: string, version: string): void => {
-    axios.post('http://localhost:8080/api/v1/runner', {
-      code: lesson.answer_code,
-      input: input,
-      language: languageList[lesson.language.split('@')[0]]["jdoodle"],
-      version: lesson.language.split('@')[1],
-    })
-      .then((response) => {
-        axios.post('http://localhost:8080/api/v1/cases', {
-          token: window.localStorage.getItem('programming-course-market'),
-          lesson_id: lesson.uuid,
-          input: input,
-          output: response.data.output,
-        })
-          .then((response) => {
-            setCases(cases.concat(response.data))
-            console.log('cases api response: ', response);
-          })
-        console.log('runner api response: ', response);
-      }, (error) => {
-        console.log(error);
-      });
+    axios
+      .post('http://localhost:8080/api/v1/runner', {
+        code: lesson.answer_code,
+        input: input,
+        language: languageList[lesson.language.split('@')[0]]['jdoodle'],
+        version: lesson.language.split('@')[1],
+      })
+      .then(
+        (response) => {
+          axios
+            .post('http://localhost:8080/api/v1/cases', {
+              token: window.localStorage.getItem('programming-course-market'),
+              lesson_id: lesson.uuid,
+              input: input,
+              output: response.data.output,
+            })
+            .then((response) => {
+              setCases(cases.concat(response.data));
+              console.log('cases api response: ', response);
+            });
+          console.log('runner api response: ', response);
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
     setInput('');
   };
 
@@ -85,12 +87,7 @@ function LessonCaseEditor(props: TabPanelProps) {
               Saved Changes
             </Alert>
           </Snackbar>
-          <Stack
-            id="organisms-lesson-case-stack"
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            spacing={2}
-          >
+          <Stack id="organisms-lesson-case-stack" justifyContent="flex-start" alignItems="flex-start" spacing={2}>
             <CaseTable />
             <CustomTextField
               required
@@ -103,10 +100,7 @@ function LessonCaseEditor(props: TabPanelProps) {
               minRows={5}
               maxRows={20}
             />
-            <ButtonDiv
-              body="Submit"
-              onClick={submitCase}
-            />
+            <ButtonDiv body="Submit" onClick={submitCase} />
           </Stack>
         </div>
       )}

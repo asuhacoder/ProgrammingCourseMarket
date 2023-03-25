@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SetterOrUpdater, useRecoilState } from 'recoil';
 import axios from 'axios';
 import MDEditor from '@uiw/react-md-editor';
-import rehypeSanitize from "rehype-sanitize";
+import rehypeSanitize from 'rehype-sanitize';
 import { Snackbar } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { User, Lesson } from '../config/Type';
@@ -17,7 +17,7 @@ interface TabPanelProps {
 
 function LessonBodyEditor(props: TabPanelProps) {
   const user: User = useRecoilState(userState)[0];
-  const [lesson, setLesson]:[Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
+  const [lesson, setLesson]: [Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
   const { children, value, index, ...other } = props;
   const [body, setBody] = useState<string | undefined>('');
   const [open, setOpen] = useState(false);
@@ -25,10 +25,7 @@ function LessonBodyEditor(props: TabPanelProps) {
     setBody(lesson.body);
   }, [lesson]);
 
-  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-    props,
-    ref,
-  ) {
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
@@ -41,7 +38,7 @@ function LessonBodyEditor(props: TabPanelProps) {
   };
 
   const submitBody = (): void => {
-    const newLesson:Lesson = {
+    const newLesson: Lesson = {
       uuid: lesson.uuid,
       user_id: user.uuid,
       course_id: lesson.course_id,
@@ -54,16 +51,20 @@ function LessonBodyEditor(props: TabPanelProps) {
       language: lesson.language,
     };
     setLesson(newLesson);
-    axios.put(`http://localhost:8080/api/v1/lessons/${lesson.uuid}`, {
-      token: window.localStorage.getItem('programming-course-market'),
-      ...newLesson,
-    })
-      .then((response) => {
-        console.log(response);
-        setOpen(true);
-      }, (error) => {
-        console.log(error);
-      });
+    axios
+      .put(`http://localhost:8080/api/v1/lessons/${lesson.uuid}`, {
+        token: window.localStorage.getItem('programming-course-market'),
+        ...newLesson,
+      })
+      .then(
+        (response) => {
+          console.log(response);
+          setOpen(true);
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
   };
 
   return (
@@ -93,7 +94,6 @@ function LessonBodyEditor(props: TabPanelProps) {
             }}
           />
         </div>
-
       )}
     </div>
   );

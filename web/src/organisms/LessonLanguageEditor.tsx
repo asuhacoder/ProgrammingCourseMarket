@@ -18,7 +18,7 @@ interface TabPanelProps {
 function LessonLanguageEditor(props: TabPanelProps) {
   const languageList = data as any;
   const user: User = useRecoilState(userState)[0];
-  const [lesson, setLesson]:[Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
+  const [lesson, setLesson]: [Lesson, SetterOrUpdater<Lesson>] = useRecoilState<Lesson>(lessonState);
   const { children, value, index, ...other } = props;
   const [language, setLanguage] = useState<string>('');
   const [version, setVersion] = useState<string>('');
@@ -28,10 +28,7 @@ function LessonLanguageEditor(props: TabPanelProps) {
     setVersion(lesson.language.split('@')[1]);
   }, [lesson]);
 
-  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-    props,
-    ref,
-  ) {
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
@@ -54,7 +51,7 @@ function LessonLanguageEditor(props: TabPanelProps) {
   };
 
   const submitLanguage = (language: string, version: string): void => {
-    const newLesson:Lesson = {
+    const newLesson: Lesson = {
       uuid: lesson.uuid,
       user_id: user.uuid,
       course_id: lesson.course_id,
@@ -67,16 +64,20 @@ function LessonLanguageEditor(props: TabPanelProps) {
       language: language + '@' + version,
     };
     setLesson(newLesson);
-    axios.put(`http://localhost:8080/api/v1/lessons/${lesson.uuid}`, {
-      token: window.localStorage.getItem('programming-course-market'),
-      ...newLesson,
-    })
-      .then((response) => {
-        console.log(response);
-        setOpen(true);
-      }, (error) => {
-        console.log(error);
-      });
+    axios
+      .put(`http://localhost:8080/api/v1/lessons/${lesson.uuid}`, {
+        token: window.localStorage.getItem('programming-course-market'),
+        ...newLesson,
+      })
+      .then(
+        (response) => {
+          console.log(response);
+          setOpen(true);
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
   };
 
   return (
@@ -114,7 +115,9 @@ function LessonLanguageEditor(props: TabPanelProps) {
                 onChange={handleLanguageChange}
               >
                 {Object.keys(languageList).map((language: string) => (
-                  <MenuItem key={language} value={language}>{language}</MenuItem>
+                  <MenuItem key={language} value={language}>
+                    {language}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -129,8 +132,10 @@ function LessonLanguageEditor(props: TabPanelProps) {
                 label="Version"
                 onChange={handleVersionChange}
               >
-                {languageList[language]["versions"].map((version: string, index: number) => (
-                  <MenuItem key={version} value={index}>{version}</MenuItem>
+                {languageList[language]['versions'].map((version: string, index: number) => (
+                  <MenuItem key={version} value={index}>
+                    {version}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>

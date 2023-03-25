@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import {
-  Stack,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-} from '@mui/material';
+import { Stack, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import { userState } from '../config/Recoil';
 import { User } from '../config/Type';
@@ -28,15 +23,17 @@ function CourseEditor() {
   useEffect(() => {
     if (id) {
       console.log('useEffect in home is running');
-      axios.get(`http://localhost:8080/api/v1/courses/${id}`, {})
-        .then((response) => {
+      axios.get(`http://localhost:8080/api/v1/courses/${id}`, {}).then(
+        (response) => {
           console.log(response.data);
           setTitle(response.data.title);
           setIntroduction(response.data.introduction);
           setChecked(response.data.is_public);
-        }, (error) => {
+        },
+        (error) => {
           console.log(error);
-        });
+        },
+      );
     }
   }, []);
 
@@ -81,49 +78,53 @@ function CourseEditor() {
   const submitCourseForm = (): void => {
     if (validateTitle() && validateIntroduction()) {
       if (id) {
-        axios.put(`http://localhost:8080/api/v1/courses/${id}`, {
-          token: window.localStorage.getItem('programming-course-market'),
-          user_id: user.uuid,
-          title,
-          introduction,
-          image: '',
-          price: 0,
-          unit_sales: 0,
-          is_public: checked,
-        })
-          .then((response) => {
-            console.log(response);
-            navigate('/');
-          }, (error) => {
-            console.log(error);
-          });
+        axios
+          .put(`http://localhost:8080/api/v1/courses/${id}`, {
+            token: window.localStorage.getItem('programming-course-market'),
+            user_id: user.uuid,
+            title,
+            introduction,
+            image: '',
+            price: 0,
+            unit_sales: 0,
+            is_public: checked,
+          })
+          .then(
+            (response) => {
+              console.log(response);
+              navigate('/');
+            },
+            (error) => {
+              console.log(error);
+            },
+          );
       } else {
-        axios.post('http://localhost:8080/api/v1/courses', {
-          token: window.localStorage.getItem('programming-course-market'),
-          user_id: user.uuid,
-          title,
-          introduction,
-          image: '',
-          price: 0,
-          unit_sales: 0,
-          is_public: checked,
-        })
-          .then((response) => {
-            console.log(response);
-            navigate('/');
-          }, (error) => {
-            console.log(error);
-          });
+        axios
+          .post('http://localhost:8080/api/v1/courses', {
+            token: window.localStorage.getItem('programming-course-market'),
+            user_id: user.uuid,
+            title,
+            introduction,
+            image: '',
+            price: 0,
+            unit_sales: 0,
+            is_public: checked,
+          })
+          .then(
+            (response) => {
+              console.log(response);
+              navigate('/');
+            },
+            (error) => {
+              console.log(error);
+            },
+          );
       }
     }
   };
 
   return (
-    <Stack
-      justifyContent="flex-start"
-      alignItems="flex-start"
-      spacing={2}
-    >
+    <Stack justifyContent="flex-start" alignItems="flex-start" spacing={2}>
       <h1 className={TextStyle}>Describe Your Course</h1>
       <CustomTextField
         required
@@ -152,18 +153,21 @@ function CourseEditor() {
       />
       {checked && (
         <FormGroup>
-          <FormControlLabel control={<Checkbox checked={checked} defaultChecked onChange={handleIsPublic} />} label="Make your course public" />
+          <FormControlLabel
+            control={<Checkbox checked={checked} defaultChecked onChange={handleIsPublic} />}
+            label="Make your course public"
+          />
         </FormGroup>
       )}
       {!checked && (
         <FormGroup>
-          <FormControlLabel control={<Checkbox checked={checked} onChange={handleIsPublic} />} label="Make your course public" />
+          <FormControlLabel
+            control={<Checkbox checked={checked} onChange={handleIsPublic} />}
+            label="Make your course public"
+          />
         </FormGroup>
       )}
-      <ButtonDiv
-        body="Submit"
-        onClick={submitCourseForm}
-      />
+      <ButtonDiv body="Submit" onClick={submitCourseForm} />
     </Stack>
   );
 }

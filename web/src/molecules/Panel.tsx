@@ -18,11 +18,7 @@ function Panel(props: TabPanelProps) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
     >
-      {value === index && (
-        <div >
-          {children}
-        </div>
-      )}
+      {value === index && <div>{children}</div>}
     </div>
   );
 }

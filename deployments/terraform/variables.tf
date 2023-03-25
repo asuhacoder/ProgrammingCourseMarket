@@ -5,7 +5,7 @@ variable "product_name" {
 
 variable "region" {
   type    = string
-  default = "us-east-2"
+  default = "us-east-1"
 }
 
 variable "user_image_name" {
@@ -24,6 +24,59 @@ variable "script_path" {
 }
 
 variable "serveice_names" {
-  type = set(string)
+  type    = set(string)
   default = ["user", "auth", "gateway", "course", "lesson", "test_case", "runner"]
+}
+
+variable "app_environment" {
+  type    = string
+  default = "production"
+}
+
+variable "private_subnet" {
+  type    = string
+  default = "10.10.0.0/24"
+}
+
+variable "private_subnet_dummy" {
+  type    = string
+  default = "10.10.10.0/24"
+}
+
+variable "public_subnet" {
+  type    = string
+  default = "10.10.100.0/24"
+}
+
+variable "availability_zone" {
+  type    = string
+  default = "us-east-1a"
+}
+
+variable "availability_zone_dummy" {
+  type    = string
+  default = "us-east-1b"
+}
+
+variable "ecs_cpu" {
+  type    = number
+  default = 10
+}
+
+variable "ecs_memory" {
+  type    = number
+  default = 512
+}
+
+variable "jdoodle_client_id" {
+  type = string
+}
+
+variable "jdoodle_client_secret" {
+  type = string
+}
+
+variable "db_engine" {
+  type    = string
+  default = "postgres"
 }

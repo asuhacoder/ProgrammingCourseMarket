@@ -3,15 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import { arrayMoveImmutable } from 'array-move';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardActions,
-  Stack,
-  Snackbar,
-  Typography,
-} from '@mui/material';
+import { Button, Card, CardContent, CardActions, Stack, Snackbar, Typography } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { useRecoilState, SetterOrUpdater } from 'recoil';
 import { userState, lessonsState } from '../config/Recoil';
@@ -32,16 +24,13 @@ import {
 function LessonListEditor() {
   const { id } = useParams();
   const user: User = useRecoilState(userState)[0];
-  const [lessons, setLessons]:[Lesson[], SetterOrUpdater<Lesson[]>] = useRecoilState<Lesson[]>(lessonsState);
+  const [lessons, setLessons]: [Lesson[], SetterOrUpdater<Lesson[]>] = useRecoilState<Lesson[]>(lessonsState);
   const [title, setTitle] = useState('');
   const [titleHasError, setTitleHasError] = useState(false);
   const [titleHelperText, setTitleHelperText] = useState('');
   const [open, setOpen] = useState(false);
 
-  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-    props,
-    ref,
-  ) {
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
@@ -53,13 +42,13 @@ function LessonListEditor() {
     setOpen(false);
   };
 
-  const onSortEnd = ({oldIndex, newIndex}: {oldIndex: number, newIndex: number}) => {
+  const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
     console.log('oldIndex: ', oldIndex);
     console.log('newIndex: ', newIndex);
     setLessons(arrayMoveImmutable(lessons, oldIndex, newIndex));
     setLessons(NumberingLessons(lessons));
-    UpdateLessons(id as string,  user, lessons[oldIndex]);
-    UpdateLessons(id as string,  user, lessons[newIndex]);
+    UpdateLessons(id as string, user, lessons[oldIndex]);
+    UpdateLessons(id as string, user, lessons[newIndex]);
     setOpen(true);
   };
 
@@ -83,87 +72,92 @@ function LessonListEditor() {
     setTitle(e.target.value);
   };
 
-  const submitNewLesson= (): void => {
+  const submitNewLesson = (): void => {
     if (validateTitle()) {
-      axios.post('http://localhost:8080/api/v1/lessons', {
+      axios
+        .post('http://localhost:8080/api/v1/lessons', {
           token: window.localStorage.getItem('programming-course-market'),
           user_id: user.uuid,
           course_id: id,
           sequence_number: lessons.length,
           title,
           introduction: '',
-          body: "**Hello world!!!**",
+          body: '**Hello world!!!**',
           default_code: '',
           answer_code: '',
           language: 'Python 3@4',
         })
-          .then((response) => {
+        .then(
+          (response) => {
             console.log(response);
-            setLessons(lessons.concat(response.data))
-          }, (error) => {
+            setLessons(lessons.concat(response.data));
+          },
+          (error) => {
             console.log(error);
-          });
+          },
+        );
       setTitle('');
     }
-  }
+  };
 
-  const deleteLesson= (uuid: string):void => {
-    axios.delete(`http://localhost:8080/api/v1/lessons/${uuid}`, {
-      data: {
-        user_id: user.uuid,
-        token: window.localStorage.getItem('programming-course-market'),
-      },
-    })
-      .then((response) => {
-        console.log(response);
-        setLessons(lessons.filter((lesson: Lesson) => lesson.uuid !== uuid));
-        setLessons(NumberingLessons(lessons));
-        for (let i = 0; i < lessons.length; i++) {
-          UpdateLessons(id as string,  user, lessons[i]);
-        }
-      }, (error) => {
-        console.log(error);
-      });
+  const deleteLesson = (uuid: string): void => {
+    axios
+      .delete(`http://localhost:8080/api/v1/lessons/${uuid}`, {
+        data: {
+          user_id: user.uuid,
+          token: window.localStorage.getItem('programming-course-market'),
+        },
+      })
+      .then(
+        (response) => {
+          console.log(response);
+          setLessons(lessons.filter((lesson: Lesson) => lesson.uuid !== uuid));
+          setLessons(NumberingLessons(lessons));
+          for (let i = 0; i < lessons.length; i++) {
+            UpdateLessons(id as string, user, lessons[i]);
+          }
+        },
+        (error) => {
+          console.log(error);
+        },
+      );
   };
 
   const DragHandle = SortableHandle(() => <span>::</span>);
 
-  const SortableItem = SortableElement(({lesson}: {lesson: Lesson}) =>
-      <Card className={SortableListStyle}>
-        <DragHandle />
-        <CardContent>
-          <Typography variant="h6" component="div">
-            {lesson.title}
-          </Typography>
-          <div className={ButtonDivStyle}>
-            <CardActions>
-              <CustomLink className={ButtonStyle} to={`/lesson/editor/${lesson.uuid}`}>
-                <Button variant="contained" size="small">Edit</Button>
-              </CustomLink>
-              <AlertModal
-                actionButtonBody="Delete"
-                actionButtonColor="error"
-                modalBody="Are you sure to delete your lesson?"
-                modalButtonColor="error"
-                onClickActionButton={() => deleteLesson(lesson.uuid)}
-              />
-            </CardActions>
-          </div>
-        </CardContent>
-      </Card>
-  );
+  const SortableItem = SortableElement(({ lesson }: { lesson: Lesson }) => (
+    <Card className={SortableListStyle}>
+      <DragHandle />
+      <CardContent>
+        <Typography variant="h6" component="div">
+          {lesson.title}
+        </Typography>
+        <div className={ButtonDivStyle}>
+          <CardActions>
+            <CustomLink className={ButtonStyle} to={`/lesson/editor/${lesson.uuid}`}>
+              <Button variant="contained" size="small">
+                Edit
+              </Button>
+            </CustomLink>
+            <AlertModal
+              actionButtonBody="Delete"
+              actionButtonColor="error"
+              modalBody="Are you sure to delete your lesson?"
+              modalButtonColor="error"
+              onClickActionButton={() => deleteLesson(lesson.uuid)}
+            />
+          </CardActions>
+        </div>
+      </CardContent>
+    </Card>
+  ));
 
-  const SortableList = SortableContainer(({children}: {children: any}) => {
+  const SortableList = SortableContainer(({ children }: { children: any }) => {
     return <div className={SortableListStyle}>{children}</div>;
   });
 
   return (
-    <Stack
-      className={LessonListEditorStackStyle}
-      justifyContent="flex-start"
-      alignItems="flex-start"
-      spacing={2}
-    >
+    <Stack className={LessonListEditorStackStyle} justifyContent="flex-start" alignItems="flex-start" spacing={2}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Saved Changes
@@ -187,10 +181,11 @@ function LessonListEditor() {
           onChange={handleTitleChange}
           onBlur={validateTitle}
         />
-        <Button variant="contained" size="small" onClick={submitNewLesson}>Add</Button>
+        <Button variant="contained" size="small" onClick={submitNewLesson}>
+          Add
+        </Button>
       </div>
     </Stack>
   );
-
 }
 export default LessonListEditor;

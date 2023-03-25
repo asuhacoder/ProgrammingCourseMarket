@@ -8,9 +8,7 @@ function MyContentsTemplate(props: any) {
     <div>
       <Header />
       <div className={MyContentsDivStyle}>
-        <MyContents
-          {...props}
-        />
+        <MyContents {...props} />
       </div>
     </div>
   );
