@@ -29,7 +29,7 @@ function SignupForm() {
   const [passwordHelperText, setPasswordHelperText] = useState('');
 
   const navigate = useNavigate();
-  const location = useLocation();
+  const routerLocation = useLocation();
 
   const validateName = (): boolean => {
     let isValid = true;
@@ -99,8 +99,10 @@ function SignupForm() {
 
   const submitSignupForm = (): void => {
     if (validateName() && validateEmail() && validateIntroduction() && validatePassword()) {
-      axios
-        .post('http://localhost:8080/api/v1/users', {
+      const url = new URL(location.href);
+      const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+      instance
+        .post(`/api/v1/users`, {
           name,
           email,
           password,
@@ -117,7 +119,7 @@ function SignupForm() {
               email: response.data.email,
               introduction: response.data.introduction,
             });
-            const state = location.state as State;
+            const state = routerLocation.state as State;
             const from = state.from.pathname || '/';
             console.log('from: ', from);
             navigate(from, { replace: true });

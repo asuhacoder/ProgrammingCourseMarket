@@ -2,9 +2,38 @@ resource "aws_s3_bucket" "bucket" {
   bucket = "static-${var.product_name}-20230325"
 }
 
-resource "aws_s3_bucket_acl" "bucket_acl" {
+resource "aws_s3_bucket_public_access_block" "static_website" {
+  bucket                  = aws_s3_bucket.bucket.bucket
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_policy" "static_website" {
   bucket = aws_s3_bucket.bucket.id
-  acl    = "private"
+  policy = data.aws_iam_policy_document.allow_cloudfront_service_principal_s3_readonly.json
+}
+
+data "aws_iam_policy_document" "allow_cloudfront_service_principal_s3_readonly" {
+  statement {
+    sid     = "AllowCloudFrontServicePrincipalReadOnly"
+    effect  = "Allow"
+    actions = ["s3:GetObject"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.static-skhole.arn]
+    }
+
+    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+  }
 }
 
 resource "aws_s3_bucket_website_configuration" "bucket" {
@@ -20,12 +49,17 @@ resource "aws_s3_bucket_website_configuration" "bucket" {
 }
 
 resource "aws_cloudfront_distribution" "static-skhole" {
+  aliases = [local.host_domain]
   origin {
     domain_name = aws_s3_bucket.bucket.bucket_regional_domain_name
     origin_id   = aws_s3_bucket.bucket.id
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.static-skhole.cloudfront_access_identity_path
-    }
+    origin_access_control_id = aws_cloudfront_origin_access_control.main.id
+  }
+
+  custom_error_response {
+    error_code = 403
+    response_code = 200
+    response_page_path = "/"
   }
 
   enabled = true
@@ -33,8 +67,8 @@ resource "aws_cloudfront_distribution" "static-skhole" {
   default_root_object = "index.html"
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
+    allowed_methods  = ["HEAD", "OPTIONS", "GET", "PUT", "POST", "DELETE", "PATCH"] 
+    cached_methods   = ["HEAD", "OPTIONS", "GET"]
     target_origin_id = aws_s3_bucket.bucket.id
 
     forwarded_values {
@@ -64,4 +98,9 @@ resource "aws_cloudfront_distribution" "static-skhole" {
   }
 }
 
-resource "aws_cloudfront_origin_access_identity" "static-skhole" {}
+resource "aws_cloudfront_origin_access_control" "main" {
+  name                              = "cf-oac"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}

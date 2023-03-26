@@ -6,8 +6,10 @@ function Home() {
   const [data, setData] = useState({});
   useEffect(() => {
     console.log('useEffect in home is running');
-    axios
-      .get('http://localhost:8080/api/v1/courses', {
+    const url = new URL(location.href);
+    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    instance
+      .get(`/api/v1/courses`, {
         params: {
           only_public: true,
           only_mine: false,

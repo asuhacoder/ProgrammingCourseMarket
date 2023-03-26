@@ -42,8 +42,10 @@ function LessonCaseEditor(props: TabPanelProps) {
   };
 
   const submitCase = (language: string, version: string): void => {
-    axios
-      .post('http://localhost:8080/api/v1/runner', {
+    const url = new URL(location.href);
+    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    instance
+      .post(`/api/v1/runner`, {
         code: lesson.answer_code,
         input: input,
         language: languageList[lesson.language.split('@')[0]]['jdoodle'],
@@ -51,8 +53,8 @@ function LessonCaseEditor(props: TabPanelProps) {
       })
       .then(
         (response) => {
-          axios
-            .post('http://localhost:8080/api/v1/cases', {
+          instance
+            .post(`/api/v1/cases`, {
               token: window.localStorage.getItem('programming-course-market'),
               lesson_id: lesson.uuid,
               input: input,

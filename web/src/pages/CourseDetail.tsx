@@ -11,7 +11,9 @@ function CourseDetail() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   useEffect(() => {
     console.log('useEffect in CourseDetail is running');
-    axios.get(`http://localhost:8080/api/v1/courses/${id}`).then(
+    const url = new URL(location.href);
+    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    instance.get(`/api/v1/courses/${id}`).then(
       (response) => {
         setCourse(response.data);
         console.log(response.data);
@@ -20,8 +22,8 @@ function CourseDetail() {
         console.log(error);
       },
     );
-    axios
-      .get(`http://localhost:8080/api/v1/lessons`, {
+    instance
+      .get(`/api/v1/lessons`, {
         params: {
           course_id: id,
         },

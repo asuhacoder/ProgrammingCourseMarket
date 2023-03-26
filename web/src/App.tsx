@@ -20,8 +20,10 @@ function App() {
   const [user, setUser] = useRecoilState(userState);
   if (JSON.stringify(user) === JSON.stringify(defaultUser)) {
     const token = window.localStorage.getItem('programming-course-market');
-    axios
-      .post('http://localhost:8080/api/v1/authz', {
+    const url = new URL(location.href);
+    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    instance
+      .post(`/api/v1/authz`, {
         token,
       })
       .then(
