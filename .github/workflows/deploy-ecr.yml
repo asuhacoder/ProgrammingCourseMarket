@@ -42,6 +42,7 @@ jobs:
     - name: terraform-apply
       uses: dflook/terraform-apply@v1.29.1
       with:
+        GITHUB_TOKEN: ${{ secrets.SKHOLE_GITHUB_TOKEN }}
         path: ./deployments/terraform
         variables: |
           jdoodle_client_id = "${{ secrets.JDOODLE_CLIENT_ID }}"
