@@ -24,6 +24,10 @@ build:
 	make protoc
 	docker-compose build
 
+.PHONY: deploy
+deploy:
+	./scripts/push-image.sh
+
 .PHONY: clean
 clean:
 	rm -f internal/pkg/pb/auth/auth.pb.go
