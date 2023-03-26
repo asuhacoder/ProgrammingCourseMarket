@@ -1,11 +1,35 @@
 # ProgrammingCourseMarket
 
-## 使用技術
-- Gin (Golang) 
-- React (TypeScript)
-- AWS
-- Docker & Docker Compose
+![codeql-analysis.yml](https://github.com/Asuha-a/ProgrammingCourseMarket/actions/workflows/codeql-analysis.yml/badge.svg)
+![deploy-ecr.yml](https://github.com/Asuha-a/ProgrammingCourseMarket/actions/workflows/deploy-ecr.yml/badge.svg)
+![deploy-react.yml](https://github.com/Asuha-a/ProgrammingCourseMarket/actions/workflows/deploy-react.yml/badge.svg)
+![eslint.yml](https://github.com/Asuha-a/ProgrammingCourseMarket/actions/workflows/eslint.yml/badge.svg)
+![go-build.yml](https://github.com/Asuha-a/ProgrammingCourseMarket/actions/workflows/go-build.yml/badge.svg)
+![go-test.yml](https://github.com/Asuha-a/ProgrammingCourseMarket/actions/workflows/go-test.yml/badge.svg)
 
-[dbdiagram.io](https://dbdiagram.io/d/61a0f4ae8c901501c0d4479e)  
-[skhole.club](https://skhole.club)  
+## URL
+[https://skhole.club](https://skhole.club)  
+
+## Network Diagram
 ![network diagram](./docs/skhole.drawio.svg)
+
+## 使用技術
+* Backend
+  * Go
+  * Gin
+  * GORM
+  * GRPC
+* Frontend
+  * TypeScript
+  * React (functional component) + Recoil
+  * Webpack
+  * Linaria (CSS in JS)
+* AWS
+  * Route53, CloudFront, S3, AWS Secrets Manager, Amazon ECR, Amazon ECS, AWS Fargate, RDS
+  * Terraform
+* Docker & Docker Compose
+* GitHub Actions
+
+## DB Diagram
+
+![dbdiagram](./docs/dbdiagram.png)  
