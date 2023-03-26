@@ -44,5 +44,5 @@ jobs:
       with:
         path: ./deployments/terraform
         variables: |
-          jdoodle_client_id = ${{ secrets.JDOODLE_CLIENT_ID }}
-          jdoodle_client_secret = ${{ secrets.JDOODLE_CLIENT_SECRET }}
+          jdoodle_client_id = "${{ secrets.JDOODLE_CLIENT_ID }}"
+          jdoodle_client_secret = "${{ secrets.JDOODLE_CLIENT_SECRET }}"
