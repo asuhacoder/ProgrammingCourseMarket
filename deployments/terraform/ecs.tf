@@ -29,7 +29,7 @@ resource "aws_ecs_task_definition" "aws-ecs-task" {
       port_mappings = [50052]
     },
     {
-      name          = "gatewaay-task-definition"
+      name          = "gateway-task-definition"
       image         = aws_ecr_repository.gateway.repository_url
       port_mappings = [8080]
     },
