@@ -25,14 +25,14 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-2
+        aws-region: ${{ secrets.AWS_REGION }}
         
     - name: setup terraform
       uses: hashicorp/setup-terraform@v1.3.2
       
     - name: terraform init
       id: init
-      working-directory: ${{ inputs.TF_WORK_DIR }}
+      working-directory: ./deployments/terraform
       run: terraform init
       
     - name: Login to Amazon ECR
@@ -41,3 +41,8 @@ jobs:
 
     - name: terraform-apply
       uses: dflook/terraform-apply@v1.29.1
+      with:
+        path: ./deployments/terraform
+        variables: |
+          jdoodle_client_id = ${{ secrets.JDOODLE_CLIENT_ID }}
+          jdoodle_client_secret = ${{ secrets.JDOODLE_CLIENT_SECRET }}
