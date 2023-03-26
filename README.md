@@ -1,7 +1,6 @@
 # ProgrammingCourseMarket
 
 ![codeql-analysis.yml](https://github.com/Asuha-a/ProgrammingCourseMarket/actions/workflows/codeql-analysis.yml/badge.svg)
-![deploy-ecr.yml](https://github.com/Asuha-a/ProgrammingCourseMarket/actions/workflows/deploy-ecr.yml/badge.svg)
 ![deploy-react.yml](https://github.com/Asuha-a/ProgrammingCourseMarket/actions/workflows/deploy-react.yml/badge.svg)
 ![eslint.yml](https://github.com/Asuha-a/ProgrammingCourseMarket/actions/workflows/eslint.yml/badge.svg)
 ![go-build.yml](https://github.com/Asuha-a/ProgrammingCourseMarket/actions/workflows/go-build.yml/badge.svg)
