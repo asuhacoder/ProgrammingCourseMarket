@@ -28,7 +28,8 @@
   * Route53, CloudFront, S3, AWS Secrets Manager, Amazon ECR, Amazon ECS, AWS Fargate, RDS
   * Terraform
 * Docker & Docker Compose
-* GitHub Actions
+* CI & CD (GitHub Actions)
+* Bash Script
 
 ## DB Diagram
 
