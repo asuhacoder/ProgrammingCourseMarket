@@ -14,6 +14,7 @@ import MyContentsPage from './pages/MyContentsPage';
 import LessonListEditor from './pages/LessonListEditor';
 import LessonEditor from './pages/LessonEditor';
 import LessonDetail from './pages/LessonDetail';
+import Adsense from './organisms/Adsense';
 
 function App() {
   console.log('token', window.localStorage.getItem('programming-course-market'));
@@ -47,6 +48,7 @@ function App() {
 
   return (
     <div className="App">
+      <Adsense />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
