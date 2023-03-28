@@ -94,7 +94,7 @@ function CourseEditor() {
           .then(
             (response) => {
               console.log(response);
-              navigate('/');
+              navigate('/mycontents');
             },
             (error) => {
               console.log(error);
@@ -115,7 +115,7 @@ function CourseEditor() {
           .then(
             (response) => {
               console.log(response);
-              navigate('/');
+              navigate('/mycontents');
             },
             (error) => {
               console.log(error);
