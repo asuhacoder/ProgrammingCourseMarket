@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import axios from 'axios';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,7 +18,7 @@ import LinkStyle from './Header.css';
 
 function Header() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const routerLocation = useLocation();
   const [user, setUser]: [User, SetterOrUpdater<User>] = useRecoilState(userState);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -37,6 +38,46 @@ function Header() {
     navigate('/');
   };
 
+  const createRandomString = (length: number) => {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
+
+  const fastLogin = () => {
+    const url = new URL(location.href);
+    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+      instance
+        .post(`/api/v1/users`, {
+          "name": "guest",
+          "email": createRandomString(10) + '@email.com',
+          "password": createRandomString(15),
+          "introduction": "",
+        })
+        .then(
+          (response) => {
+            console.log(response);
+            window.localStorage.setItem('programming-course-market', response.data.token);
+            setUser({
+              token: response.data.token,
+              uuid: response.data.uuid,
+              name: response.data.name,
+              email: response.data.email,
+              introduction: response.data.introduction,
+            });
+          },
+          (error) => {
+            console.log(error);
+          },
+        );
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -46,10 +87,11 @@ function Header() {
           </Typography>
           {JSON.stringify(user) === JSON.stringify(defaultUser) && (
             <div>
-              <CustomLink to="/signup" state={{ from: location }}>
+              <Button color="inherit" onClick={fastLogin}>Fast Login</Button>
+              <CustomLink to="/signup" state={{ from: routerLocation }}>
                 <Button color="inherit">Signup</Button>
               </CustomLink>
-              <CustomLink to="/login" state={{ from: location }}>
+              <CustomLink to="/login" state={{ from: routerLocation }}>
                 <Button color="inherit">Login</Button>
               </CustomLink>
             </div>
