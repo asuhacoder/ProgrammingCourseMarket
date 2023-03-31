@@ -22,6 +22,8 @@ services:
     depends_on: 
       user_db:
         condition: service_healthy
+    env_file:
+      - variables.env
   auth:
     build:
       context: ./
@@ -33,6 +35,8 @@ services:
     depends_on: 
       user_db:
         condition: service_healthy
+    env_file:
+      - variables.env
   user_db:
     image: postgres:15.2-alpine3.17
     container_name: "user_db"
@@ -59,6 +63,8 @@ services:
     depends_on: 
       course_db:
         condition: service_healthy
+    env_file:
+      - variables.env
   course_db:
     image: postgres:15.2-alpine3.17
     container_name: "course_db"
@@ -85,6 +91,8 @@ services:
     depends_on: 
       lesson_db:
         condition: service_healthy
+    env_file:
+      - variables.env
   lesson_db:
     image: postgres:15.2-alpine3.17
     container_name: "lesson_db"
@@ -111,6 +119,8 @@ services:
     depends_on: 
       test_case_db:
         condition: service_healthy
+    env_file:
+      - variables.env
   test_case_db:
     image: postgres:15.2-alpine3.17
     container_name: "test_case_db"

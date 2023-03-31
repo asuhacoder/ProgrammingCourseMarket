@@ -7,6 +7,32 @@ resource "aws_iam_role" "ecs_task_execution_role" {
   assume_role_policy = file("files/assume_role_policy/ecs-task.json")
 }
 
+resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
+  name   = "iam_role_policy"
+  role   = aws_iam_role.ecs_task_execution_role.id
+  policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource": [
+          "${aws_secretsmanager_secret.jdoodle.arn}"
+        ]
+      }
+    ]
+  }
+  EOF
+}
+
+resource "aws_iam_instance_profile" "ecs_task_execution_profile" {
+  name = "profile"
+  role = aws_iam_role.ecs_task_execution_role.name
+}
+
 resource "aws_ecs_task_definition" "aws-ecs-task" {
   family                   = "${var.product_name}_task_definition"
   network_mode             = "awsvpc"

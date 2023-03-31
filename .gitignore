@@ -172,8 +172,9 @@ sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/go,node,react,nextjs
 
-# secret files
-*.env
+# files
+secrets.env
+!web/.env
 
 # https://github.com/github/gitignore/blob/main/Terraform.gitignore
 
