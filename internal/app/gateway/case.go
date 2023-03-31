@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"log"
+	"os"
 	"time"
 
 	pbCase "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/case"
@@ -12,9 +13,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-const (
-	caseAddress = "case:50056"
-)
+var caseHost = os.Getenv("USER_HOST")
+var caseAddress = caseHost + ":50056"
 
 type CreateCaseRequest struct {
 	Token    string `form:"token" json:"token"`

@@ -2,6 +2,7 @@ package course
 
 import (
 	"log"
+	"os"
 	"time"
 
 	uuid "github.com/gofrs/uuid"
@@ -15,8 +16,9 @@ var (
 )
 
 func Init() {
+	host := os.Getenv("COURSE_DB_HOST")
 	DB, err = gorm.Open(postgres.New(postgres.Config{
-		DSN: "host=course_db user=gorm password=gormpassword dbname=gorm port=5432 sslmode=disable TimeZone=Asia/Tokyo",
+		DSN: "host=" + host + " user=gorm password=gormpassword dbname=gorm port=5432 sslmode=disable TimeZone=Asia/Tokyo",
 	}), &gorm.Config{})
 	if err != nil {
 		panic(err)

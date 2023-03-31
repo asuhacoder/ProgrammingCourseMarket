@@ -3,6 +3,7 @@ package gateway
 import (
 	"context"
 	"log"
+	"os"
 	"time"
 
 	pbAuth "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/auth"
@@ -11,9 +12,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-const (
-	authAddress = "auth:50052"
-)
+var authHost = os.Getenv("USER_HOST")
+var authAddress = authHost + ":50052"
 
 type AuthnRequest struct {
 	Email    string `form:"email" json:"email"`
