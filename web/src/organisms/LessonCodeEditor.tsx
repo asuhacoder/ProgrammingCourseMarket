@@ -24,8 +24,7 @@ function LessonCodeEditor(props: TabPanelProps) {
   const { children, value, index, defaultOrAnswer, ...other } = props;
   const [code, setCode] = useState('');
   const [open, setOpen] = React.useState(false);
-  const url = new URL(location.href);
-  const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+  const instance = axios.create({baseURL: process.env.REACT_APP_API_URL})
   const options = {
     readOnly: false,
     minimap: { enabled: false },

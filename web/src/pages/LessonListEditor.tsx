@@ -12,8 +12,7 @@ function LessonListEditor() {
   const [, setLessons]: [Lesson[], SetterOrUpdater<Lesson[]>] = useRecoilState<Lesson[]>(lessonsState);
   useEffect(() => {
     console.log('useEffect in LessonListEditor is running');
-    const url = new URL(location.href);
-    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    const instance = axios.create({baseURL: process.env.REACT_APP_API_URL})
     instance
       .get(`/api/v1/lessons`, {
         params: {

@@ -20,8 +20,7 @@ function App() {
   const [user, setUser] = useRecoilState(userState);
   if (JSON.stringify(user) === JSON.stringify(defaultUser)) {
     const token = window.localStorage.getItem('programming-course-market');
-    const url = new URL(location.href);
-    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    const instance = axios.create({baseURL: process.env.REACT_APP_API_URL})
     instance
       .post(`/api/v1/authz`, {
         token,

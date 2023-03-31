@@ -29,8 +29,7 @@ function LessonListEditor() {
   const [titleHasError, setTitleHasError] = useState(false);
   const [titleHelperText, setTitleHelperText] = useState('');
   const [open, setOpen] = useState(false);
-  const url = new URL(location.href);
-  const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+  const instance = axios.create({baseURL: process.env.REACT_APP_API_URL})
 
   const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;

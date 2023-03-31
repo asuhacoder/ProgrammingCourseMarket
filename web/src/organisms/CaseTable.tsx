@@ -10,8 +10,7 @@ function CaseTable() {
   const [cases, setCases]: [Case[], SetterOrUpdater<Case[]>] = useRecoilState<Case[]>(casesState);
   const user: User = useRecoilState(userState)[0];
   const deleteCase = (uuid: string): void => {
-    const url = new URL(location.href);
-    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    const instance = axios.create({baseURL: process.env.REACT_APP_API_URL})
     instance
       .delete(`/api/v1/cases/${uuid}`, {
         data: {
