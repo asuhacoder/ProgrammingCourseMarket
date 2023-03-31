@@ -47,3 +47,28 @@ output "ecr-runner-url" {
   description = "runner ECR repository url"
   value       = aws_ecr_repository.runner.repository_url
 }
+
+output "aws_iam_role_policy" {
+  description = "aws_iam_role_policy"
+  value       = aws_iam_role_policy.ecs_task_execution_role_policy.policy
+}
+
+output "user_db_address" {
+  description = "user db address"
+  value       = aws_db_instance.user.address
+}
+
+output "course_db_address" {
+  description = "course db address"
+  value       = aws_db_instance.course.address
+}
+
+output "lesson_db_address" {
+  description = "lesson db address"
+  value       = aws_db_instance.lesson.address
+}
+
+output "test_case_db_address" {
+  description = "test_case db address"
+  value       = aws_db_instance.test_case.address
+}

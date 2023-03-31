@@ -2,6 +2,7 @@ package lesson
 
 import (
 	"log"
+	"os"
 
 	uuid "github.com/gofrs/uuid"
 	"gorm.io/driver/postgres"
@@ -14,8 +15,9 @@ var (
 )
 
 func LessonInit() {
+	host := os.Getenv("LESSON_DB_HOST")
 	LessonDB, err = gorm.Open(postgres.New(postgres.Config{
-		DSN: "host=lesson_db user=gorm password=gormpassword dbname=gorm port=5432 sslmode=disable TimeZone=Asia/Tokyo",
+		DSN: "host=" + host + " user=gorm password=gormpassword dbname=gorm port=5432 sslmode=disable TimeZone=Asia/Tokyo",
 	}), &gorm.Config{})
 	if err != nil {
 		panic(err)

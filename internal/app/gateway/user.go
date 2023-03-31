@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"log"
+	"os"
 	"time"
 
 	pbUser "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/user"
@@ -12,9 +13,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-const (
-	userAddress = "user:50051"
-)
+var userHost = os.Getenv("USER_HOST")
+var userAddress = userHost + ":50051"
 
 type CreateUserRequest struct {
 	Name         string `form:"name" json:"name"`

@@ -3,6 +3,7 @@ package gateway
 import (
 	"context"
 	"log"
+	"os"
 	"time"
 
 	pbRunner "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/runner"
@@ -11,9 +12,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-const (
-	runnerAddress = "runner:50055"
-)
+var runnerHost = os.Getenv("RUNNER_HOST")
+var runnerAddress = runnerHost + ":50055"
 
 type RunnerRequest struct {
 	Code     string `form:"code" json:"code"`

@@ -20,8 +20,7 @@ function CourseEditor() {
   const [introductionHasError, setIntroductionHasError] = useState(false);
   const [introductionHelperText, setIntroductionHelperText] = useState('');
   const [checked, setChecked] = useState(false);
-  const url = new URL(location.href);
-  const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+  const instance = axios.create({baseURL: process.env.REACT_APP_API_URL})
   useEffect(() => {
     if (id) {
       console.log('useEffect in home is running');

@@ -6,8 +6,7 @@ function Home() {
   const [data, setData] = useState({});
   useEffect(() => {
     console.log('useEffect in home is running');
-    const url = new URL(location.href);
-    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    const instance = axios.create({baseURL: process.env.REACT_APP_API_URL})
     instance
       .get(`/api/v1/courses`, {
         params: {

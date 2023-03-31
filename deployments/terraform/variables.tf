@@ -48,6 +48,11 @@ variable "public_subnet" {
   default = "10.10.100.0/24"
 }
 
+variable "public_dummy_subnet" {
+  type    = string
+  default = "10.10.90.0/24"
+}
+
 variable "availability_zone" {
   type    = string
   default = "us-east-1a"
@@ -60,7 +65,7 @@ variable "availability_zone_dummy" {
 
 variable "ecs_cpu" {
   type    = number
-  default = 10
+  default = 30
 }
 
 variable "ecs_memory" {

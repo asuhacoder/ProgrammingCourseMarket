@@ -42,8 +42,7 @@ function LessonCaseEditor(props: TabPanelProps) {
   };
 
   const submitCase = (language: string, version: string): void => {
-    const url = new URL(location.href);
-    const instance = axios.create({baseURL: `${url.protocol}//${url.hostname}:8080`})
+    const instance = axios.create({baseURL: process.env.REACT_APP_API_URL})
     instance
       .post(`/api/v1/runner`, {
         code: lesson.answer_code,

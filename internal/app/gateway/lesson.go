@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"log"
+	"os"
 	"time"
 
 	pbLesson "github.com/Asuha-a/ProgrammingCourseMarket/internal/pkg/pb/lesson"
@@ -12,9 +13,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-const (
-	lessonAddress = "lesson:50054"
-)
+var lessonHost = os.Getenv("LESSON_HOST")
+var lessonAddress = lessonHost + ":50054"
 
 type CreateLessonRequest struct {
 	Token          string `form:"token" json:"token"`

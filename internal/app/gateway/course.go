@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"log"
+	"os"
 	"strconv"
 	"time"
 
@@ -13,9 +14,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-const (
-	courseAddress = "course:50053"
-)
+var courseHost = os.Getenv("COURSE_HOST")
+var courseAddress = courseHost + ":50053"
 
 type CourseCreateUpdateRequest struct {
 	UserId       string `form:"user_id" json:"user_id"`
