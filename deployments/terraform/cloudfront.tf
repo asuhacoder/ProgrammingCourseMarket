@@ -121,12 +121,6 @@ resource "aws_cloudfront_distribution" "alb" {
     }
   }
 
-  custom_error_response {
-    error_code         = 403
-    response_code      = 200
-    response_page_path = "/"
-  }
-
   enabled = true
 
   default_cache_behavior {
