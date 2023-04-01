@@ -2,10 +2,13 @@ const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const dotenv = require('dotenv');
 
-const dev = process.env.APP_ENV !== 'production';
+const dev = process.env.APP_ENV !== 'development';
+const env = dotenv.config().parsed;
 
 module.exports = {
+  
   mode: dev ? 'development' : 'production',
   devtool: 'source-map',
   entry: {
@@ -21,7 +24,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': { APP_ENV: JSON.stringify(process.env.APP_ENV) },
+      'process.env': JSON.stringify(env)
     }),
     new MiniCssExtractPlugin({ filename: 'styles.css' }),
     new HtmlWebpackPlugin({
