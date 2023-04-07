@@ -26,6 +26,8 @@ Progateのような学習コースを作って公開できるようにした。�
 
 ### コース作成画面
 
+![ProgrammingCourseMarket - Google Chrome 2023-04-07 16-04-13](https://user-images.githubusercontent.com/30449505/230563637-ae9a252b-f4b3-4a55-a44b-9a77b50f734b.gif)
+
 ### コース受講画面
 
 ### こだわったところ
