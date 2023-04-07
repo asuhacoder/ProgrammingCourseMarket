@@ -37,7 +37,7 @@ type DeleteUserRequest struct {
 }
 
 func listUsers(c *gin.Context) {
-	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -80,7 +80,7 @@ func listUsers(c *gin.Context) {
 }
 
 func getUser(c *gin.Context) {
-	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -112,7 +112,7 @@ func getUser(c *gin.Context) {
 
 func createUser(c *gin.Context) {
 	log.Println("createUser func started")
-	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -153,7 +153,7 @@ func createUser(c *gin.Context) {
 
 func updateUser(c *gin.Context) {
 	log.Println("updateUser func started")
-	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -189,7 +189,7 @@ func updateUser(c *gin.Context) {
 
 func deleteUser(c *gin.Context) {
 	log.Println("deleteUser func started")
-	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(userAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
