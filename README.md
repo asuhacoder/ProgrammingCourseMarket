@@ -51,7 +51,7 @@ Progateのような学習コースを作って公開できるようにした。�
   * Webpack
   * Linaria (CSS in JS)
 * AWS
-  * Route53, CloudFront, S3, AWS Secrets Manager, Amazon ECR, Amazon ECS, AWS Fargate, RDS
+  * Route53, CloudFront, S3, AWS Secrets Manager, Amazon ECR, Amazon ECS, AWS Fargate, RDS, Amazon CloudWatch, AWS Certificate Manager, VPC Endpoints, ALB
   * Terraform
 * Docker & Docker Compose
 * CI & CD (GitHub Actions)
