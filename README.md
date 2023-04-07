@@ -24,11 +24,13 @@
 
 Progateのような学習コースを作って公開できるようにした。これにより講座の通りに進めるだけで知識が見についていく。Progateによって舗装された道の延長を提供する。
 
+### コース受講画面
+
+![ProgrammingCourseMarket - Google Chrome 2023-04-07 16-36-50](https://user-images.githubusercontent.com/30449505/230566565-366cc75b-35f2-4325-b25c-fb77b5a6e766.gif)
+
 ### コース作成画面
 
 ![ProgrammingCourseMarket - Google Chrome 2023-04-07 16-04-13](https://user-images.githubusercontent.com/30449505/230563637-ae9a252b-f4b3-4a55-a44b-9a77b50f734b.gif)
-
-### コース受講画面
 
 ### こだわったところ
 
