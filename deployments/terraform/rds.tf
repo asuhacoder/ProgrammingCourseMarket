@@ -38,7 +38,7 @@ resource "aws_security_group" "private-db-sg-user" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = [var.public_subnet]
+    cidr_blocks = [var.private_subnet_ecs]
   }
 
   egress {
@@ -73,7 +73,7 @@ resource "aws_security_group" "private-db-sg-course" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = [var.public_subnet]
+    cidr_blocks = [var.private_subnet_ecs]
   }
 
   egress {
@@ -108,7 +108,7 @@ resource "aws_security_group" "private-db-sg-lesson" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = [var.public_subnet]
+    cidr_blocks = [var.private_subnet_ecs]
   }
 
   egress {
@@ -143,7 +143,7 @@ resource "aws_security_group" "private-db-sg-test_case" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = [var.public_subnet]
+    cidr_blocks = [var.private_subnet_ecs]
   }
 
   egress {

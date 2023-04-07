@@ -73,12 +73,6 @@ resource "aws_lb_target_group" "target_group" {
   }
 }
 
-# resource "aws_lb_target_group_attachment" "gateway" {
-#   target_group_arn = aws_lb_target_group.target_group.arn
-#   target_id        = aws_ecs_task_definition.aws-ecs-task.container_definitions[2].arn
-#   port             = 8080
-# }
-
 resource "aws_lb_listener" "listener" {
   load_balancer_arn = aws_lb.application_load_balancer.id
   port              = "443"

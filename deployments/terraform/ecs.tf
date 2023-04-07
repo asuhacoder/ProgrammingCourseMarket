@@ -40,25 +40,6 @@ resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
   }
   EOF
 }
-# {
-#   "Sid": "AllowDescribeRepoImage",
-#   "Effect": "Allow",
-#   "Action": [
-#       "ecr:DescribeImages",
-#       "ecr:DescribeRepositories"
-#   ],
-#   "Resource": [
-#     "${aws_ecr_repository.user.arn}",
-#     "${aws_ecr_repository.auth.arn}",
-#     "${aws_ecr_repository.gateway.arn}",
-#     "${aws_ecr_repository.course.arn}",
-#     "${aws_ecr_repository.lesson.arn}",
-#     "${aws_ecr_repository.test_case.arn}",
-#     "${aws_ecr_repository.runner.arn}"
-#   ]
-# }
-
-
 
 resource "aws_iam_instance_profile" "ecs_task_execution_profile" {
   name = "profile"
@@ -71,7 +52,7 @@ resource "aws_ecs_task_definition" "aws-ecs-task-gateway" {
   family                   = "${var.product_name}_task_definition_gateway"
   network_mode             = "awsvpc"
   cpu                      = var.ecs_task_definition_cpu
-  memory = var.ecs_task_definition_memory
+  memory                   = var.ecs_task_definition_memory
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([
@@ -127,7 +108,7 @@ resource "aws_ecs_task_definition" "aws-ecs-task-user" {
   family                   = "${var.product_name}_task_definition_user"
   network_mode             = "awsvpc"
   cpu                      = var.ecs_task_definition_cpu
-  memory = var.ecs_task_definition_memory
+  memory                   = var.ecs_task_definition_memory
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([
@@ -161,7 +142,7 @@ resource "aws_ecs_task_definition" "aws-ecs-task-auth" {
   family                   = "${var.product_name}_task_definition_auth"
   network_mode             = "awsvpc"
   cpu                      = var.ecs_task_definition_cpu
-  memory = var.ecs_task_definition_memory
+  memory                   = var.ecs_task_definition_memory
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([
@@ -195,7 +176,7 @@ resource "aws_ecs_task_definition" "aws-ecs-task-course" {
   family                   = "${var.product_name}_task_definition_course"
   network_mode             = "awsvpc"
   cpu                      = var.ecs_task_definition_cpu
-  memory = var.ecs_task_definition_memory
+  memory                   = var.ecs_task_definition_memory
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([
@@ -235,7 +216,7 @@ resource "aws_ecs_task_definition" "aws-ecs-task-lesson" {
   family                   = "${var.product_name}_task_definition_lesson"
   network_mode             = "awsvpc"
   cpu                      = var.ecs_task_definition_cpu
-  memory = var.ecs_task_definition_memory
+  memory                   = var.ecs_task_definition_memory
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([
@@ -275,7 +256,7 @@ resource "aws_ecs_task_definition" "aws-ecs-task-test-case" {
   family                   = "${var.product_name}_task_definition_test_case"
   network_mode             = "awsvpc"
   cpu                      = var.ecs_task_definition_cpu
-  memory = var.ecs_task_definition_memory
+  memory                   = var.ecs_task_definition_memory
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([
@@ -315,7 +296,7 @@ resource "aws_ecs_task_definition" "aws-ecs-task-runner" {
   family                   = "${var.product_name}_task_definition_runner"
   network_mode             = "awsvpc"
   cpu                      = var.ecs_task_definition_cpu
-  memory = var.ecs_task_definition_memory
+  memory                   = var.ecs_task_definition_memory
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([
@@ -365,7 +346,7 @@ resource "aws_ecs_service" "aws-ecs-service-gateway" {
   force_new_deployment = true
 
   network_configuration {
-    subnets          = [aws_subnet.public.id]
+    subnets          = [aws_subnet.private-ecs.id]
     assign_public_ip = true
     security_groups = [
       aws_security_group.service_security_group.id,
@@ -397,7 +378,7 @@ resource "aws_ecs_service" "aws-ecs-service-user" {
   force_new_deployment = true
 
   network_configuration {
-    subnets          = [aws_subnet.public.id]
+    subnets          = [aws_subnet.private-ecs.id]
     assign_public_ip = true
     security_groups = [
       aws_security_group.service_security_group.id,
@@ -420,7 +401,7 @@ resource "aws_ecs_service" "aws-ecs-service-auth" {
   force_new_deployment = true
 
   network_configuration {
-    subnets          = [aws_subnet.public.id]
+    subnets          = [aws_subnet.private-ecs.id]
     assign_public_ip = true
     security_groups = [
       aws_security_group.service_security_group.id,
@@ -443,7 +424,7 @@ resource "aws_ecs_service" "aws-ecs-service-course" {
   force_new_deployment = true
 
   network_configuration {
-    subnets          = [aws_subnet.public.id]
+    subnets          = [aws_subnet.private-ecs.id]
     assign_public_ip = true
     security_groups = [
       aws_security_group.service_security_group.id,
@@ -466,7 +447,7 @@ resource "aws_ecs_service" "aws-ecs-service-lesson" {
   force_new_deployment = true
 
   network_configuration {
-    subnets          = [aws_subnet.public.id]
+    subnets          = [aws_subnet.private-ecs.id]
     assign_public_ip = true
     security_groups = [
       aws_security_group.service_security_group.id,
@@ -489,7 +470,7 @@ resource "aws_ecs_service" "aws-ecs-service-test-case" {
   force_new_deployment = true
 
   network_configuration {
-    subnets          = [aws_subnet.public.id]
+    subnets          = [aws_subnet.private-ecs.id]
     assign_public_ip = true
     security_groups = [
       aws_security_group.service_security_group.id,
