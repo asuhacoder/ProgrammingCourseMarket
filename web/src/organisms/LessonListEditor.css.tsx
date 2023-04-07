@@ -5,7 +5,6 @@ export const LessonListEditorStackStyle = css`
 `;
 
 export const NewLessonTitleEditorStyle = css`
-  display: flex;
   width: 100%;
 `;
 
