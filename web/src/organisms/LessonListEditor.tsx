@@ -15,7 +15,6 @@ import AlertModal from '../molecules/AlertModal';
 import { NumberingLessons, UpdateLessons } from '../utils/LessonsUtils';
 import {
   LessonListEditorStackStyle,
-  NewLessonTitleEditorStyle,
   NewLessonTitleTextFieldStyle,
   SortableListStyle,
   ButtonDivStyle,
@@ -170,21 +169,19 @@ function LessonListEditor() {
           <SortableItem key={`item-${value.uuid}`} index={index} lesson={value} />
         ))}
       </SortableList>
-    <div className={NewLessonTitleEditorStyle}>
-        <CustomTextField
-          className={NewLessonTitleTextFieldStyle}
-          required
-          id="outlined-basic"
-          label="Lesson Title"
-          value={title}
-          defaultValue={title}
-          helperText={titleHelperText}
-          error={titleHasError}
-          onChange={handleTitleChange}
-          onBlur={validateTitle}
-        />
-        <ButtonDiv body="Add" variant="contained" size="small" onClick={submitNewLesson}></ButtonDiv>
-      </div>
+      <CustomTextField
+        className={NewLessonTitleTextFieldStyle}
+        required
+        id="outlined-basic"
+        label="Lesson Title"
+        value={title}
+        defaultValue={title}
+        helperText={titleHelperText}
+        error={titleHasError}
+        onChange={handleTitleChange}
+        onBlur={validateTitle}
+      />
+      <ButtonDiv body="Add" variant="contained" size="small" onClick={submitNewLesson}></ButtonDiv>
     </Stack>
   );
 }

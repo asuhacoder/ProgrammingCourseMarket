@@ -4,10 +4,6 @@ export const LessonListEditorStackStyle = css`
   width: 100%;
 `;
 
-export const NewLessonTitleEditorStyle = css`
-  width: 100%;
-`;
-
 export const NewLessonTitleTextFieldStyle = css`
   margin-right: 30px;
   width: 100%;
