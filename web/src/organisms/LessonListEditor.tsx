@@ -170,21 +170,23 @@ function LessonListEditor() {
         ))}
       </SortableList>
       <div className={NewLessonTitleEditorStyle}>
-        <CustomTextField
-          className={NewLessonTitleTextFieldStyle}
-          required
-          id="outlined-basic"
-          label="Lesson Title"
-          value={title}
-          defaultValue={title}
-          helperText={titleHelperText}
-          error={titleHasError}
-          onChange={handleTitleChange}
-          onBlur={validateTitle}
-        />
-        <Button variant="contained" size="small" onClick={submitNewLesson}>
-          Add
-        </Button>
+        <Stack justifyContent="flex-start" alignItems="flex-start" spacing={2}>
+          <CustomTextField
+            className={NewLessonTitleTextFieldStyle}
+            required
+            id="outlined-basic"
+            label="Lesson Title"
+            value={title}
+            defaultValue={title}
+            helperText={titleHelperText}
+            error={titleHasError}
+            onChange={handleTitleChange}
+            onBlur={validateTitle}
+          />
+          <Button variant="contained" size="small" onClick={submitNewLesson}>
+            Add
+          </Button>
+        </Stack>
       </div>
     </Stack>
   );
