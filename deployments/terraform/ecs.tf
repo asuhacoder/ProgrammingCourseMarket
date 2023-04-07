@@ -40,25 +40,6 @@ resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
   }
   EOF
 }
-# {
-#   "Sid": "AllowDescribeRepoImage",
-#   "Effect": "Allow",
-#   "Action": [
-#       "ecr:DescribeImages",
-#       "ecr:DescribeRepositories"
-#   ],
-#   "Resource": [
-#     "${aws_ecr_repository.user.arn}",
-#     "${aws_ecr_repository.auth.arn}",
-#     "${aws_ecr_repository.gateway.arn}",
-#     "${aws_ecr_repository.course.arn}",
-#     "${aws_ecr_repository.lesson.arn}",
-#     "${aws_ecr_repository.test_case.arn}",
-#     "${aws_ecr_repository.runner.arn}"
-#   ]
-# }
-
-
 
 resource "aws_iam_instance_profile" "ecs_task_execution_profile" {
   name = "profile"
