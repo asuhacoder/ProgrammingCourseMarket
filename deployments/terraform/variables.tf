@@ -43,6 +43,11 @@ variable "private_subnet_dummy" {
   default = "10.10.10.0/24"
 }
 
+variable "private_subnet_ecs" {
+  type    = string
+  default = "10.10.20.0/24"
+}
+
 variable "public_subnet" {
   type    = string
   default = "10.10.100.0/24"
