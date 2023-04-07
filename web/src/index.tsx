@@ -7,6 +7,12 @@ import App from './App';
 import Theme from './config/Theme';
 import reportWebVitals from './reportWebVitals';
 
+if (process.env.REACT_APP_ENV === 'production') {
+  console.log = () => {}
+  console.error = () => {}
+  console.debug = () => {}
+}
+
 ReactDOM.render(
   <BrowserRouter>
     <RecoilRoot>
