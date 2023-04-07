@@ -31,7 +31,7 @@ type CourseDeleteRequest struct {
 }
 
 func listCourses(c *gin.Context) {
-	conn, err := grpc.Dial(courseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(courseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -89,7 +89,7 @@ func listCourses(c *gin.Context) {
 }
 
 func getCourse(c *gin.Context) {
-	conn, err := grpc.Dial(courseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(courseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -124,7 +124,7 @@ func getCourse(c *gin.Context) {
 
 func createCourse(c *gin.Context) {
 	log.Println("createCourse func started")
-	conn, err := grpc.Dial(courseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(courseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -169,7 +169,7 @@ func createCourse(c *gin.Context) {
 
 func updateCourse(c *gin.Context) {
 	log.Println("updateCourse func started")
-	conn, err := grpc.Dial(courseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(courseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -216,7 +216,7 @@ func updateCourse(c *gin.Context) {
 
 func deleteCourse(c *gin.Context) {
 	log.Println("deleteCourse func started")
-	conn, err := grpc.Dial(courseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(courseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)

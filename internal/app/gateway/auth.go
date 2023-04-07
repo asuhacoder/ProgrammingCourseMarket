@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var authHost = os.Getenv("USER_HOST")
+var authHost = os.Getenv("AUTH_HOST")
 var authAddress = authHost + ":50052"
 
 type AuthnRequest struct {
@@ -25,7 +25,7 @@ type AuthzRequest struct {
 }
 
 func authn(c *gin.Context) {
-	conn, err := grpc.Dial(authAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(authAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -61,7 +61,7 @@ func authn(c *gin.Context) {
 }
 
 func authz(c *gin.Context) {
-	conn, err := grpc.Dial(authAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(authAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}

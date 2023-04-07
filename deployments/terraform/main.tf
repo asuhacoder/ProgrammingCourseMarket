@@ -19,5 +19,6 @@ locals {
 }
 
 provider "aws" {
-  region = var.region
+  region = "us-east-1"
+  alias  = "us-east-1"
 }

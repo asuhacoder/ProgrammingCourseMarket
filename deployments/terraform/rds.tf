@@ -22,7 +22,7 @@ resource "aws_db_instance" "user" {
   db_name                = "gorm"
   engine                 = var.db_engine
   engine_version         = "11.18"
-  instance_class         = "db.t3.micro"
+  instance_class         = var.db_instance_class
   username               = "gorm"
   password               = "gormpassword"
   parameter_group_name   = aws_db_parameter_group.pg.name
@@ -57,7 +57,7 @@ resource "aws_db_instance" "course" {
   db_name                = "gorm"
   engine                 = var.db_engine
   engine_version         = "11.18"
-  instance_class         = "db.t3.micro"
+  instance_class         = var.db_instance_class
   username               = "gorm"
   password               = "gormpassword"
   parameter_group_name   = aws_db_parameter_group.pg.name
@@ -92,7 +92,7 @@ resource "aws_db_instance" "lesson" {
   db_name                = "gorm"
   engine                 = var.db_engine
   engine_version         = "11.18"
-  instance_class         = "db.t3.micro"
+  instance_class         = var.db_instance_class
   username               = "gorm"
   password               = "gormpassword"
   parameter_group_name   = aws_db_parameter_group.pg.name
@@ -127,7 +127,7 @@ resource "aws_db_instance" "test_case" {
   db_name                = "gorm"
   engine                 = var.db_engine
   engine_version         = "11.18"
-  instance_class         = "db.t3.micro"
+  instance_class         = var.db_instance_class
   username               = "gorm"
   password               = "gormpassword"
   parameter_group_name   = aws_db_parameter_group.pg.name

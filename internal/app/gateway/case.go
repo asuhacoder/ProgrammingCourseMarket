@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var caseHost = os.Getenv("USER_HOST")
+var caseHost = os.Getenv("TEST_CASE_HOST")
 var caseAddress = caseHost + ":50056"
 
 type CreateCaseRequest struct {
@@ -36,7 +36,7 @@ type DeleteCaseRequest struct {
 }
 
 func listCases(c *gin.Context) {
-	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -76,7 +76,7 @@ func listCases(c *gin.Context) {
 }
 
 func getCase(c *gin.Context) {
-	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -108,7 +108,7 @@ func getCase(c *gin.Context) {
 
 func createCase(c *gin.Context) {
 	log.Println("createCase func started")
-	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -148,7 +148,7 @@ func createCase(c *gin.Context) {
 
 func updateCase(c *gin.Context) {
 	log.Println("updateCase func started")
-	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
@@ -192,7 +192,7 @@ func updateCase(c *gin.Context) {
 
 func deleteCase(c *gin.Context) {
 	log.Println("deleteCase func started")
-	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(caseAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)

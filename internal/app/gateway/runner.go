@@ -24,7 +24,7 @@ type RunnerRequest struct {
 
 func runCode(c *gin.Context) {
 	log.Println("runCode func started")
-	conn, err := grpc.Dial(runnerAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(runnerAddress, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.WaitForReady(true)))
 	log.Println("connected grpc server")
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
