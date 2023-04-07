@@ -63,12 +63,12 @@ variable "availability_zone_dummy" {
   default = "us-east-1b"
 }
 
-variable "ecs_cpu" {
+variable "ecs_task_definition_cpu" {
   type    = number
-  default = 30
+  default = 256
 }
 
-variable "ecs_memory" {
+variable "ecs_task_definition_memory" {
   type    = number
   default = 512
 }
@@ -84,4 +84,9 @@ variable "jdoodle_client_secret" {
 variable "db_engine" {
   type    = string
   default = "postgres"
+}
+
+variable "db_instance_class" {
+  type    = string
+  default = "db.t2.micro"
 }

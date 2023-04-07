@@ -2,9 +2,9 @@ data "aws_route53_zone" "host_domain" {
   name = local.host_domain
 }
 
-data "aws_route53_zone" "alb" {
-  name = "alb.${local.host_domain}"
-}
+# data "aws_route53_zone" "alb" {
+#   name = "alb.${local.host_domain}"
+# }
 
 resource "aws_route53_record" "cert_validation" {
   for_each = {
@@ -23,27 +23,27 @@ resource "aws_route53_record" "cert_validation" {
   zone_id         = data.aws_route53_zone.host_domain.zone_id
 }
 
-resource "aws_route53_record" "cert_alb" {
-  for_each = {
-    for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.domain_name => {
-      name   = dvo.resource_record_name
-      record = dvo.resource_record_value
-      type   = dvo.resource_record_type
-    } if length(regexall("^\\*\\.", dvo.domain_name)) == 0
-  }
+# resource "aws_route53_record" "cert_alb" {
+#   for_each = {
+#     for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.domain_name => {
+#       name   = dvo.resource_record_name
+#       record = dvo.resource_record_value
+#       type   = dvo.resource_record_type
+#     } if length(regexall("^\\*\\.", dvo.domain_name)) == 0
+#   }
 
-  allow_overwrite = true
-  name            = each.value.name
-  records         = [each.value.record]
-  ttl             = 60
-  type            = each.value.type
-  zone_id         = data.aws_route53_zone.alb.zone_id
-}
+#   allow_overwrite = true
+#   name            = each.value.name
+#   records         = [each.value.record]
+#   ttl             = 60
+#   type            = each.value.type
+#   zone_id         = data.aws_route53_zone.alb.zone_id
+# }
 
 resource "aws_acm_certificate" "cert" {
-  domain_name       = local.host_domain
+  domain_name               = local.host_domain
   subject_alternative_names = ["alb.${local.host_domain}"]
-  validation_method = "DNS"
+  validation_method         = "DNS"
 
   tags = {
     Environment = var.app_environment
@@ -72,10 +72,10 @@ resource "aws_acm_certificate_validation" "cert" {
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
 }
 
-resource "aws_acm_certificate_validation" "alb" {
-  certificate_arn         = aws_acm_certificate.cert.arn
-  validation_record_fqdns = [for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.resource_record_name]
-}
+# resource "aws_acm_certificate_validation" "alb" {
+#   certificate_arn         = aws_acm_certificate.cert.arn
+#   validation_record_fqdns = [for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.resource_record_name]
+# }
 
 resource "aws_route53_record" "site" {
   zone_id = data.aws_route53_zone.host_domain.zone_id
@@ -90,13 +90,31 @@ resource "aws_route53_record" "site" {
 }
 
 resource "aws_route53_record" "alb" {
-  zone_id = data.aws_route53_zone.alb.zone_id
+  zone_id = data.aws_route53_zone.host_domain.zone_id
   name    = "alb.${local.host_domain}"
   type    = "A"
 
   alias {
     name                   = aws_lb.application_load_balancer.dns_name
     zone_id                = aws_lb.application_load_balancer.zone_id
-    evaluate_target_health = true
+    evaluate_target_health = false
   }
+}
+
+# resource "aws_route53_record" "alb" {
+#   zone_id = data.aws_route53_zone.alb.zone_id
+#   name    = "alb.${local.host_domain}"
+#   type    = "A"
+
+#   alias {
+#     name                   = aws_cloudfront_distribution.static-skhole.domain_name
+#     zone_id                = aws_cloudfront_distribution.static-skhole.hosted_zone_id
+#     evaluate_target_health = false
+#   }
+# }
+
+resource "aws_service_discovery_private_dns_namespace" "this" {
+  name        = "${var.product_name}.local"
+  description = var.product_name
+  vpc         = aws_vpc.aws-vpc.id
 }
