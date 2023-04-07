@@ -7,7 +7,7 @@
 ![go-test.yml](https://github.com/Asuha-a/ProgrammingCourseMarket/actions/workflows/go-test.yml/badge.svg)
 
 ## URL
-[https://skhole.club](https://skhole.club)  
+[https://skhole.club](http://bit.ly/3zIG4Jn)  
 
 ## サービス内容
 プログラミングのコースを公開、受講できるサービスです。  
