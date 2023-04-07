@@ -10,6 +10,7 @@ import { userState, lessonsState } from '../config/Recoil';
 import { User, Lesson } from '../config/Type';
 import CustomTextField from '../atoms/CustomTextField';
 import CustomLink from '../atoms/CustomLink';
+import ButtonDiv from '../molecules/ButtonDiv';
 import AlertModal from '../molecules/AlertModal';
 import { NumberingLessons, UpdateLessons } from '../utils/LessonsUtils';
 import {
@@ -169,24 +170,20 @@ function LessonListEditor() {
           <SortableItem key={`item-${value.uuid}`} index={index} lesson={value} />
         ))}
       </SortableList>
-      <div className={NewLessonTitleEditorStyle}>
-        <Stack justifyContent="flex-start" alignItems="flex-start" spacing={2}>
-          <CustomTextField
-            className={NewLessonTitleTextFieldStyle}
-            required
-            id="outlined-basic"
-            label="Lesson Title"
-            value={title}
-            defaultValue={title}
-            helperText={titleHelperText}
-            error={titleHasError}
-            onChange={handleTitleChange}
-            onBlur={validateTitle}
-          />
-          <Button variant="contained" size="small" onClick={submitNewLesson}>
-            Add
-          </Button>
-        </Stack>
+    <div className={NewLessonTitleEditorStyle}>
+        <CustomTextField
+          className={NewLessonTitleTextFieldStyle}
+          required
+          id="outlined-basic"
+          label="Lesson Title"
+          value={title}
+          defaultValue={title}
+          helperText={titleHelperText}
+          error={titleHasError}
+          onChange={handleTitleChange}
+          onBlur={validateTitle}
+        />
+        <ButtonDiv body="Add" variant="contained" size="small" onClick={submitNewLesson}></ButtonDiv>
       </div>
     </Stack>
   );
