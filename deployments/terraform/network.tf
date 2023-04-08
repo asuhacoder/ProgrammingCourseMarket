@@ -93,6 +93,11 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
+resource "aws_route_table_association" "public_dummy" {
+  subnet_id      = aws_subnet.public_dummy.id
+  route_table_id = aws_route_table.public.id
+}
+
 resource "aws_security_group" "service_security_group" {
   vpc_id = aws_vpc.aws-vpc.id
 
@@ -160,7 +165,7 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   vpc_id              = aws_vpc.aws-vpc.id
   service_name        = "com.amazonaws.${var.region}.ecr.dkr"
   vpc_endpoint_type   = "Interface"
-  subnet_ids          = [aws_subnet.private-ecs.id]
+  subnet_ids          = [aws_subnet.private-ecs.id, aws_subnet.dummy.id]
   security_group_ids  = [aws_security_group.vpc_endpoint.id]
   private_dns_enabled = true
 }
@@ -169,7 +174,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
   vpc_id              = aws_vpc.aws-vpc.id
   service_name        = "com.amazonaws.${var.region}.ecr.api"
   vpc_endpoint_type   = "Interface"
-  subnet_ids          = [aws_subnet.private-ecs.id]
+  subnet_ids          = [aws_subnet.private-ecs.id, aws_subnet.dummy.id]
   security_group_ids  = [aws_security_group.vpc_endpoint.id]
   private_dns_enabled = true
 }
@@ -178,7 +183,7 @@ resource "aws_vpc_endpoint" "logs" {
   vpc_id              = aws_vpc.aws-vpc.id
   service_name        = "com.amazonaws.${var.region}.logs"
   vpc_endpoint_type   = "Interface"
-  subnet_ids          = [aws_subnet.private-ecs.id]
+  subnet_ids          = [aws_subnet.private-ecs.id, aws_subnet.dummy.id]
   security_group_ids  = [aws_security_group.vpc_endpoint.id]
   private_dns_enabled = true
 }
