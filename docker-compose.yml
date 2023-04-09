@@ -42,7 +42,7 @@ services:
     container_name: "user_db"
     environment: 
       POSTGRES_USER: gorm
-      POSTGRES_PASSWORD: gorm
+      POSTGRES_PASSWORD: gormpassword
       POSTGRES_DB: gorm
       POSTGRES_HOST: user_db
     ports:
@@ -70,7 +70,7 @@ services:
     container_name: "course_db"
     environment: 
       POSTGRES_USER: gorm
-      POSTGRES_PASSWORD: gorm
+      POSTGRES_PASSWORD: gormpassword
       POSTGRES_DB: gorm
       POSTGRES_HOST: course_db
     ports:
@@ -98,7 +98,7 @@ services:
     container_name: "lesson_db"
     environment: 
       POSTGRES_USER: gorm
-      POSTGRES_PASSWORD: gorm
+      POSTGRES_PASSWORD: gormpassword
       POSTGRES_DB: gorm
       POSTGRES_HOST: lesson_db
     ports:
@@ -126,7 +126,7 @@ services:
     container_name: "test_case_db"
     environment: 
       POSTGRES_USER: gorm
-      POSTGRES_PASSWORD: gorm
+      POSTGRES_PASSWORD: gormpassword
       POSTGRES_DB: gorm
       POSTGRES_HOST: case_db
     ports:
