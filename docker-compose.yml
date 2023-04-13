@@ -128,7 +128,7 @@ services:
       POSTGRES_USER: gorm
       POSTGRES_PASSWORD: gormpassword
       POSTGRES_DB: gorm
-      POSTGRES_HOST: case_db
+      POSTGRES_HOST: test_case_db
     ports:
       - 5435:5432
     healthcheck:
