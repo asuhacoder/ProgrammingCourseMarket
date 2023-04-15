@@ -13,8 +13,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var caseHost = os.Getenv("TEST_CASE_HOST")
-var caseAddress = caseHost + ":50056"
+var caseAddress = os.Getenv("TEST_CASE_HOST") + ":50056"
 
 type CreateCaseRequest struct {
 	Token    string `form:"token" json:"token"`
