@@ -22,7 +22,7 @@ protoc:
 .PHONY: build
 build:
 	make protoc
-	docker-compose build
+	docker compose build
 
 .PHONY: deploy
 deploy:
@@ -45,4 +45,5 @@ clean:
 help:
 	@echo "protoc: run protoc commands"
 	@echo "build: build this project"
+	@echo "deploy: deploy this project"
 	@echo "clean: delete all files created by make"
