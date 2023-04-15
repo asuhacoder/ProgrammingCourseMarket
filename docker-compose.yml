@@ -11,6 +11,8 @@ services:
       true
     depends_on:
       - user
+    env_file:
+      - variables.env
   user:
     build:
       context: ./
