@@ -22,7 +22,7 @@ protoc:
 .PHONY: build
 build:
 	make protoc
-	docker-compose build
+	docker compose build
 
 .PHONY: deploy
 deploy:

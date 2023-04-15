@@ -47,8 +47,8 @@ $ make build
 
 ## Run
 
-1. run `docker-compose run`
+1. run `docker compose run`
 
 ```
-$ docker-compose run
+$ docker compose run
 ```
