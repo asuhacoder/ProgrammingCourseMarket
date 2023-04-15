@@ -12,8 +12,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var runnerHost = os.Getenv("RUNNER_HOST")
-var runnerAddress = runnerHost + ":50055"
+var runnerAddress = os.Getenv("RUNNER_HOST") + ":50055"
 
 type RunnerRequest struct {
 	Code     string `form:"code" json:"code"`

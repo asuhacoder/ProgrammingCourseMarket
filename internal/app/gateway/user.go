@@ -13,8 +13,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var userHost = os.Getenv("USER_HOST")
-var userAddress = userHost + ":50051"
+var userAddress = os.Getenv("USER_HOST") + ":50051"
 
 type CreateUserRequest struct {
 	Name         string `form:"name" json:"name"`

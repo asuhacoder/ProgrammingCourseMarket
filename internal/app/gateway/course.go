@@ -14,8 +14,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var courseHost = os.Getenv("COURSE_HOST")
-var courseAddress = courseHost + ":50053"
+var courseAddress = os.Getenv("COURSE_HOST") + ":50053"
 
 type CourseCreateUpdateRequest struct {
 	UserId       string `form:"user_id" json:"user_id"`

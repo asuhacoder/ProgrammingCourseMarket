@@ -12,8 +12,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var authHost = os.Getenv("AUTH_HOST")
-var authAddress = authHost + ":50052"
+var authAddress = os.Getenv("AUTH_HOST") + ":50052"
 
 type AuthnRequest struct {
 	Email    string `form:"email" json:"email"`

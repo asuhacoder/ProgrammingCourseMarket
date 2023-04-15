@@ -13,8 +13,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var lessonHost = os.Getenv("LESSON_HOST")
-var lessonAddress = lessonHost + ":50054"
+var lessonAddress = os.Getenv("LESSON_HOST") + ":50054"
 
 type CreateLessonRequest struct {
 	Token          string `form:"token" json:"token"`
