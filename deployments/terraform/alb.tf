@@ -22,7 +22,7 @@ resource "aws_lb" "application_load_balancer" {
 }
 
 resource "aws_security_group" "load_balancer_security_group" {
-  vpc_id = aws_vpc.aws-vpc.id
+  vpc_id = aws_vpc.aws_vpc.id
 
   ingress {
     from_port        = 443
@@ -51,7 +51,7 @@ resource "aws_lb_target_group" "target_group" {
   port        = 8080
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = aws_vpc.aws-vpc.id
+  vpc_id      = aws_vpc.aws_vpc.id
 
   health_check {
     interval            = 30
