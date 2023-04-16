@@ -33,7 +33,7 @@ resource "aws_db_instance" "user" {
 
 resource "aws_security_group" "private-db-sg-user" {
   name   = "private-db-sg-user"
-  vpc_id = aws_vpc.aws-vpc.id
+  vpc_id = aws_vpc.aws_vpc.id
   ingress {
     from_port   = 5432
     to_port     = 5432
@@ -68,7 +68,7 @@ resource "aws_db_instance" "course" {
 
 resource "aws_security_group" "private-db-sg-course" {
   name   = "private-db-sg-course"
-  vpc_id = aws_vpc.aws-vpc.id
+  vpc_id = aws_vpc.aws_vpc.id
   ingress {
     from_port   = 5432
     to_port     = 5432
@@ -103,7 +103,7 @@ resource "aws_db_instance" "lesson" {
 
 resource "aws_security_group" "private-db-sg-lesson" {
   name   = "private-db-sg-lesson"
-  vpc_id = aws_vpc.aws-vpc.id
+  vpc_id = aws_vpc.aws_vpc.id
   ingress {
     from_port   = 5432
     to_port     = 5432
@@ -138,7 +138,7 @@ resource "aws_db_instance" "test_case" {
 
 resource "aws_security_group" "private-db-sg-test_case" {
   name   = "private-db-sg-test_case"
-  vpc_id = aws_vpc.aws-vpc.id
+  vpc_id = aws_vpc.aws_vpc.id
   ingress {
     from_port   = 5432
     to_port     = 5432

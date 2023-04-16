@@ -1,4 +1,4 @@
-resource "aws_vpc" "aws-vpc" {
+resource "aws_vpc" "aws_vpc" {
   cidr_block           = "10.10.0.0/16"
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -8,8 +8,8 @@ resource "aws_vpc" "aws-vpc" {
   }
 }
 
-resource "aws_internet_gateway" "aws-igw" {
-  vpc_id = aws_vpc.aws-vpc.id
+resource "aws_internet_gateway" "aws_igw" {
+  vpc_id = aws_vpc.aws_vpc.id
   tags = {
     Name        = "${var.product_name}-igw"
     Environment = var.app_environment
@@ -17,7 +17,7 @@ resource "aws_internet_gateway" "aws-igw" {
 }
 
 resource "aws_subnet" "private" {
-  vpc_id            = aws_vpc.aws-vpc.id
+  vpc_id            = aws_vpc.aws_vpc.id
   cidr_block        = var.private_subnet
   availability_zone = var.availability_zone
 
@@ -28,7 +28,7 @@ resource "aws_subnet" "private" {
 }
 
 resource "aws_subnet" "private-ecs" {
-  vpc_id            = aws_vpc.aws-vpc.id
+  vpc_id            = aws_vpc.aws_vpc.id
   cidr_block        = var.private_subnet_ecs
   availability_zone = var.availability_zone
 
@@ -39,7 +39,7 @@ resource "aws_subnet" "private-ecs" {
 }
 
 resource "aws_subnet" "dummy" {
-  vpc_id            = aws_vpc.aws-vpc.id
+  vpc_id            = aws_vpc.aws_vpc.id
   cidr_block        = var.private_subnet_dummy
   availability_zone = var.availability_zone_dummy
 
@@ -50,7 +50,7 @@ resource "aws_subnet" "dummy" {
 }
 
 resource "aws_subnet" "public" {
-  vpc_id                  = aws_vpc.aws-vpc.id
+  vpc_id                  = aws_vpc.aws_vpc.id
   cidr_block              = var.public_subnet
   availability_zone       = var.availability_zone
   map_public_ip_on_launch = true
@@ -62,19 +62,19 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_subnet" "public_dummy" {
-  vpc_id                  = aws_vpc.aws-vpc.id
+  vpc_id                  = aws_vpc.aws_vpc.id
   cidr_block              = var.public_dummy_subnet
   availability_zone       = var.availability_zone_dummy
   map_public_ip_on_launch = true
 
   tags = {
-    Name        = "${var.product_name}-public-subnet"
+    Name        = "${var.product_name}-public-dummy-subnet"
     Environment = var.app_environment
   }
 }
 
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.aws-vpc.id
+  vpc_id = aws_vpc.aws_vpc.id
 
   tags = {
     Name        = "${var.product_name}-routing-table-public"
@@ -85,7 +85,7 @@ resource "aws_route_table" "public" {
 resource "aws_route" "public" {
   route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.aws-igw.id
+  gateway_id             = aws_internet_gateway.aws_igw.id
 }
 
 resource "aws_route_table_association" "public" {
@@ -99,7 +99,7 @@ resource "aws_route_table_association" "public_dummy" {
 }
 
 resource "aws_security_group" "service_security_group" {
-  vpc_id = aws_vpc.aws-vpc.id
+  vpc_id = aws_vpc.aws_vpc.id
 
   ingress {
     from_port       = 0
@@ -123,7 +123,7 @@ resource "aws_security_group" "service_security_group" {
 }
 
 resource "aws_route_table" "ecs_private" {
-  vpc_id = aws_vpc.aws-vpc.id
+  vpc_id = aws_vpc.aws_vpc.id
 }
 
 resource "aws_route_table_association" "ecs_private" {
@@ -132,7 +132,7 @@ resource "aws_route_table_association" "ecs_private" {
 }
 
 resource "aws_vpc_endpoint" "s3" {
-  vpc_id            = aws_vpc.aws-vpc.id
+  vpc_id            = aws_vpc.aws_vpc.id
   service_name      = "com.amazonaws.${var.region}.s3"
   vpc_endpoint_type = "Gateway"
 }
@@ -144,25 +144,25 @@ resource "aws_vpc_endpoint_route_table_association" "private_s3" {
 
 resource "aws_security_group" "vpc_endpoint" {
   name   = "vpc_endpoint_sg"
-  vpc_id = aws_vpc.aws-vpc.id
+  vpc_id = aws_vpc.aws_vpc.id
 
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.aws-vpc.cidr_block]
+    cidr_blocks = [aws_vpc.aws_vpc.cidr_block]
   }
 
   egress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.aws-vpc.cidr_block]
+    cidr_blocks = [aws_vpc.aws_vpc.cidr_block]
   }
 }
 
 resource "aws_vpc_endpoint" "ecr_dkr" {
-  vpc_id              = aws_vpc.aws-vpc.id
+  vpc_id              = aws_vpc.aws_vpc.id
   service_name        = "com.amazonaws.${var.region}.ecr.dkr"
   vpc_endpoint_type   = "Interface"
   subnet_ids          = [aws_subnet.private-ecs.id, aws_subnet.dummy.id]
@@ -171,7 +171,7 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
 }
 
 resource "aws_vpc_endpoint" "ecr_api" {
-  vpc_id              = aws_vpc.aws-vpc.id
+  vpc_id              = aws_vpc.aws_vpc.id
   service_name        = "com.amazonaws.${var.region}.ecr.api"
   vpc_endpoint_type   = "Interface"
   subnet_ids          = [aws_subnet.private-ecs.id, aws_subnet.dummy.id]
@@ -180,7 +180,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
 }
 
 resource "aws_vpc_endpoint" "logs" {
-  vpc_id              = aws_vpc.aws-vpc.id
+  vpc_id              = aws_vpc.aws_vpc.id
   service_name        = "com.amazonaws.${var.region}.logs"
   vpc_endpoint_type   = "Interface"
   subnet_ids          = [aws_subnet.private-ecs.id, aws_subnet.dummy.id]
@@ -189,7 +189,7 @@ resource "aws_vpc_endpoint" "logs" {
 }
 
 resource "aws_vpc_endpoint" "secretsmanager" {
-  vpc_id              = aws_vpc.aws-vpc.id
+  vpc_id              = aws_vpc.aws_vpc.id
   service_name        = "com.amazonaws.${var.region}.secretsmanager"
   vpc_endpoint_type   = "Interface"
   subnet_ids          = [aws_subnet.private-ecs.id]
