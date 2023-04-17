@@ -62,18 +62,6 @@ resource "aws_route53_record" "alb" {
   }
 }
 
-# resource "aws_route53_record" "alb" {
-#   zone_id = data.aws_route53_zone.host_domain.zone_id
-#   name    = "alb.${local.host_domain}"
-#   type    = "A"
-
-#   alias {
-#     name                   = aws_lb.application_load_balancer.dns_name
-#     zone_id                = aws_lb.application_load_balancer.zone_id
-#     evaluate_target_health = false
-#   }
-# }
-
 resource "aws_service_discovery_private_dns_namespace" "this" {
   name        = "${var.product_name}.local"
   description = var.product_name
