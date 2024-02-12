@@ -31,7 +31,7 @@
     "@uiw/react-md-editor": "^3.20.5",
     "array-move": "^4.0.0",
     "autoprefixer": "^10.0.2",
-    "axios": "^0.24.0",
+    "axios": "^1.6.0",
     "lodash": "^4.17.21",
     "nth-check": "^2.0.1",
     "postcss": "^8.4.31",
